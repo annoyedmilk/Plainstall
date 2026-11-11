@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/annoyedmilk/Plainstall/schemas/presets.schema.json",
+  "title": "Plainstall presets file (presets.json)",
+  "description": "Describes the built-in presets. Which apps and tweaks a preset switches on is NOT listed here: every catalog entry names its presets in 'defaultIn', so there is one place to look per entry. This file holds what is left: the preset's name, its card text and its Setup defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalogVersion",
+    "presets"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "catalogVersion": {
+      "const": 1
+    },
+    "presets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/preset"
+      }
+    }
+  },
+  "$defs": {
+    "preset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "tagline",
+        "description",
+        "setup"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "recommended",
+            "privacy-max",
+            "gaming",
+            "minimal"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "tagline": {
+          "description": "One short line for the preset card.",
+          "type": "string",
+          "maxLength": 80
+        },
+        "description": {
+          "description": "Two or three plain sentences: who the preset is for and what it changes.",
+          "type": "string",
+          "maxLength": 400
+        },
+        "isDefault": {
+          "description": "Exactly one preset is the default.",
+          "type": "boolean"
+        },
+        "setup": {
+          "description": "Values this preset puts into the profile's 'setup' section. The user can change every one of them.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "localAccount",
+            "skipPrivacyPages",
+            "bypassHardwareChecks"
+          ],
+          "properties": {
+            "localAccount": {
+              "description": "true: set up with a local account and skip the Microsoft account pages.",
+              "type": "boolean"
+            },
+            "skipPrivacyPages": {
+              "type": "boolean"
+            },
+            "bypassHardwareChecks": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

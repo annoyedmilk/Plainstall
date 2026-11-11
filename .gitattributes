@@ -1,0 +1,6 @@
+# Text files are stored with LF and checked out with CRLF everywhere, so every checkout builds the same bytes.
+* text=auto eol=crlf
+
+*.png binary
+*.ico binary
+*.ttf binary

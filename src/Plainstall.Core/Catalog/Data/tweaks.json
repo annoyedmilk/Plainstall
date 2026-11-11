@@ -1,0 +1,3390 @@
+{
+  "$schema": "./catalog.schema.json",
+  "catalogVersion": 1,
+  "kind": "tweaks",
+  "categories": [
+    {
+      "id": "ads",
+      "title": "Ads and suggestions"
+    },
+    {
+      "id": "privacy",
+      "title": "Privacy"
+    },
+    {
+      "id": "ai",
+      "title": "Copilot and AI"
+    },
+    {
+      "id": "search",
+      "title": "Start and search"
+    },
+    {
+      "id": "edge",
+      "title": "Microsoft Edge",
+      "description": "These apply only while Edge is installed."
+    },
+    {
+      "id": "explorer",
+      "title": "Explorer and taskbar"
+    },
+    {
+      "id": "appearance",
+      "title": "Appearance"
+    },
+    {
+      "id": "gaming",
+      "title": "Gaming"
+    },
+    {
+      "id": "updates",
+      "title": "Updates and automatic installs"
+    },
+    {
+      "id": "system",
+      "title": "System and storage"
+    },
+    {
+      "id": "developer",
+      "title": "Developer features",
+      "description": "Optional Windows features for software developers. They need virtualization switched on in the PC's firmware."
+    },
+    {
+      "id": "setup",
+      "title": "Setup",
+      "description": "Applied through the options on the Setup tab, not as switches."
+    }
+  ],
+  "entries": [
+    {
+      "id": "setup-hardware-bypass",
+      "title": "Install on unsupported hardware",
+      "description": "Lets Windows 11 install on PCs without TPM 2.0, Secure Boot or a supported processor.",
+      "details": "Harmless on PCs that meet the requirements. On PCs that do not, Microsoft does not promise updates, and Windows reminds you of that with a 'requirements not met' notice in Settings and on the desktop. The switch to hide that notice is on the Tweaks tab, under System and storage.",
+      "category": "setup",
+      "risk": "moderate",
+      "defaultIn": [],
+      "boundTo": "setup.bypassHardwareChecks",
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "setupSystem",
+          "key": "Setup\\LabConfig",
+          "name": "BypassTPMCheck",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "setupSystem",
+          "key": "Setup\\LabConfig",
+          "name": "BypassSecureBootCheck",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "setupSystem",
+          "key": "Setup\\LabConfig",
+          "name": "BypassRAMCheck",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "setupSystem",
+          "key": "Setup\\LabConfig",
+          "name": "BypassCPUCheck",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "setupSystem",
+          "key": "Setup\\LabConfig",
+          "name": "BypassStorageCheck",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "Setup\\MoSetup",
+          "name": "AllowUpgradesWithUnsupportedTPMOrCPU",
+          "type": "dword",
+          "data": 1,
+          "note": "For later in-place upgrades of the installed system."
+        }
+      ]
+    },
+    {
+      "id": "setup-local-account",
+      "title": "Local account setup",
+      "description": "Lets Setup create a normal local account without a Microsoft account or an internet connection, and skips the three security questions.",
+      "category": "setup",
+      "risk": "safe",
+      "defaultIn": [],
+      "boundTo": "setup.localAccount",
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\OOBE",
+          "name": "BypassNRO",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\System",
+          "name": "NoLocalPasswordResetQuestions",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "setup-skip-privacy-pages",
+      "title": "Skip the privacy questions",
+      "description": "Skips the 'Choose privacy settings for your device' pages. The privacy switches in this profile decide the values.",
+      "category": "setup",
+      "risk": "safe",
+      "defaultIn": [],
+      "boundTo": "setup.skipPrivacyPages",
+      "source": [
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\OOBE",
+          "name": "DisablePrivacyExperience",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-promoted-app-installs",
+      "title": "No automatic install of promoted apps",
+      "description": "Stops Windows from installing sponsored apps and games, such as Candy Crush or Spotify, into a new account by itself.",
+      "category": "ads",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SilentInstalledAppsEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "PreInstalledAppsEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "PreInstalledAppsEverEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "OemPreInstalledAppsEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\Subscriptions"
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SuggestedApps"
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\CloudContent",
+          "name": "DisableWindowsConsumerFeatures",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\PushToInstall",
+          "name": "DisablePushToInstall",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-suggestions",
+      "title": "No tips and suggestions",
+      "description": "Turns off suggested apps in Start, tips and 'finish setting up' reminders, suggestions in Settings, and notifications that advertise Microsoft services.",
+      "category": "ads",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-310093Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338388Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SystemPaneSuggestionsEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SoftLandingEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338393Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353694Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353696Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353698Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Start_IrisRecommendations",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "ShowSyncProviderNotifications",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Start_AccountNotifications",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\SystemSettings\\AccountNotifications",
+          "name": "EnableAccountNotifications",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement",
+          "name": "ScoobeSystemSettingEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings\\Windows.SystemToast.Suggested",
+          "name": "Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings\\Windows.SystemToast.BackupReminder",
+          "name": "Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Mobility",
+          "name": "OptedIn",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\CloudContent",
+          "name": "DisableCopilotPinScreen",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\CloudContent",
+          "name": "DisableConsumerAccountStateContent",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\CloudContent",
+          "name": "DisableCloudOptimizedContent",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-content-delivery",
+      "title": "No Windows Spotlight and promotional content",
+      "description": "Switches off the service that delivers promotional content to Start and Settings and the changing Windows Spotlight pictures to the lock screen. The lock screen then shows a fixed picture.",
+      "details": "This is the one switch for Spotlight on the lock screen: turn it off if you like the Spotlight pictures. Tips and ads in Start and Settings stay off through 'No tips and suggestions'. To choose Spotlight again later, set Settings > Personalization > Lock screen to Windows Spotlight.",
+      "category": "ads",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "ContentDeliveryAllowed",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "FeatureManagementEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContentEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338387Enabled",
+          "type": "dword",
+          "data": 0,
+          "note": "The lock screen Spotlight subscription. Win11Debloat's lock screen tips file sets it and says that it turns the Spotlight option off, so it lives here with the other Spotlight values and not in no-lock-screen-tips."
+        }
+      ]
+    },
+    {
+      "id": "no-lock-screen-tips",
+      "title": "No tips on the lock screen",
+      "description": "Removes the 'fun facts, tips and tricks' texts that Windows lays over your own lock screen picture.",
+      "details": "Does not change Windows Spotlight. Whether the lock screen shows Spotlight pictures is decided by 'No Windows Spotlight and promotional content' alone.",
+      "category": "ads",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "RotatingLockScreenOverlayEnabled",
+          "type": "dword",
+          "data": 0,
+          "note": "The text overlay only. The Spotlight subscription value (SubscribedContent-338387Enabled) moved to no-content-delivery, so that one entry decides about Spotlight. This value alone is expected to leave Spotlight on. This is not verified on an installed PC."
+        }
+      ]
+    },
+    {
+      "id": "clean-start-pins",
+      "title": "Empty Start menu pins",
+      "description": "New accounts start with no pinned apps in the Start menu, instead of the advertising tiles Microsoft pins by default.",
+      "details": "You can pin your own apps at any time.",
+      "category": "ads",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\PolicyManager\\current\\device\\Start",
+          "name": "ConfigureStartPins",
+          "type": "string",
+          "data": "{\"pinnedList\": [{}]}"
+        }
+      ]
+    },
+    {
+      "id": "no-store-search-suggestions",
+      "title": "No Store suggestions in search",
+      "description": "Stops the Start menu search from suggesting apps from the Microsoft Store.",
+      "details": "Works by denying access to one database file in the user's profile. The Microsoft Store itself keeps working. Undo: remove the deny entry from that file's permissions.",
+      "category": "ads",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.command",
+          "scope": "user",
+          "summary": "Block the Store suggestion database for Start menu search",
+          "command": "$d = Join-Path $env:LOCALAPPDATA 'Packages\\Microsoft.WindowsStore_8wekyb3d8bbwe\\LocalState'; New-Item -ItemType Directory -Force -Path $d | Out-Null; $f = Join-Path $d 'store.db'; if (-not (Test-Path -LiteralPath $f)) { New-Item -ItemType File -Path $f | Out-Null }; & icacls.exe $f /deny '*S-1-1-0:(F)' | Out-Null"
+        }
+      ]
+    },
+    {
+      "id": "hide-settings-home",
+      "title": "No Home page in Settings",
+      "description": "Settings opens on the System page instead of the Home page with its cards for Microsoft 365, Xbox Game Pass and OneDrive.",
+      "details": "Every setting stays where it is. Only the Home page is hidden. Settings shows 'Some settings are managed by your organization' while this is on, which is harmless.",
+      "category": "ads",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "name": "SettingsPageVisibility",
+          "type": "string",
+          "data": "hide:home",
+          "note": "SettingsPageVisibility holds one list for all pages. Another entry that hides a Settings page must share this value."
+        }
+      ]
+    },
+    {
+      "id": "no-advertising-id",
+      "title": "No advertising ID",
+      "description": "Apps cannot use an advertising ID to show you personalized ads.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "name": "Enabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-tailored-experiences",
+      "title": "No tailored experiences",
+      "description": "Microsoft does not use your diagnostic data to personalize tips, ads and recommendations.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+          "name": "TailoredExperiencesWithDiagnosticDataEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-online-speech",
+      "title": "No online speech recognition",
+      "description": "Your voice is not sent to Microsoft for speech recognition. Dictation that works on the device is not affected.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
+          "name": "HasAccepted",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-typing-data",
+      "title": "No typing and handwriting collection",
+      "description": "Windows does not collect what you type and write to improve its suggestions.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Input\\TIPC",
+          "name": "Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\InputPersonalization",
+          "name": "RestrictImplicitInkCollection",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\InputPersonalization",
+          "name": "RestrictImplicitTextCollection",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\InputPersonalization\\TrainedDataStore",
+          "name": "HarvestContacts",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Personalization\\Settings",
+          "name": "AcceptedPrivacyPolicy",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "required-diagnostics-only",
+      "title": "Required diagnostic data only",
+      "description": "Windows sends Microsoft only the diagnostic data it requires, not the optional extra data.",
+      "details": "Windows Insider preview builds need optional diagnostic data and are not offered while this is on. Home and Pro cannot send less than the required level.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\DataCollection",
+          "name": "AllowTelemetry",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\SQMClient\\Windows",
+          "name": "CEIPEnable",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-activity-history",
+      "title": "No activity history upload",
+      "description": "Windows does not send the history of apps and files you used to Microsoft.",
+      "details": "Clipboard history (Win+V) keeps working, because the activity feed itself stays on.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\System",
+          "name": "PublishUserActivities",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\System",
+          "name": "UploadUserActivities",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-app-launch-tracking",
+      "title": "No app launch tracking",
+      "description": "Windows does not track which apps you start to rank Start and search results.",
+      "details": "The 'Most used' list in the Start menu stays empty.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Start_TrackProgs",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-feedback-prompts",
+      "title": "No feedback requests",
+      "description": "Windows does not ask you to rate it or answer surveys.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Siuf\\Rules",
+          "name": "NumberOfSIUFInPeriod",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Siuf\\Rules",
+          "name": "PeriodInNanoSeconds"
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Feedback\\Siuf\\DmClient"
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload"
+        }
+      ]
+    },
+    {
+      "id": "no-telemetry-tasks",
+      "title": "Remove data collection tasks",
+      "description": "Removes the background tasks that gather usage and compatibility data for Microsoft.",
+      "details": "Windows Update and its own tasks are not touched. A feature update may put these tasks back. Removes five tasks and the Customer Experience Improvement Program folder. All of them are in the 26H2 image. The startup apps check (StartupAppTask) is kept, because it collects nothing.",
+      "category": "privacy",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser"
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp"
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Application Experience\\ProgramDataUpdater"
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Customer Experience Improvement Program",
+          "folder": true
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector"
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Autochk\\Proxy"
+        }
+      ]
+    },
+    {
+      "id": "no-diagnostics-services",
+      "title": "Disable the diagnostics services",
+      "description": "Disables the two Windows services that collect and upload diagnostic data.",
+      "details": "A few troubleshooting and feedback features depend on these services. Undo: set both services back to Automatic in the Services console.",
+      "category": "privacy",
+      "risk": "moderate",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Services\\DiagTrack",
+          "name": "Start",
+          "type": "dword",
+          "data": 4,
+          "ifKeyExists": true
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Services\\dmwappushservice",
+          "name": "Start",
+          "type": "dword",
+          "data": 4,
+          "ifKeyExists": true
+        }
+      ]
+    },
+    {
+      "id": "no-error-reporting",
+      "title": "No error reports to Microsoft",
+      "description": "Windows does not send crash reports to Microsoft.",
+      "details": "Crash reports sometimes return a known fix. That no longer happens.",
+      "category": "privacy",
+      "risk": "moderate",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Services\\WerSvc",
+          "name": "Start",
+          "type": "dword",
+          "data": 4,
+          "ifKeyExists": true
+        },
+        {
+          "kind": "task.delete",
+          "path": "Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+        }
+      ]
+    },
+    {
+      "id": "location-off",
+      "title": "Location off",
+      "description": "Turns location off for Windows and all apps.",
+      "details": "Automatic time zone, weather for your position, maps and Find My Device stop working. The switch in Settings is locked while this is on.",
+      "category": "privacy",
+      "risk": "moderate",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\LocationAndSensors",
+          "name": "DisableLocation",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\LocationAndSensors",
+          "name": "DisableLocationScripting",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-find-my-device",
+      "title": "No Find My Device",
+      "description": "Windows does not report this PC's position to your Microsoft account.",
+      "details": "You can no longer locate a lost laptop through account.microsoft.com.",
+      "category": "privacy",
+      "risk": "moderate",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\FindMyDevice",
+          "name": "AllowFindMyDevice",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-cloud-clipboard",
+      "title": "No clipboard sync",
+      "description": "The clipboard is not synced to your other devices through Microsoft's cloud.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "source": [
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\System",
+          "name": "AllowCrossDeviceClipboard",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-online-tips",
+      "title": "No online tips in Settings",
+      "description": "The Settings app does not download tips and help content from Microsoft.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\System",
+          "name": "AllowOnlineTips",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-copilot",
+      "title": "Copilot off",
+      "description": "Turns the Copilot assistant off and removes its taskbar button.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "ShowCopilotButton",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "name": "TurnOffWindowsCopilot",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "name": "TurnOffWindowsCopilot",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-recall",
+      "title": "Recall off",
+      "description": "Turns off Recall, the feature that takes regular screenshots of what you do so you can search them later.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "name": "DisableAIDataAnalysis",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsAI",
+          "name": "DisableAIDataAnalysis",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsAI",
+          "name": "AllowRecallEnablement",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsAI",
+          "name": "TurnOffSavingSnapshots",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "feature.disable",
+          "name": "Recall",
+          "note": "Present only on images that carry the Recall feature; skipped otherwise."
+        }
+      ]
+    },
+    {
+      "id": "no-click-to-do",
+      "title": "Click to Do off",
+      "description": "Turns off Click to Do, which analyzes text and images on your screen with AI.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Policies\\Microsoft\\Windows\\WindowsAI",
+          "name": "DisableClickToDo",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsAI",
+          "name": "DisableClickToDo",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "ai-service-on-demand",
+      "title": "AI service starts only when needed",
+      "description": "The Windows AI background service no longer starts with Windows.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Services\\WSAIFabricSvc",
+          "name": "Start",
+          "type": "dword",
+          "data": 3,
+          "ifKeyExists": true
+        }
+      ]
+    },
+    {
+      "id": "notepad-no-ai",
+      "title": "No AI in Notepad",
+      "description": "Removes the AI writing features from Notepad.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\WindowsNotepad",
+          "name": "DisableAIFeatures",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "paint-no-ai",
+      "title": "No AI in Paint",
+      "description": "Removes the AI image features from Paint.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "name": "DisableCocreator",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "name": "DisableGenerativeFill",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "name": "DisableImageCreator",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "name": "DisableGenerativeErase",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Policies\\Paint",
+          "name": "DisableRemoveBackground",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-web-search",
+      "title": "No web results in Start search",
+      "description": "Searching in the Start menu finds things on your PC only, not Bing web results.",
+      "category": "search",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Policies\\Microsoft\\Windows\\Explorer",
+          "name": "DisableSearchBoxSuggestions",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Explorer",
+          "name": "DisableSearchBoxSuggestions",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Windows Search",
+          "name": "AllowCortana",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Windows Search",
+          "name": "CortanaConsent",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-search-highlights",
+      "title": "No search highlights",
+      "description": "The search panel no longer shows trending searches, illustrations for special days and other daily content from Bing.",
+      "details": "Searching for apps, files and settings works as before.",
+      "category": "search",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Windows Search",
+          "name": "EnableDynamicContentInWSB",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-phone-link-in-start",
+      "title": "No phone panel in Start",
+      "description": "Removes the Phone Link panel next to the Start menu.",
+      "details": "The panel belongs to the Phone Link app. When Phone Link is removed on the Apps tab, the panel is gone anyway and this switch changes nothing.",
+      "category": "search",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Start\\Companions\\Microsoft.YourPhone_8wekyb3d8bbwe",
+          "name": "IsEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "hide-start-recommended",
+      "title": "Hide 'Recommended' in Start",
+      "description": "Removes the Recommended section from the Start menu.",
+      "details": "Uses the per-user policy only. The machine-wide and 'education' variants of this setting lock the lock-screen Spotlight option and are not used.",
+      "category": "search",
+      "risk": "moderate",
+      "defaultIn": [],
+      "minBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Policies\\Microsoft\\Windows\\Explorer",
+          "name": "HideRecommendedSection",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "search-without-webview",
+      "title": "Lighter Start search",
+      "description": "Makes the Start menu search use less memory by not loading its web component.",
+      "details": "This overrides an internal Windows feature switch. A future Windows update can change or remove it.",
+      "category": "search",
+      "risk": "advanced",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\FeatureManagement\\Overrides\\8\\1694661260",
+          "name": "EnabledState",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-outlook-devhome-autoinstall",
+      "title": "No automatic Outlook and Dev Home",
+      "description": "Stops Windows Update from installing the new Outlook and Dev Home by itself after setup.",
+      "details": "You can still install both from the Store.",
+      "category": "updates",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.delete",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\Orchestrator\\UScheduler_Oobe\\OutlookUpdate"
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\Orchestrator\\UScheduler_Oobe\\DevHomeUpdate"
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator\\UScheduler\\OutlookUpdate",
+          "name": "workCompleted",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator\\UScheduler\\DevHomeUpdate",
+          "name": "workCompleted",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Windows Mail",
+          "name": "PreventRun",
+          "type": "dword",
+          "data": 1,
+          "note": "Carried over from tiny11builder. Its effect on the new Outlook is not verified on an installed PC."
+        }
+      ]
+    },
+    {
+      "id": "no-teams-autoinstall",
+      "title": "No automatic Teams",
+      "description": "Stops Windows from installing Microsoft Teams by itself.",
+      "category": "updates",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.delete",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\Orchestrator\\UScheduler_Oobe\\TFLUpdate",
+          "note": "Setup-time job present in the 26H2 image. 'TFL' is read as 'Teams for Life', the consumer Teams. An inference from the name, checked in the VM test."
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Teams",
+          "name": "DisableInstallation",
+          "type": "dword",
+          "data": 1,
+          "note": "Carried over from tiny11builder. Its effect is not verified on an installed PC."
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\Communications",
+          "name": "ConfigureChatAutoInstall",
+          "type": "dword",
+          "data": 0,
+          "maxBuild": 22631
+        }
+      ]
+    },
+    {
+      "id": "no-device-companion-apps",
+      "title": "No automatic device apps",
+      "description": "Stops Windows from installing manufacturer apps when you plug in a device such as a monitor or a mouse.",
+      "details": "Drivers are still installed. Some devices lose their custom icon in Settings.",
+      "category": "updates",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Device Metadata",
+          "name": "PreventDeviceMetadataFromNetwork",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-update-sharing",
+      "title": "No update sharing with other PCs",
+      "description": "Windows downloads updates from Microsoft only and does not upload them to other PCs on the internet or your network.",
+      "category": "updates",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DODownloadMode",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-restart-while-signed-in",
+      "title": "No update restart while you are signed in",
+      "description": "Windows does not restart by itself to finish an update while someone is signed in.",
+      "details": "Updates still download, but most only finish with a restart. You need to restart yourself now and then: a PC that is only ever put to sleep may then go without its security updates for a long time.",
+      "category": "updates",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsUpdate\\AU",
+          "name": "NoAutoRebootWithLoggedOnUsers",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "keep-malware-removal-tool-off",
+      "title": "No Malicious Software Removal Tool",
+      "description": "Stops Windows Update from delivering Microsoft's monthly malware removal tool.",
+      "details": "This lowers protection slightly, so Plainstall leaves it off unless you ask for it. Microsoft Defender keeps running and updating either way.",
+      "category": "updates",
+      "risk": "advanced",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\MRT",
+          "name": "DontOfferThroughWUAU",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-driver-updates",
+      "title": "No driver updates through Windows Update",
+      "description": "Windows Update no longer installs drivers, so a graphics driver you installed yourself is not replaced by an older one.",
+      "details": "Install drivers from the maker of your PC or graphics card instead, and keep them up to date yourself. The drivers that come with Windows still work. Windows Update keeps installing security and other updates.",
+      "category": "updates",
+      "risk": "moderate",
+      "defaultIn": [
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsUpdate",
+          "name": "ExcludeWUDriversInQualityUpdate",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState",
+          "name": "ExcludeWUDrivers",
+          "type": "dword",
+          "data": 1,
+          "note": "Win11Debloat writes this policy state value next to the policy. Its SearchOrderConfig value is left out: it controls device apps and icons, which no-device-companion-apps covers."
+        }
+      ]
+    },
+    {
+      "id": "no-early-updates",
+      "title": "No updates as soon as they are available",
+      "description": "Windows does not install new features and optional updates early. It gets them when they are ready for everyone.",
+      "details": "This is the Windows Update setting 'Get the latest updates as soon as they are available'. You can switch it on again in Settings > Windows Update.",
+      "category": "updates",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\UX\\Settings",
+          "name": "IsContinuousInnovationOptedIn",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "delay-feature-updates",
+      "title": "Feature updates one year later",
+      "description": "Windows waits a year before it installs a new yearly version of Windows 11. Security updates still arrive every month.",
+      "details": "Works on Pro and higher only. Windows 11 Home ignores it. Each version gets security updates for at least two years, so a one-year delay is safe. Undo: delete the two DeferFeatureUpdates values under the Windows Update policy key.",
+      "category": "updates",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsUpdate",
+          "name": "DeferFeatureUpdates",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\WindowsUpdate",
+          "name": "DeferFeatureUpdatesPeriodInDays",
+          "type": "dword",
+          "data": 365
+        }
+      ]
+    },
+    {
+      "id": "edge-no-ads",
+      "title": "Edge without ads",
+      "description": "Turns off the news feed, sponsored links, shopping assistant, first-run pages and 'make Edge your default browser' prompts in Microsoft Edge.",
+      "details": "Edge shows 'managed by your organization' in its settings while policies are set. HideFirstRunExperience is 1, so Edge skips its first-run pages.",
+      "category": "edge",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "Microsoft Edge policy reference",
+          "url": "https://learn.microsoft.com/deployedge/microsoft-edge-policies"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "NewTabPageContentEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "NewTabPageHideDefaultTopSites",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "EdgeShoppingAssistantEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "TabServicesEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "AlternateErrorPagesEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "UserFeedbackAllowed",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "ShowRecommendationsEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "WalletDonationEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "HideFirstRunExperience",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "DefaultBrowserSettingEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "DefaultBrowserSettingsCampaignEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "SpotlightExperiencesAndRecommendationsEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "ShowAcrobatSubscriptionButton",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "edge-no-ai",
+      "title": "Edge without Copilot",
+      "description": "Turns off Copilot and the other AI features in Microsoft Edge.",
+      "category": "edge",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "HubsSidebarEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "CopilotCDPPageContext",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "CopilotPageContext",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "Microsoft365CopilotChatIconEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "EdgeEntraCopilotPageContext",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "EdgeHistoryAISearchEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "ComposeInlineEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "GenAILocalFoundationalModelSettings",
+          "type": "dword",
+          "data": 1
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "NewTabPageBingChatEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "edge-less-telemetry",
+      "title": "Edge sends less data",
+      "description": "Edge does not send browsing data and optional diagnostic data to Microsoft.",
+      "category": "edge",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "PersonalizationReportingEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "DiagnosticData",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "edge-no-background",
+      "title": "Edge does not run in the background",
+      "description": "Edge does not start in the background when you sign in to Windows. When you close Edge, it stops completely.",
+      "details": "Edge can take a moment longer to open the first time. Extensions and web apps that work in the background stop when you close Edge. The two settings for this in Edge, under System and performance, are locked while this is on.",
+      "category": "edge",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "StartupBoostEnabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Edge",
+          "name": "BackgroundModeEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "show-file-extensions",
+      "title": "Show file extensions",
+      "description": "Shows the ending of file names, such as .pdf or .exe, so you can tell what a file really is.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "HideFileExt",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "show-hidden-files",
+      "title": "Show hidden files",
+      "description": "Shows files and folders that Windows normally hides.",
+      "details": "Windows hides these items for a reason. If you delete them, apps can stop working.",
+      "category": "explorer",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Hidden",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "taskbar-end-task",
+      "title": "'End task' in the taskbar menu",
+      "description": "Adds 'End task' to the menu you get when you right-click an app on the taskbar, to close a frozen app.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "minBuild": 22631,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings",
+          "name": "TaskbarEndTask",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-widgets",
+      "title": "Widgets off",
+      "description": "Turns the Widgets panel off by policy, so it stays off even if the Widgets app comes back with an update.",
+      "details": "The taskbar button value (TaskbarDa) is not written: recent Windows builds protect it. Removing the Widgets app removes the button.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Dsh",
+          "name": "AllowNewsAndInterests",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "hide-chat-icon",
+      "title": "No Chat icon",
+      "description": "Removes the Chat icon from the taskbar on Windows 11 22H2.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "maxBuild": 22621,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Windows Chat",
+          "name": "ChatIcon",
+          "type": "dword",
+          "data": 3
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "TaskbarMn",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "taskbar-left",
+      "title": "Taskbar on the left",
+      "description": "Puts the Start button and taskbar icons at the left edge, as in Windows 10.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "TaskbarAl",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "hide-task-view-button",
+      "title": "No Task View button",
+      "description": "Removes the Task View button from the taskbar. Win+Tab still works.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "ShowTaskViewButton",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "hide-taskbar-search",
+      "title": "No search box on the taskbar",
+      "description": "Removes the search box from the taskbar. Search still opens when you press the Windows key and type.",
+      "details": "Applied at first sign-in: Windows overwrites this value when it creates a new account.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Search",
+          "name": "SearchboxTaskbarMode",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "classic-context-menu",
+      "title": "Classic right-click menu",
+      "description": "Brings back the full Windows 10 right-click menu in File Explorer, without the extra 'Show more options' step.",
+      "details": "The per-user part is applied at first sign-in because it lives in a part of the registry that is created per account. Relies on an internal Windows switch that an update can change.",
+      "category": "explorer",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32",
+          "name": "",
+          "type": "string",
+          "data": ""
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\FeatureManagement\\Overrides\\14\\4055089295",
+          "name": "EnabledState",
+          "type": "dword",
+          "data": 1,
+          "note": "Needed since 26H2 (Win11Debloat a7566e2). Inert on older builds."
+        }
+      ]
+    },
+    {
+      "id": "explorer-opens-this-pc",
+      "title": "File Explorer opens 'This PC'",
+      "description": "File Explorer starts with your drives and folders instead of the Home page.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "LaunchTo",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "hide-gallery",
+      "title": "No Gallery in File Explorer",
+      "description": "Removes 'Gallery' from the left pane of File Explorer.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Classes\\CLSID\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}",
+          "name": "System.IsPinnedToNameSpaceTree",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "hide-home",
+      "title": "No Home in File Explorer",
+      "description": "Removes 'Home' from the left pane of File Explorer.",
+      "details": "Quick access links may not refresh until File Explorer is restarted.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "requires": [
+        "explorer-opens-this-pc"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Classes\\CLSID\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}",
+          "name": "",
+          "type": "string",
+          "data": "CLSID_MSGraphHomeFolder"
+        },
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Classes\\CLSID\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}",
+          "name": "System.IsPinnedToNameSpaceTree",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "taskbar-never-combine",
+      "title": "Never combine taskbar buttons",
+      "description": "Every open window gets its own taskbar button with its name, also on the taskbars of other monitors.",
+      "details": "Change it in Settings > Personalization > Taskbar > Taskbar behaviors.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "TaskbarGlomLevel",
+          "type": "dword",
+          "data": 2
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "MMTaskbarGlomLevel",
+          "type": "dword",
+          "data": 2
+        }
+      ]
+    },
+    {
+      "id": "dark-theme",
+      "title": "Dark mode",
+      "description": "Windows and apps start in dark mode for every new account.",
+      "details": "Set twice on purpose: in the default profile and again at first sign-in, because Windows resets the theme values when it creates an account.",
+      "category": "appearance",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "AppsUseLightTheme",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "SystemUsesLightTheme",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "AppsUseLightTheme",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "SystemUsesLightTheme",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-transparency",
+      "title": "Transparency effects off",
+      "description": "The taskbar, Start menu and windows use solid colors instead of see-through glass effects. Helps on older or slower PCs.",
+      "details": "Set in the default profile and again at first sign-in, because Windows resets the theme values when it creates an account. Switch it back on in Settings > Personalization > Colors.",
+      "category": "appearance",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "EnableTransparency",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "EnableTransparency",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-animations",
+      "title": "Animations off",
+      "description": "Windows opens, closes and minimizes windows and menus at once, without animations. Helps on older or slower PCs.",
+      "details": "Set in the default profile and again at first sign-in, as Win11Debloat does, because Windows can reset these values when it creates an account. Some animations stop only after the next sign-in. Switch them back on in Settings > Accessibility > Visual effects.",
+      "category": "appearance",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Desktop",
+          "name": "UserPreferencesMask",
+          "type": "binary",
+          "data": "9012078010000000",
+          "note": "Win11Debloat's Disable_Animations value: the default mask with the menu, list and window animation bits cleared."
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Desktop\\WindowMetrics",
+          "name": "MinAnimate",
+          "type": "string",
+          "data": "0",
+          "note": "From winutil's visual effects tweak: no animation when a window is minimized or restored."
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "TaskbarAnimations",
+          "type": "dword",
+          "data": 0,
+          "note": "From winutil's visual effects tweak."
+        },
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Control Panel\\Desktop",
+          "name": "UserPreferencesMask",
+          "type": "binary",
+          "data": "9012078010000000",
+          "note": "Win11Debloat's Sysprep variant sets this again with a RunOnce command at first sign-in."
+        }
+      ]
+    },
+    {
+      "id": "short-menu-delay",
+      "title": "Shorter menu delay",
+      "description": "When you point at a menu item that has a submenu, the submenu opens after 0.1 seconds. Windows normally waits 0.4 seconds.",
+      "category": "appearance",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Desktop",
+          "name": "MenuShowDelay",
+          "type": "string",
+          "data": "100",
+          "note": "A string, not a number. The Default user's hive of the 26H2 image holds \"400\"."
+        }
+      ]
+    },
+    {
+      "id": "no-game-recording",
+      "title": "No background game recording",
+      "description": "Turns off Game DVR background recording, which can cost performance in games.",
+      "details": "Set as a default, not a lock: you can switch recording back on in Settings or Game Bar.",
+      "category": "gaming",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "System\\GameConfigStore",
+          "name": "GameDVR_Enabled",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-mouse-acceleration",
+      "title": "No mouse acceleration",
+      "description": "Turns off 'Enhance pointer precision', so the pointer moves the same distance however fast you move the mouse.",
+      "category": "gaming",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Mouse",
+          "name": "MouseSpeed",
+          "type": "string",
+          "data": "0"
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Mouse",
+          "name": "MouseThreshold1",
+          "type": "string",
+          "data": "0"
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Mouse",
+          "name": "MouseThreshold2",
+          "type": "string",
+          "data": "0"
+        }
+      ]
+    },
+    {
+      "id": "gpu-scheduling",
+      "title": "Hardware GPU scheduling",
+      "description": "Switches on hardware-accelerated GPU scheduling, which can reduce latency in games.",
+      "details": "Ignored when the graphics card or driver does not support it.",
+      "category": "gaming",
+      "risk": "moderate",
+      "defaultIn": [
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "WinLessBloat11",
+          "url": "https://github.com/annoyedmilk/WinLessBloat11"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\GraphicsDrivers",
+          "name": "HwSchMode",
+          "type": "dword",
+          "data": 2
+        }
+      ]
+    },
+    {
+      "id": "no-controller-game-bar",
+      "title": "Xbox button does not open Game Bar",
+      "description": "Pressing the Xbox button on a game controller no longer opens Game Bar.",
+      "details": "Game Bar itself stays and still opens with Win+G. Also worth switching on when you remove the Game Bar app on the Apps tab, so the controller button no longer tries to open it. Undo in Settings > Gaming > Game Bar.",
+      "category": "gaming",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\GameBar",
+          "name": "UseNexusForGameBarEnabled",
+          "type": "dword",
+          "data": 0,
+          "note": "Only the controller setting of Win11Debloat's Disable_Game_Bar_Integration. Its ms-gamebar protocol overrides are left out: they would break Game Bar links while Game Bar is installed."
+        }
+      ]
+    },
+    {
+      "id": "windowed-game-optimizations",
+      "title": "Optimizations for windowed games",
+      "description": "Games that run in a window or in a borderless window get less input delay. They can also use Auto HDR and variable refresh rate.",
+      "details": "Applies to DirectX 10 and DirectX 11 games. Games in full screen mode do not change. If a game shows problems, switch it off in Settings > System > Display > Graphics.",
+      "category": "gaming",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "minBuild": 22621,
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "name": "DirectXUserGlobalSettings",
+          "type": "string",
+          "data": "SwapEffectUpgradeEnable=1;",
+          "note": "DirectXUserGlobalSettings holds all global graphics settings of a user in one string. Another entry that changes one of them must share this value. The key is not in the Default user's hive of the 26H2 image."
+        }
+      ]
+    },
+    {
+      "id": "high-performance-power-plan",
+      "title": "High performance power plan",
+      "description": "Windows uses the High performance power plan instead of Balanced. The processor stays fast, so the PC uses more power. This is for desktop PCs.",
+      "details": "Applied at the first sign-in. Many laptops do not have this power plan. On these PCs the power plan does not change, and the log of the first sign-in tells you this. On a laptop, the battery becomes empty faster. To go back, select Balanced in Control Panel > Power Options.",
+      "category": "gaming",
+      "risk": "moderate",
+      "defaultIn": [
+        "gaming"
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.command",
+          "scope": "machine",
+          "summary": "Switch to the High performance power plan",
+          "command": "$scheme = '8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c'; if ((& powercfg.exe /list) -match $scheme) { & powercfg.exe /setactive $scheme; if ($LASTEXITCODE -ne 0) { throw ('powercfg ended with code ' + $LASTEXITCODE + '. The power plan was not changed.') } } else { 'This PC has no High performance power plan. Many laptops do not have it. The power plan was not changed.' }",
+          "note": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c is the built-in High performance scheme. The 26H2 image holds it, but PCs with Modern Standby (S0 low power idle) usually do not offer it. A missing scheme gives a normal log line, not a problem. powercfg reports a failure only through its error stream and its exit code, so the exit code is checked and a failed switch is logged as a failed step."
+        }
+      ]
+    },
+    {
+      "id": "no-fast-startup",
+      "title": "Fast Startup off",
+      "description": "Shutting down really turns Windows off, so the next start is a fresh one.",
+      "details": "Fast Startup keeps part of Windows on the disk when you shut down. Without it the PC may start a few seconds slower, but drivers start fresh every time and a second operating system on the same PC can safely use the Windows drives. Restart is not affected.",
+      "category": "system",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\Session Manager\\Power",
+          "name": "HiberbootEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-hibernation",
+      "title": "Hibernation off",
+      "description": "Windows does not keep a hibernation file on the disk. This frees disk space: the file is often 40 percent as large as the memory (RAM) of the PC. After this change, the PC cannot hibernate.",
+      "details": "Fast Startup also stops, because it needs hibernation. On a laptop, Windows cannot save your open work to the disk when the battery becomes almost empty. To switch hibernation on again, run 'powercfg /hibernate on' in a terminal as administrator.",
+      "category": "system",
+      "risk": "moderate",
+      "defaultIn": [],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\Power",
+          "name": "HibernateEnabled",
+          "type": "dword",
+          "data": 0,
+          "note": "The value that 'powercfg /hibernate off' writes. It overrides HibernateEnabledDefault, which Windows writes itself at start from what the hardware supports. Neither value is in the 26H2 image, so writing HibernateEnabledDefault offline would change nothing."
+        }
+      ]
+    },
+    {
+      "id": "no-reserved-storage",
+      "title": "No reserved storage",
+      "description": "Windows does not set aside about 7 GB of disk space for updates.",
+      "details": "On a nearly full disk an update may then fail for lack of space, so no preset includes this. Only worth it on a very small disk that you keep tidy yourself.",
+      "category": "system",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\Windows\\CurrentVersion\\ReserveManager",
+          "name": "ShippedWithReserves",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-auto-device-encryption",
+      "title": "No automatic drive encryption",
+      "description": "Windows does not encrypt the drive by itself during setup.",
+      "details": "Avoids being locked out by a recovery key you never saved. If you want encryption, switch BitLocker or Device encryption on in Settings after setup and store the key.",
+      "category": "system",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        },
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\BitLocker",
+          "name": "PreventDeviceEncryption",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "long-paths",
+      "title": "Long file paths",
+      "description": "Allows programs to use file paths longer than 260 characters.",
+      "category": "system",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\FileSystem",
+          "name": "LongPathsEnabled",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "no-standby-networking",
+      "title": "No network in standby",
+      "description": "The PC does not stay connected to the network while it sleeps, which saves battery.",
+      "details": "Mail and messages do not arrive while the PC sleeps. Has no effect on PCs without Modern Standby.",
+      "category": "system",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Power\\PowerSettings\\f15576e8-98b7-4186-b944-eafa664402d9",
+          "name": "ACSettingIndex",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Power\\PowerSettings\\f15576e8-98b7-4186-b944-eafa664402d9",
+          "name": "DCSettingIndex",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-firmware-apps",
+      "title": "No apps injected by the PC maker's firmware",
+      "description": "Stops the PC's firmware from installing the manufacturer's software into Windows at every start.",
+      "details": "Also stops firmware-based anti-theft agents that some business laptops use.",
+      "category": "system",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\Session Manager",
+          "name": "DisableWpbtExecution",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "block-onedrive",
+      "title": "Block OneDrive completely",
+      "description": "Prevents OneDrive from running at all, even if it is installed later.",
+      "details": "A user who installs OneDrive later gets an app that refuses to start. Undo: delete this policy value.",
+      "category": "system",
+      "risk": "advanced",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\OneDrive",
+          "name": "DisableFileSyncNGSC",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "detailed-crash-screen",
+      "title": "Details on the crash screen",
+      "description": "Shows technical details on the blue crash screen.",
+      "category": "system",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSystem",
+          "key": "CurrentControlSet\\Control\\CrashControl",
+          "name": "DisplayParameters",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
+      "id": "numlock-on",
+      "title": "Num Lock on at start",
+      "description": "Num Lock is on when Windows starts.",
+      "category": "system",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Keyboard",
+          "name": "InitialKeyboardIndicators",
+          "type": "string",
+          "data": "2"
+        },
+        {
+          "kind": "registry.set",
+          "hive": "systemUser",
+          "key": "Control Panel\\Keyboard",
+          "name": "InitialKeyboardIndicators",
+          "type": "string",
+          "data": "2"
+        }
+      ]
+    },
+    {
+      "id": "no-sticky-keys-prompt",
+      "title": "No Sticky Keys prompt",
+      "description": "Pressing Shift five times no longer opens the Sticky Keys question.",
+      "category": "system",
+      "risk": "safe",
+      "defaultIn": [],
+      "minBuild": 26100,
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\Accessibility\\StickyKeys",
+          "name": "Flags",
+          "type": "string",
+          "data": "506"
+        }
+      ]
+    },
+    {
+      "id": "no-startup-delay",
+      "title": "No startup delay for apps",
+      "description": "Apps that start with Windows start right after you sign in. Windows normally waits a few seconds before it starts them.",
+      "details": "On a PC with a slow hard disk, the desktop can take longer to become ready.",
+      "category": "system",
+      "risk": "safe",
+      "defaultIn": [
+        "gaming"
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Serialize",
+          "name": "StartupDelayInMSec",
+          "type": "dword",
+          "data": 0,
+          "note": "The Serialize key is not in the Default user's hive of the 26H2 image."
+        }
+      ]
+    },
+    {
+      "id": "hide-unsupported-hardware-notice",
+      "title": "Hide the 'requirements not met' notice",
+      "description": "Hides the reminder that this PC does not meet the Windows 11 requirements, on PCs installed with the hardware check bypass.",
+      "details": "The reminder is there because Microsoft does not promise updates for such PCs. Hiding it does not change that. Has no effect on PCs that meet the requirements.",
+      "category": "system",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\UnsupportedHardwareNotificationCache",
+          "name": "SV1",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Control Panel\\UnsupportedHardwareNotificationCache",
+          "name": "SV2",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "systemUser",
+          "key": "Control Panel\\UnsupportedHardwareNotificationCache",
+          "name": "SV1",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "systemUser",
+          "key": "Control Panel\\UnsupportedHardwareNotificationCache",
+          "name": "SV2",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "wsl",
+      "title": "Windows Subsystem for Linux",
+      "description": "Switches on the Windows features that Linux distributions such as Ubuntu need to run inside Windows.",
+      "details": "The Linux distribution itself is installed later with 'wsl --install', which needs an internet connection. Virtualization must be switched on in the PC's firmware (BIOS or UEFI).",
+      "category": "developer",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        },
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "feature.enable",
+          "name": "Microsoft-Windows-Subsystem-Linux"
+        },
+        {
+          "kind": "feature.enable",
+          "name": "VirtualMachinePlatform"
+        }
+      ]
+    },
+    {
+      "id": "windows-sandbox",
+      "title": "Windows Sandbox",
+      "description": "Switches on Windows Sandbox, a throwaway copy of Windows in a window for trying out programs safely. Everything in it is deleted when you close it.",
+      "details": "Pro, Education and Enterprise only. On Home, Plainstall skips this switch. Virtualization must be switched on in the PC's firmware (BIOS or UEFI).",
+      "category": "developer",
+      "risk": "moderate",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        },
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "feature.enable",
+          "name": "Containers-DisposableClientVM"
+        }
+      ]
+    }
+  ]
+}

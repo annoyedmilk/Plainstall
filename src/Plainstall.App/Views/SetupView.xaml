@@ -1,0 +1,264 @@
+<UserControl
+    x:Class="Plainstall.App.Views.SetupView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Plainstall.App.Resources"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:SetupViewModel}"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="FieldError" BasedOn="{StaticResource Plainstall.Body}" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </UserControl.Resources>
+    <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="0,12,12,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="6*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <!--  Account  -->
+                <Border Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <DockPanel>
+                            <ui:ToggleSwitch
+                                VerticalAlignment="Top"
+                                AutomationProperties.HelpText="{x:Static res:Strings.Setup_LocalAccountText}"
+                                AutomationProperties.Name="{x:Static res:Strings.Setup_LocalAccountTitle}"
+                                DockPanel.Dock="Right"
+                                IsChecked="{Binding LocalAccount}" />
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                           Text="{x:Static res:Strings.Setup_LocalAccountTitle}" />
+                                <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                           Text="{x:Static res:Strings.Setup_LocalAccountText}" />
+                            </StackPanel>
+                        </DockPanel>
+                        <StackPanel Margin="0,12,0,0" IsEnabled="{Binding LocalAccount}">
+                            <TextBlock
+                                x:Name="AccountNameLabel"
+                                Style="{StaticResource Plainstall.Body}"
+                                Text="{x:Static res:Strings.Setup_AccountNameLabel}" />
+                            <ui:TextBox
+                                Margin="0,4,0,0"
+                                AutomationProperties.HelpText="{Binding AccountNameError}"
+                                AutomationProperties.LabeledBy="{Binding ElementName=AccountNameLabel}"
+                                AutomationProperties.Name="{x:Static res:Strings.Setup_AccountNameLabel}"
+                                MaxLength="20"
+                                PlaceholderText="{x:Static res:Strings.Setup_AccountNamePlaceholder}"
+                                Text="{Binding AccountName, UpdateSourceTrigger=PropertyChanged}" />
+                            <DockPanel
+                                Visibility="{Binding AccountNameError, Converter={StaticResource NullToCollapsed}}">
+                                <ui:SymbolIcon
+                                    Margin="0,4,6,0"
+                                    Foreground="{DynamicResource Plainstall.DangerBrush}"
+                                    Symbol="ErrorCircle24" />
+                                <TextBlock
+                                    AutomationProperties.LiveSetting="Assertive"
+                                    Style="{StaticResource FieldError}"
+                                    Text="{Binding AccountNameError}" />
+                            </DockPanel>
+                            <CheckBox
+                                Margin="0,10,0,0"
+                                AutomationProperties.HelpText="{x:Static res:Strings.Setup_AskPasswordText}"
+                                AutomationProperties.Name="{x:Static res:Strings.Setup_AskPassword}"
+                                Content="{x:Static res:Strings.Setup_AskPassword}"
+                                IsChecked="{Binding AskPassword}"
+                                IsEnabled="{Binding CanChangeAskPassword}" />
+                            <TextBlock
+                                Margin="28,0,0,0"
+                                Style="{StaticResource Plainstall.Secondary}"
+                                Text="{x:Static res:Strings.Setup_AskPasswordText}" />
+                            <DockPanel
+                                Visibility="{Binding AskPasswordError, Converter={StaticResource NullToCollapsed}}">
+                                <ui:SymbolIcon
+                                    Margin="0,4,6,0"
+                                    Foreground="{DynamicResource Plainstall.DangerBrush}"
+                                    Symbol="ErrorCircle24" />
+                                <TextBlock
+                                    AutomationProperties.LiveSetting="Assertive"
+                                    Style="{StaticResource FieldError}"
+                                    Text="{Binding AskPasswordError}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!--  Computer name  -->
+                <Border Margin="0,12,0,0" Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <TextBlock
+                            x:Name="ComputerNameLabel"
+                            Style="{StaticResource Plainstall.Strong}"
+                            Text="{x:Static res:Strings.Setup_ComputerNameLabel}" />
+                        <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                   Text="{x:Static res:Strings.Setup_ComputerNameText}" />
+                        <ui:TextBox
+                            Margin="0,6,0,0"
+                            AutomationProperties.HelpText="{Binding ComputerNameError}"
+                            AutomationProperties.LabeledBy="{Binding ElementName=ComputerNameLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_ComputerNameLabel}"
+                            MaxLength="15"
+                            PlaceholderText="{x:Static res:Strings.Setup_ComputerNamePlaceholder}"
+                            Text="{Binding ComputerName, UpdateSourceTrigger=PropertyChanged}" />
+                        <DockPanel Visibility="{Binding ComputerNameError, Converter={StaticResource NullToCollapsed}}">
+                            <ui:SymbolIcon
+                                Margin="0,4,6,0"
+                                Foreground="{DynamicResource Plainstall.DangerBrush}"
+                                Symbol="ErrorCircle24" />
+                            <TextBlock
+                                AutomationProperties.LiveSetting="Assertive"
+                                Style="{StaticResource FieldError}"
+                                Text="{Binding ComputerNameError}" />
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+                <!--  Setup pages  -->
+                <Border Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <DockPanel>
+                            <ui:ToggleSwitch
+                                VerticalAlignment="Top"
+                                AutomationProperties.HelpText="{x:Static res:Strings.Setup_SkipPrivacyText}"
+                                AutomationProperties.Name="{x:Static res:Strings.Setup_SkipPrivacyTitle}"
+                                DockPanel.Dock="Right"
+                                IsChecked="{Binding SkipPrivacyPages}" />
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                           Text="{x:Static res:Strings.Setup_SkipPrivacyTitle}" />
+                                <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                           Text="{x:Static res:Strings.Setup_SkipPrivacyText}" />
+                            </StackPanel>
+                        </DockPanel>
+                        <DockPanel Margin="0,14,0,0">
+                            <ui:ToggleSwitch
+                                VerticalAlignment="Top"
+                                AutomationProperties.HelpText="{x:Static res:Strings.Setup_BypassText}"
+                                AutomationProperties.Name="{x:Static res:Strings.Setup_BypassTitle}"
+                                DockPanel.Dock="Right"
+                                IsChecked="{Binding BypassHardwareChecks}" />
+                            <StackPanel Margin="0,0,12,0">
+                                <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                           Text="{x:Static res:Strings.Setup_BypassTitle}" />
+                                <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                           Text="{x:Static res:Strings.Setup_BypassText}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+
+                <!--  Region, keyboard, time zone  -->
+                <Border Margin="0,12,0,0" Style="{StaticResource Plainstall.Card}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="160" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.ColumnSpan="5"
+                            Margin="0,0,0,8"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{x:Static res:Strings.Setup_RegionalText}" />
+
+                        <TextBlock
+                            x:Name="RegionLabel"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Plainstall.Strong}"
+                            Text="{x:Static res:Strings.Setup_Region}" />
+                        <ComboBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="0,4"
+                            AutomationProperties.LabeledBy="{Binding ElementName=RegionLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_Region}"
+                            DisplayMemberPath="Title"
+                            ItemsSource="{Binding RegionModes}"
+                            SelectedItem="{Binding RegionMode}" />
+                        <ComboBox
+                            Grid.Row="1"
+                            Grid.Column="4"
+                            Margin="0,4"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_RegionValueName}"
+                            DisplayMemberPath="DisplayName"
+                            ItemsSource="{Binding Regions}"
+                            SelectedItem="{Binding RegionValue}"
+                            Visibility="{Binding IsRegionValue, Converter={StaticResource BoolToVisibility}}" />
+
+                        <TextBlock
+                            x:Name="KeyboardLabel"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Plainstall.Strong}"
+                            Text="{x:Static res:Strings.Setup_Keyboard}" />
+                        <ComboBox
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="0,4"
+                            AutomationProperties.LabeledBy="{Binding ElementName=KeyboardLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_Keyboard}"
+                            DisplayMemberPath="Title"
+                            ItemsSource="{Binding KeyboardModes}"
+                            SelectedItem="{Binding KeyboardMode}" />
+                        <ComboBox
+                            Grid.Row="2"
+                            Grid.Column="4"
+                            Margin="0,4"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_KeyboardValueName}"
+                            DisplayMemberPath="DisplayName"
+                            ItemsSource="{Binding Keyboards}"
+                            SelectedItem="{Binding KeyboardValue}"
+                            Visibility="{Binding IsKeyboardValue, Converter={StaticResource BoolToVisibility}}" />
+
+                        <TextBlock
+                            x:Name="TimeZoneLabel"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Plainstall.Strong}"
+                            Text="{x:Static res:Strings.Setup_TimeZone}" />
+                        <ComboBox
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Margin="0,4"
+                            AutomationProperties.LabeledBy="{Binding ElementName=TimeZoneLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_TimeZone}"
+                            DisplayMemberPath="Title"
+                            ItemsSource="{Binding TimeZoneModes}"
+                            SelectedItem="{Binding TimeZoneMode}" />
+                        <ComboBox
+                            Grid.Row="3"
+                            Grid.Column="4"
+                            Margin="0,4"
+                            AutomationProperties.Name="{x:Static res:Strings.Setup_TimeZoneValueName}"
+                            DisplayMemberPath="DisplayName"
+                            ItemsSource="{Binding TimeZones}"
+                            SelectedItem="{Binding TimeZoneValue}"
+                            Visibility="{Binding IsTimeZoneValue, Converter={StaticResource BoolToVisibility}}" />
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

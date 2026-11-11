@@ -1,0 +1,234 @@
+<UserControl
+    x:Class="Plainstall.App.Views.WindowsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Plainstall.App.Resources"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:WindowsViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,16,32,24">
+            <TextBlock Style="{StaticResource Plainstall.PageTitle}" Text="{x:Static res:Strings.Windows_Title}" />
+            <TextBlock Style="{StaticResource Plainstall.PageSubtitle}" Text="{x:Static res:Strings.Windows_Subtitle}" />
+
+            <!--  Where Windows comes from  -->
+            <Grid Margin="0,16,0,0" KeyboardNavigation.DirectionalNavigation="Contained">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton
+                    AutomationProperties.HelpText="{x:Static res:Strings.Windows_DownloadText}"
+                    AutomationProperties.Name="{x:Static res:Strings.Windows_DownloadTitle}"
+                    GroupName="Source"
+                    IsChecked="{Binding UseDownload, Mode=TwoWay}"
+                    Style="{StaticResource Plainstall.ChoiceCard}">
+                    <DockPanel>
+                        <ui:SymbolIcon
+                            Margin="0,0,12,0"
+                            VerticalAlignment="Top"
+                            FontSize="28"
+                            Symbol="CloudArrowDown24" />
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                       Text="{x:Static res:Strings.Windows_DownloadTitle}" />
+                            <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                       Text="{x:Static res:Strings.Windows_DownloadText}" />
+                        </StackPanel>
+                    </DockPanel>
+                </RadioButton>
+                <RadioButton
+                    Grid.Column="2"
+                    AutomationProperties.HelpText="{x:Static res:Strings.Windows_IsoText}"
+                    AutomationProperties.Name="{x:Static res:Strings.Windows_IsoTitle}"
+                    GroupName="Source"
+                    IsChecked="{Binding UseOwnIso, Mode=TwoWay}"
+                    Style="{StaticResource Plainstall.ChoiceCard}">
+                    <DockPanel>
+                        <ui:SymbolIcon
+                            Margin="0,0,12,0"
+                            VerticalAlignment="Top"
+                            FontSize="28"
+                            Symbol="Document24" />
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                       Text="{x:Static res:Strings.Windows_IsoTitle}" />
+                            <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                       Text="{x:Static res:Strings.Windows_IsoText}" />
+                        </StackPanel>
+                    </DockPanel>
+                </RadioButton>
+            </Grid>
+
+            <!--  Download  -->
+            <Border
+                Margin="0,16,0,0"
+                Style="{StaticResource Plainstall.Card}"
+                Visibility="{Binding UseDownload, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel>
+                    <TextBlock
+                        x:Name="LanguageLabel"
+                        Style="{StaticResource Plainstall.Strong}"
+                        Text="{x:Static res:Strings.Windows_LanguageLabel}" />
+                    <StackPanel Margin="0,6,0,0" Orientation="Horizontal">
+                        <ComboBox
+                            MinWidth="320"
+                            AutomationProperties.LabeledBy="{Binding ElementName=LanguageLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Windows_LanguageLabel}"
+                            DisplayMemberPath="DisplayName"
+                            IsEnabled="{Binding LanguagesLoaded}"
+                            ItemsSource="{Binding Languages}"
+                            SelectedItem="{Binding SelectedLanguage}" />
+                        <ui:ProgressRing
+                            Width="22"
+                            Height="22"
+                            Margin="12,0,8,0"
+                            AutomationProperties.Name="{x:Static res:Strings.Windows_LoadingLanguages}"
+                            IsIndeterminate="True"
+                            Visibility="{Binding IsLoadingLanguages, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            AutomationProperties.LiveSetting="Polite"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{x:Static res:Strings.Windows_LoadingLanguages}"
+                            Visibility="{Binding IsLoadingLanguages, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{Binding ReleaseText}" />
+                    </StackPanel>
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        Style="{StaticResource Plainstall.Body}"
+                        Text="{Binding LanguageNote}"
+                        Visibility="{Binding LanguageNote, Converter={StaticResource NullToCollapsed}}" />
+
+                    <Border
+                        Margin="0,12,0,0"
+                        Style="{StaticResource Plainstall.Notice.Danger}"
+                        Visibility="{Binding LanguageLoadError, Converter={StaticResource NullToCollapsed}}">
+                        <DockPanel>
+                            <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon.Danger}" Symbol="ErrorCircle24" />
+                            <StackPanel>
+                                <TextBlock
+                                    AutomationProperties.LiveSetting="Assertive"
+                                    Style="{StaticResource Plainstall.Body}"
+                                    Text="{Binding LanguageLoadError}" />
+                                <WrapPanel Margin="0,8,0,0">
+                                    <ui:Button
+                                        Margin="0,0,8,0"
+                                        AutomationProperties.Name="{x:Static res:Strings.Windows_TryAgain}"
+                                        Command="{Binding LoadLanguagesCommand}"
+                                        Content="{x:Static res:Strings.Windows_TryAgain}"
+                                        Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                                    <ui:Button
+                                        AutomationProperties.Name="{x:Static res:Strings.Windows_UseIsoInstead}"
+                                        Command="{Binding UseIsoInsteadCommand}"
+                                        Content="{x:Static res:Strings.Windows_UseIsoInstead}"
+                                        Icon="{ui:SymbolIcon Document24}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!--  Own ISO  -->
+            <Border
+                Margin="0,16,0,0"
+                Style="{StaticResource Plainstall.Card}"
+                Visibility="{Binding UseOwnIso, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel>
+                    <TextBlock
+                        x:Name="IsoLabel"
+                        Style="{StaticResource Plainstall.Strong}"
+                        Text="{x:Static res:Strings.Windows_IsoFileLabel}" />
+                    <DockPanel Margin="0,6,0,0">
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            AutomationProperties.Name="{x:Static res:Strings.Windows_BrowseIsoName}"
+                            Command="{Binding BrowseIsoCommand}"
+                            Content="{x:Static res:Strings.Windows_BrowseIso}"
+                            DockPanel.Dock="Right"
+                            Icon="{ui:SymbolIcon FolderOpen24}" />
+                        <ui:TextBox
+                            AutomationProperties.LabeledBy="{Binding ElementName=IsoLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Windows_IsoFileLabel}"
+                            IsReadOnly="True"
+                            PlaceholderText="{x:Static res:Strings.Windows_IsoPlaceholder}"
+                            Text="{Binding IsoPath, Mode=OneWay}" />
+                    </DockPanel>
+                    <StackPanel
+                        Margin="0,10,0,0"
+                        Orientation="Horizontal"
+                        Visibility="{Binding IsReadingIso, Converter={StaticResource BoolToVisibility}}">
+                        <ui:ProgressRing
+                            Width="20"
+                            Height="20"
+                            Margin="0,0,8,0"
+                            AutomationProperties.Name="{x:Static res:Strings.Windows_ReadingIso}"
+                            IsIndeterminate="True" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            AutomationProperties.LiveSetting="Polite"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{x:Static res:Strings.Windows_ReadingIso}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0"
+                                Visibility="{Binding HasMedia, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Style="{StaticResource Plainstall.Body}" Text="{Binding MediaVersionText}" />
+                        <TextBlock Style="{StaticResource Plainstall.Body}" Text="{Binding MediaLanguageText}" />
+                        <TextBlock Style="{StaticResource Plainstall.Body}" Text="{Binding MediaEditionsText}" />
+                    </StackPanel>
+                    <Border
+                        Margin="0,12,0,0"
+                        Style="{StaticResource Plainstall.Notice.Danger}"
+                        Visibility="{Binding IsoError, Converter={StaticResource NullToCollapsed}}">
+                        <DockPanel>
+                            <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon.Danger}" Symbol="ErrorCircle24" />
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                           Text="{x:Static res:Strings.Windows_IsoErrorTitle}" />
+                                <TextBlock
+                                    AutomationProperties.LiveSetting="Assertive"
+                                    Style="{StaticResource Plainstall.Body}"
+                                    Text="{Binding IsoError}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!--  Edition  -->
+            <Border
+                Margin="0,16,0,0"
+                Style="{StaticResource Plainstall.Card}"
+                Visibility="{Binding HasEditions, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel>
+                    <TextBlock
+                        x:Name="EditionLabel"
+                        Style="{StaticResource Plainstall.Strong}"
+                        Text="{x:Static res:Strings.Windows_EditionLabel}" />
+                    <ComboBox
+                        MinWidth="320"
+                        Margin="0,6,0,0"
+                        HorizontalAlignment="Left"
+                        AutomationProperties.LabeledBy="{Binding ElementName=EditionLabel}"
+                        AutomationProperties.Name="{x:Static res:Strings.Windows_EditionLabel}"
+                        DisplayMemberPath="Title"
+                        ItemsSource="{Binding Editions}"
+                        SelectedItem="{Binding SelectedEdition}" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        Style="{StaticResource Plainstall.Secondary}"
+                        Text="{x:Static res:Strings.Windows_EditionHint}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

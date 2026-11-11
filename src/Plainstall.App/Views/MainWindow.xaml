@@ -1,0 +1,326 @@
+<ui:FluentWindow
+    x:Class="Plainstall.App.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Plainstall.App.Resources"
+    xmlns:services="clr-namespace:Plainstall.App.Services"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:views="clr-namespace:Plainstall.App.Views"
+    xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+    mc:Ignorable="d"
+    Title="{x:Static res:Strings.App_Title}"
+    Width="1280"
+    Height="720"
+    MinWidth="960"
+    MinHeight="600"
+    Background="{DynamicResource Plainstall.PageBackgroundBrush}"
+    ExtendsContentIntoTitleBar="True"
+    Icon="pack://application:,,,/Plainstall.App;component/Assets/plainstall.ico"
+    WindowBackdropType="None"
+    WindowCornerPreference="Round"
+    WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:WelcomeViewModel}">
+            <views:WelcomePage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:WindowsViewModel}">
+            <views:WindowsPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomizeViewModel}">
+            <views:CustomizePage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReviewViewModel}">
+            <views:ReviewPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BuildViewModel}">
+            <views:BuildPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DoneViewModel}">
+            <views:DonePage />
+        </DataTemplate>
+
+        <!--  The appearance switch: three icons side by side, the chosen one filled.  -->
+        <Style x:Key="Plainstall.ThemeSwitch" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Plainstall.CardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Cycle" />
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6">
+                            <ItemsPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style
+            x:Key="Plainstall.ThemeSwitchItem"
+            d:Style.DataContext="{d:DesignInstance Type=vm:ThemeOption}"
+            TargetType="ListBoxItem">
+            <Setter Property="AutomationProperties.Name" Value="{Binding Title}" />
+            <Setter Property="ToolTip" Value="{Binding Title}" />
+            <Setter Property="Foreground" Value="{DynamicResource Plainstall.TextSecondaryBrush}" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource Plainstall.FocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border
+                            x:Name="Back"
+                            Width="36"
+                            Height="28"
+                            Background="Transparent"
+                            CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Back" Property="Background"
+                                        Value="{DynamicResource Plainstall.SubtleBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Plainstall.TextBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Back" Property="Background"
+                                        Value="{DynamicResource Plainstall.AccentBrush}" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="Plainstall.ThemeSwitchIcon" DataType="{x:Type vm:ThemeOption}">
+            <ui:SymbolIcon
+                x:Name="Icon"
+                FontSize="16"
+                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                Symbol="Desktop24" />
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Choice}" Value="{x:Static services:ThemeChoice.Light}">
+                    <Setter TargetName="Icon" Property="Symbol" Value="WeatherSunny24" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Choice}" Value="{x:Static services:ThemeChoice.Dark}">
+                    <Setter TargetName="Icon" Property="Symbol" Value="WeatherMoon24" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Title="{x:Static res:Strings.App_Title}" Grid.Row="0" CanMaximize="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Plainstall.App;component/Assets/icon-64.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <!--  Banners  -->
+        <StackPanel Grid.Row="1" Margin="24,0,24,0">
+            <Border
+                Margin="0,0,0,8"
+                Style="{StaticResource Plainstall.Notice.Caution}"
+                Visibility="{Binding ShowElevationBanner, Converter={StaticResource BoolToVisibility}}">
+                <DockPanel>
+                    <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon}" Symbol="ShieldError24" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        AutomationProperties.LiveSetting="Polite"
+                        Style="{StaticResource Plainstall.Body}"
+                        Text="{x:Static res:Strings.Banner_NotElevated}" />
+                </DockPanel>
+            </Border>
+            <Border
+                Margin="0,0,0,8"
+                Style="{StaticResource Plainstall.Notice}"
+                Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVisibility}}">
+                <DockPanel>
+                    <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon}" Symbol="ArrowCircleUp24" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        AutomationProperties.Name="{x:Static res:Strings.Update_DismissName}"
+                        Appearance="Transparent"
+                        Command="{Binding DismissUpdateCommand}"
+                        DockPanel.Dock="Right"
+                        Icon="{ui:SymbolIcon Dismiss24}"
+                        ToolTip="{x:Static res:Strings.Update_DismissName}" />
+                    <ui:HyperlinkButton
+                        Foreground="{DynamicResource Plainstall.AccentTextBrush}"
+                        AutomationProperties.Name="{x:Static res:Strings.Update_OpenPage}"
+                        Command="{Binding OpenUpdatePageCommand}"
+                        Content="{x:Static res:Strings.Update_OpenPage}"
+                        DockPanel.Dock="Right" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Style="{StaticResource Plainstall.Body}"
+                        Text="{Binding UpdateText}" />
+                </DockPanel>
+            </Border>
+        </StackPanel>
+
+        <!--  Step indicator  -->
+        <Border
+            Grid.Row="2"
+            Margin="24,0,24,0"
+            Padding="0,4,0,10"
+            BorderBrush="{DynamicResource Plainstall.CardBorderBrush}"
+            BorderThickness="0,0,0,1">
+            <ItemsControl
+                AutomationProperties.Name="{Binding StepText}"
+                Focusable="False"
+                ItemsSource="{Binding Steps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:StepViewModel}">
+                        <StackPanel AutomationProperties.Name="{Binding AutomationName}" Orientation="Horizontal">
+                            <Grid Width="28" Height="28">
+                                <Ellipse
+                                    x:Name="Circle"
+                                    Fill="Transparent"
+                                    Stroke="{DynamicResource Plainstall.StepUpcomingBrush}"
+                                    StrokeThickness="2" />
+                                <TextBlock
+                                    x:Name="Number"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Foreground="{DynamicResource Plainstall.TextSecondaryBrush}"
+                                    Text="{Binding Number}" />
+                                <ui:SymbolIcon
+                                    x:Name="Tick"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Foreground="White"
+                                    Symbol="Checkmark24"
+                                    Visibility="Collapsed" />
+                            </Grid>
+                            <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
+                                <TextBlock
+                                    x:Name="Title"
+                                    FontSize="14"
+                                    Foreground="{DynamicResource Plainstall.TextSecondaryBrush}"
+                                    Text="{Binding Title}" />
+                                <TextBlock
+                                    x:Name="State"
+                                    FontSize="11"
+                                    Foreground="{DynamicResource Plainstall.TextSecondaryBrush}"
+                                    Text="{Binding StateText}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                <Setter TargetName="Circle" Property="Fill"
+                                        Value="{DynamicResource Plainstall.AccentBrush}" />
+                                <Setter TargetName="Circle" Property="Stroke"
+                                        Value="{DynamicResource Plainstall.AccentBrush}" />
+                                <Setter TargetName="Number" Property="Foreground" Value="White" />
+                                <Setter TargetName="Title" Property="FontWeight" Value="Bold" />
+                                <Setter TargetName="Title" Property="Foreground"
+                                        Value="{DynamicResource Plainstall.TextBrush}" />
+                                <Setter TargetName="State" Property="Foreground"
+                                        Value="{DynamicResource Plainstall.TextBrush}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsDone}" Value="True">
+                                <Setter TargetName="Circle" Property="Fill"
+                                        Value="{DynamicResource Plainstall.StepDoneBrush}" />
+                                <Setter TargetName="Circle" Property="Stroke"
+                                        Value="{DynamicResource Plainstall.StepDoneBrush}" />
+                                <Setter TargetName="Number" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="Tick" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="Title" Property="Foreground"
+                                        Value="{DynamicResource Plainstall.TextBrush}" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+
+        <!--  The page  -->
+        <ContentControl
+            Grid.Row="3"
+            Content="{Binding CurrentPage}"
+            Focusable="False"
+            IsTabStop="False" />
+
+        <!--  Footer: appearance switch, why Next is not available, Back and Next  -->
+        <Border
+            Grid.Row="4"
+            Padding="24,10"
+            BorderBrush="{DynamicResource Plainstall.CardBorderBrush}"
+            BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!--  Same as Windows, light, dark: one click, the choice is the filled icon.  -->
+                <ListBox
+                    VerticalAlignment="Center"
+                    AutomationProperties.Name="{x:Static res:Strings.Theme_Label}"
+                    ItemContainerStyle="{StaticResource Plainstall.ThemeSwitchItem}"
+                    ItemTemplate="{StaticResource Plainstall.ThemeSwitchIcon}"
+                    ItemsSource="{Binding ThemeOptions}"
+                    SelectedItem="{Binding SelectedTheme}"
+                    Style="{StaticResource Plainstall.ThemeSwitch}" />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="24,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    AutomationProperties.LiveSetting="Polite"
+                    Style="{StaticResource Plainstall.Secondary}"
+                    Text="{Binding ContinueBlockedReason}"
+                    TextAlignment="Right" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <ui:Button
+                        MinWidth="110"
+                        AutomationProperties.Name="{x:Static res:Strings.Nav_BackName}"
+                        Command="{Binding BackCommand}"
+                        Content="{x:Static res:Strings.Nav_Back}"
+                        Icon="{ui:SymbolIcon ArrowLeft24}"
+                        Visibility="{Binding ShowBack, Converter={StaticResource BoolToVisibility}}" />
+                    <ui:Button
+                        MinWidth="130"
+                        Margin="12,0,0,0"
+                        Appearance="Primary"
+                        AutomationProperties.Name="{Binding NextAutomationName}"
+                        Command="{Binding NextCommand}"
+                        Content="{Binding NextText}"
+                        Visibility="{Binding ShowNext, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

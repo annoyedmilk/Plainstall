@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <RootNamespace>Plainstall.App.Tests</RootNamespace>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Plainstall.App\Plainstall.App.csproj"/>
+        <ProjectReference Include="..\..\src\Plainstall.Core\Plainstall.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit.v3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- The app's sources are checked as text: resource keys, literal strings in XAML, forbidden characters. -->
+        <None Include="$(RepoRoot)src\Plainstall.App\**\*.xaml" Exclude="$(RepoRoot)src\Plainstall.App\bin\**;$(RepoRoot)src\Plainstall.App\obj\**" Link="AppSources\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+        <None Include="$(RepoRoot)src\Plainstall.App\**\*.cs" Exclude="$(RepoRoot)src\Plainstall.App\bin\**;$(RepoRoot)src\Plainstall.App\obj\**" Link="AppSources\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+        <None Include="$(RepoRoot)src\Plainstall.App\**\*.resx;$(RepoRoot)src\Plainstall.App\**\*.json;$(RepoRoot)src\Plainstall.App\*.csproj;$(RepoRoot)src\Plainstall.App\*.manifest" Exclude="$(RepoRoot)src\Plainstall.App\bin\**;$(RepoRoot)src\Plainstall.App\obj\**" Link="AppSources\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+</Project>

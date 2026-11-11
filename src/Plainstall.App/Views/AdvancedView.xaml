@@ -1,0 +1,265 @@
+<UserControl
+    x:Class="Plainstall.App.Views.AdvancedView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Plainstall.App.Resources"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
+    x:Name="Root"
+    d:DataContext="{d:DesignInstance Type=vm:AdvancedViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="0,12,12,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Apps to install at the first sign-in  -->
+            <Border VerticalAlignment="Top" Style="{StaticResource Plainstall.Card}">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{Binding InstallCountText}" />
+                        <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                   Text="{x:Static res:Strings.Advanced_InstallTitle}" />
+                    </DockPanel>
+                    <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                               Text="{x:Static res:Strings.Advanced_InstallText}" />
+
+                    <Border
+                        Margin="0,10,0,0"
+                        Style="{StaticResource Plainstall.Notice.Caution}"
+                        Visibility="{Binding ShowBrowserSuggestion, Converter={StaticResource BoolToVisibility}}">
+                        <DockPanel>
+                            <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon}" Symbol="Globe24" />
+                            <TextBlock
+                                AutomationProperties.LiveSetting="Polite"
+                                Style="{StaticResource Plainstall.Body}"
+                                Text="{x:Static res:Strings.Advanced_BrowserSuggestion}" />
+                        </DockPanel>
+                    </Border>
+
+                    <ItemsControl
+                        Margin="0,8,0,0"
+                        Focusable="False"
+                        ItemsSource="{Binding InstallGroups}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:InstallGroupViewModel}">
+                                <StackPanel Margin="0,6,0,0">
+                                    <TextBlock Style="{StaticResource Plainstall.Strong}" Text="{Binding Title}" />
+                                    <ItemsControl Focusable="False" ItemsSource="{Binding Items}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="2" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type vm:InstallOptionViewModel}">
+                                                <CheckBox
+                                                    Margin="0,2,8,2"
+                                                    AutomationProperties.HelpText="{Binding Description}"
+                                                    AutomationProperties.Name="{Binding Title}"
+                                                    IsChecked="{Binding IsSelected}"
+                                                    ToolTip="{Binding Description}">
+                                                    <StackPanel>
+                                                        <TextBlock Style="{StaticResource Plainstall.Body}"
+                                                                   Text="{Binding Title}" />
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Style="{StaticResource Plainstall.Secondary}"
+                                                            Text="{Binding Description}"
+                                                            TextTrimming="CharacterEllipsis"
+                                                            TextWrapping="NoWrap" />
+                                                    </StackPanel>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock
+                        x:Name="WingetLabel"
+                        Margin="0,14,0,4"
+                        Style="{StaticResource Plainstall.Strong}"
+                        Text="{x:Static res:Strings.Advanced_AddOtherLabel}" />
+                    <DockPanel>
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_AddOtherName}"
+                            Command="{Binding AddWingetIdCommand}"
+                            Content="{x:Static res:Strings.Advanced_Add}"
+                            DockPanel.Dock="Right"
+                            Icon="{ui:SymbolIcon Add24}" />
+                        <ui:TextBox
+                            AutomationProperties.HelpText="{Binding NewWingetIdError}"
+                            AutomationProperties.LabeledBy="{Binding ElementName=WingetLabel}"
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_AddOtherLabel}"
+                            PlaceholderText="{x:Static res:Strings.Advanced_WingetPlaceholder}"
+                            Text="{Binding NewWingetId, UpdateSourceTrigger=PropertyChanged}" />
+                    </DockPanel>
+                    <DockPanel Margin="0,4,0,0"
+                               Visibility="{Binding NewWingetIdError, Converter={StaticResource NullToCollapsed}}">
+                        <ui:SymbolIcon
+                            Margin="0,0,6,0"
+                            Foreground="{DynamicResource Plainstall.DangerBrush}"
+                            Symbol="ErrorCircle24" />
+                        <TextBlock
+                            AutomationProperties.LiveSetting="Assertive"
+                            FontWeight="SemiBold"
+                            Style="{StaticResource Plainstall.Body}"
+                            Text="{Binding NewWingetIdError}" />
+                    </DockPanel>
+                    <ItemsControl
+                        Margin="0,6,0,0"
+                        Focusable="False"
+                        ItemsSource="{Binding CustomInstalls}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Margin="0,2">
+                                    <ui:Button
+                                        AutomationProperties.Name="{Binding Converter={StaticResource Format}, ConverterParameter={x:Static res:Strings.Advanced_RemoveItemName}}"
+                                        Appearance="Transparent"
+                                        Command="{Binding DataContext.RemoveCustomInstallCommand, ElementName=Root}"
+                                        CommandParameter="{Binding}"
+                                        DockPanel.Dock="Right"
+                                        Icon="{ui:SymbolIcon Delete24}"
+                                        ToolTip="{x:Static res:Strings.Advanced_Remove}" />
+                                    <TextBlock VerticalAlignment="Center" Style="{StaticResource Plainstall.Body}"
+                                               Text="{Binding}" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Grid.Column="2">
+                <!--  Drivers  -->
+                <Border Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                   Text="{x:Static res:Strings.Advanced_DriversTitle}" />
+                        <CheckBox
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_DriversFromPc}"
+                            Content="{x:Static res:Strings.Advanced_DriversFromPc}"
+                            IsChecked="{Binding DriversFromThisPc}" />
+                        <ItemsControl
+                            Margin="0,6,0,0"
+                            Focusable="False"
+                            ItemsSource="{Binding DriverFolders}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="0,2">
+                                        <ui:Button
+                                            AutomationProperties.Name="{Binding Converter={StaticResource Format}, ConverterParameter={x:Static res:Strings.Advanced_RemoveItemName}}"
+                                            Appearance="Transparent"
+                                            Command="{Binding DataContext.RemoveDriverFolderCommand, ElementName=Root}"
+                                            CommandParameter="{Binding}"
+                                            DockPanel.Dock="Right"
+                                            Icon="{ui:SymbolIcon Delete24}"
+                                            ToolTip="{x:Static res:Strings.Advanced_Remove}" />
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource Plainstall.Body}"
+                                            Text="{Binding}"
+                                            TextTrimming="CharacterEllipsis"
+                                            TextWrapping="NoWrap"
+                                            ToolTip="{Binding}" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ui:Button
+                            Margin="0,6,0,0"
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_AddDriverFolder}"
+                            Command="{Binding AddDriverFolderCommand}"
+                            Content="{x:Static res:Strings.Advanced_AddDriverFolder}"
+                            Icon="{ui:SymbolIcon FolderAdd24}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Update packages  -->
+                <Border Margin="0,12,0,0" Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                   Text="{x:Static res:Strings.Advanced_UpdatesTitle}" />
+                        <TextBlock Style="{StaticResource Plainstall.Secondary}"
+                                   Text="{x:Static res:Strings.Advanced_UpdatesText}" />
+                        <ItemsControl
+                            Margin="0,6,0,0"
+                            Focusable="False"
+                            ItemsSource="{Binding Updates}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="0,2">
+                                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                            <ui:Button
+                                                AutomationProperties.Name="{Binding Converter={StaticResource Format}, ConverterParameter={x:Static res:Strings.Advanced_MoveUpName}}"
+                                                Appearance="Transparent"
+                                                Command="{Binding DataContext.MoveUpdateUpCommand, ElementName=Root}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon ArrowUp24}"
+                                                ToolTip="{x:Static res:Strings.Advanced_MoveUp}" />
+                                            <ui:Button
+                                                AutomationProperties.Name="{Binding Converter={StaticResource Format}, ConverterParameter={x:Static res:Strings.Advanced_MoveDownName}}"
+                                                Appearance="Transparent"
+                                                Command="{Binding DataContext.MoveUpdateDownCommand, ElementName=Root}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon ArrowDown24}"
+                                                ToolTip="{x:Static res:Strings.Advanced_MoveDown}" />
+                                            <ui:Button
+                                                AutomationProperties.Name="{Binding Converter={StaticResource Format}, ConverterParameter={x:Static res:Strings.Advanced_RemoveItemName}}"
+                                                Appearance="Transparent"
+                                                Command="{Binding DataContext.RemoveUpdateCommand, ElementName=Root}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon Delete24}"
+                                                ToolTip="{x:Static res:Strings.Advanced_Remove}" />
+                                        </StackPanel>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource Plainstall.Body}"
+                                            Text="{Binding}"
+                                            TextTrimming="CharacterEllipsis"
+                                            TextWrapping="NoWrap"
+                                            ToolTip="{Binding}" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ui:Button
+                            Margin="0,6,0,0"
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_AddUpdates}"
+                            Command="{Binding AddUpdatesCommand}"
+                            Content="{x:Static res:Strings.Advanced_AddUpdates}"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    </StackPanel>
+                </Border>
+
+                <!--  Extra cleanup  -->
+                <Border Margin="0,12,0,0" Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <CheckBox
+                            AutomationProperties.HelpText="{x:Static res:Strings.Advanced_ResetBaseWarning}"
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_ResetBase}"
+                            Content="{x:Static res:Strings.Advanced_ResetBase}"
+                            IsChecked="{Binding ResetBase}" />
+                        <TextBlock
+                            Margin="28,2,0,0"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{x:Static res:Strings.Advanced_ResetBaseWarning}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

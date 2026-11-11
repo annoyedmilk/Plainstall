@@ -1,0 +1,208 @@
+# Plainstall: last steps on a freshly installed PC.
+#
+# Created by Plainstall when the installation stick was built. Windows starts this file
+# once, with administrator rights, when the first account signs in for the first time.
+# It never restarts the PC. It downloads nothing, except the apps the owner of the stick
+# chose, and those only through winget.
+# Log: %SystemRoot%\Setup\Scripts\Plainstall\Logs\Machine.log
+
+$ErrorActionPreference = 'Continue'
+$ProgressPreference = 'SilentlyContinue'
+
+$plainstallLogFolder = Join-Path $env:SystemRoot 'Setup\Scripts\Plainstall\Logs'
+$plainstallLog = Join-Path $plainstallLogFolder 'Machine.log'
+$plainstallDone = Join-Path $plainstallLogFolder 'Machine.done'
+$plainstallProblems = 0
+
+function Write-PlainstallLog {
+    param([string]$Message)
+    $plainstallLine = '{0}  {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message
+    try {
+        Add-Content -LiteralPath $script:plainstallLog -Value $plainstallLine -Encoding UTF8 -ErrorAction Stop
+    } catch {
+        # The log itself cannot be written. There is no other place to report that,
+        # and the work must go on.
+    }
+}
+
+# Runs one action. Whatever happens inside is written to the log, and the script goes on.
+function Invoke-PlainstallStep {
+    param([string]$Title, [scriptblock]$Action)
+    try {
+        $plainstallItems = @(& $Action *>&1)
+        $plainstallErrors = @($plainstallItems | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] })
+        $plainstallText = ($plainstallItems | Out-String).Trim()
+        if ($plainstallErrors.Count -gt 0) {
+            $script:plainstallProblems++
+            Write-PlainstallLog ('ERROR   ' + $Title)
+        } else {
+            Write-PlainstallLog ('OK      ' + $Title)
+        }
+        if ($plainstallText) {
+            Write-PlainstallLog ('        ' + $plainstallText)
+        }
+    } catch {
+        $script:plainstallProblems++
+        Write-PlainstallLog ('FAILED  ' + $Title + ': ' + $_.Exception.Message)
+    }
+}
+
+# Runs one command from the Plainstall catalog. The text becomes code here and nowhere else,
+# inside the step, so that a command with a mistake in it fails alone.
+function Invoke-PlainstallCommand {
+    param([string]$Title, [string]$Code)
+    Invoke-PlainstallStep $Title { & ([scriptblock]::Create($Code)) }
+}
+
+try {
+    New-Item -ItemType Directory -Path $plainstallLogFolder -Force -ErrorAction Stop | Out-Null
+} catch {
+    # Without the folder there is no log, but the work is still worth doing.
+}
+if (Test-Path -LiteralPath $plainstallDone) {
+    # This script has already run to its end once.
+    exit 0
+}
+Write-PlainstallLog 'Started.'
+
+try { $Host.UI.RawUI.WindowTitle = 'Finishing the setup of this PC' } catch { }
+Write-Host ''
+Write-Host '  Windows is almost ready.'
+Write-Host '  A few last steps are running. This window closes by itself.'
+Write-Host ''
+
+Invoke-PlainstallCommand 'OneDrive: Remove the OneDrive setup entry' 'Remove-ItemProperty -Path ''HKLM:\SOFTWARE\Example'' -Name ''OneDriveSetup'' -ErrorAction SilentlyContinue'
+
+$plainstallApps = @('Mozilla.Firefox', '7zip.7zip', 'Notepad++.Notepad++')
+$plainstallAppPattern = '\A[A-Za-z0-9][A-Za-z0-9+_\-]*(\.[A-Za-z0-9+_\-]+)+\z'
+$plainstallStorePattern = '\A(9[A-Z0-9]{11}|XP[A-Z0-9]{12})\z'
+$plainstallNetworkSeconds = 300
+$plainstallWingetSeconds = 300
+$plainstallInstallSeconds = 1200
+$plainstallInstalled = 0
+
+function Test-PlainstallInternet {
+    try {
+        [void][System.Net.Dns]::GetHostAddresses('cdn.winget.microsoft.com')
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+function Find-PlainstallWinget {
+    $plainstallCommand = Get-Command -Name 'winget.exe' -CommandType Application -ErrorAction Ignore | Select-Object -First 1
+    if ($plainstallCommand) { return $plainstallCommand.Path }
+    $plainstallAlias = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\winget.exe'
+    if (Test-Path -LiteralPath $plainstallAlias) { return $plainstallAlias }
+    return $null
+}
+
+# Waits until the condition is true, but never longer than the given time.
+function Wait-PlainstallCondition {
+    param([scriptblock]$Condition, [int]$Seconds)
+    $plainstallDeadline = (Get-Date).AddSeconds($Seconds)
+    while ($true) {
+        if (& $Condition) { return $true }
+        if ((Get-Date) -ge $plainstallDeadline) { return $false }
+        Start-Sleep -Seconds 5
+    }
+}
+
+Write-Host '  Plainstall installs your apps now.'
+Write-Host '  Please do not switch the PC off, and keep it connected to the internet.'
+Write-Host '  This can take several minutes. This window closes by itself when it is done.'
+Write-Host ''
+Write-PlainstallLog ('Apps to install: ' + ($plainstallApps -join ', '))
+
+$plainstallReady = $true
+if (-not (Test-PlainstallInternet)) {
+    Write-Host '  Waiting for an internet connection, for up to 5 minutes.'
+    Write-Host '  Connect to Wi-Fi or plug in a network cable now.'
+    Write-Host ''
+    if (-not (Wait-PlainstallCondition { Test-PlainstallInternet } $plainstallNetworkSeconds)) {
+        $plainstallReady = $false
+        $plainstallProblems++
+        Write-PlainstallLog 'SKIPPED the apps: no internet connection within the time limit.'
+        Write-Host '  There is no internet connection, so Plainstall did not install the apps.'
+    }
+}
+
+$plainstallWinget = $null
+if ($plainstallReady) {
+    $plainstallWinget = Find-PlainstallWinget
+    if (-not $plainstallWinget) {
+        # On a new account Windows may not have finished registering App Installer (winget) yet.
+        # This asks Windows to do it now. The package is already on the PC; nothing is downloaded.
+        Write-Host '  Getting the app installer ready.'
+        try {
+            Add-AppxPackage -RegisterByFamilyName -MainPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe' -ErrorAction Stop
+        } catch {
+            Write-PlainstallLog ('App Installer could not be registered right away: ' + $_.Exception.Message)
+        }
+        [void](Wait-PlainstallCondition { [bool](Find-PlainstallWinget) } $plainstallWingetSeconds)
+        $plainstallWinget = Find-PlainstallWinget
+    }
+    if (-not $plainstallWinget) {
+        $plainstallReady = $false
+        $plainstallProblems++
+        Write-PlainstallLog 'SKIPPED the apps: winget did not become available within the time limit.'
+        Write-Host '  The app installer of Windows is not ready, so Plainstall did not install the apps.'
+    }
+}
+
+if ($plainstallReady) {
+    Write-PlainstallLog ('Using ' + $plainstallWinget)
+    $plainstallNumber = 0
+    foreach ($plainstallApp in $plainstallApps) {
+        $plainstallNumber++
+        # A Microsoft Store id comes from the msstore source, every other id from the winget source.
+        if ($plainstallApp -cmatch $plainstallStorePattern) {
+            $plainstallSource = 'msstore'
+        } elseif ($plainstallApp -cmatch $plainstallAppPattern) {
+            $plainstallSource = 'winget'
+        } else {
+            $plainstallProblems++
+            Write-PlainstallLog ('SKIPPED app number {0}: its name is not a winget package id or a Store id.' -f $plainstallNumber)
+            continue
+        }
+        Write-Host ('  Installing app {0} of {1}: {2}' -f $plainstallNumber, $plainstallApps.Count, $plainstallApp)
+        Invoke-PlainstallStep ('Install ' + $plainstallApp) {
+            $plainstallArguments = @('install', '--id', $plainstallApp, '--exact', '--silent', '--accept-package-agreements', '--accept-source-agreements', '--source', $plainstallSource)
+            $plainstallProcess = Start-Process -FilePath $plainstallWinget -ArgumentList $plainstallArguments -NoNewWindow -PassThru
+            # Reading the handle now makes the exit code available later (a quirk of Start-Process).
+            $null = $plainstallProcess.Handle
+            if (-not $plainstallProcess.WaitForExit($plainstallInstallSeconds * 1000)) {
+                try { $plainstallProcess.Kill() } catch { }
+                throw 'The installation did not finish within the time limit and was stopped.'
+            }
+            if ($plainstallProcess.ExitCode -ne 0) {
+                throw ('winget ended with code 0x{0:X8}.' -f $plainstallProcess.ExitCode)
+            }
+            $script:plainstallInstalled++
+        }
+    }
+}
+
+Write-Host ''
+if ($plainstallInstalled -eq $plainstallApps.Count) {
+    Write-Host '  All apps are installed.'
+    Start-Sleep -Seconds 3
+} else {
+    Write-Host ('  Plainstall installed {0} of {1} apps.' -f $plainstallInstalled, $plainstallApps.Count)
+    Write-Host '  You can install the missing ones yourself later, for example from the Microsoft Store.'
+    Write-Host ('  Details are in this file: ' + $plainstallLog)
+    Start-Sleep -Seconds 15
+}
+
+Write-PlainstallLog ('Finished. Steps with problems: ' + $plainstallProblems)
+
+# The very last step: an empty marker file. It is created whether or not every step worked.
+# It keeps this script from running twice, and it shows that the work is over.
+try {
+    [void][System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($plainstallDone))
+    [System.IO.File]::WriteAllBytes($plainstallDone, [byte[]]::new(0))
+} catch {
+    Write-PlainstallLog ('The marker file could not be written: ' + $_.Exception.Message)
+}
+exit 0

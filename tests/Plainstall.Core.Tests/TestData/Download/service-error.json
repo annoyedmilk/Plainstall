@@ -1,0 +1,9 @@
+{
+  "Errors": [
+    {
+      "Key": "ErrorSettings.Rejected",
+      "Value": "The request was rejected for this session",
+      "Type": 9
+    }
+  ]
+}

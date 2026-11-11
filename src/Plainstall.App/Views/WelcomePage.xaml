@@ -1,0 +1,221 @@
+<UserControl
+    x:Class="Plainstall.App.Views.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Plainstall.App.Resources"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:WelcomeViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,16,32,24">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <!--
+                        The name, set in the brand font: pla, a red i, a gold n, stall. Four text blocks side by
+                        side and not four Runs in one TextBlock: XAML turns the line breaks between Runs into
+                        spaces, so reformatting the file would split the word.
+                    -->
+                    <StackPanel AutomationProperties.Name="{x:Static res:Strings.App_Title}" Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="{StaticResource Plainstall.BrandFont}" />
+                                <Setter Property="FontSize" Value="52" />
+                                <Setter Property="FontWeight" Value="ExtraBold" />
+                                <Setter Property="Foreground" Value="{DynamicResource Plainstall.WordmarkLettersBrush}" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock Text="{x:Static res:Strings.Wordmark_Pla}" />
+                        <TextBlock Foreground="{DynamicResource Plainstall.WordmarkIBrush}"
+                                   Text="{x:Static res:Strings.Wordmark_I}" />
+                        <TextBlock Foreground="{DynamicResource Plainstall.WordmarkNBrush}"
+                                   Text="{x:Static res:Strings.Wordmark_N}" />
+                        <TextBlock Text="{x:Static res:Strings.Wordmark_Stall}" />
+                    </StackPanel>
+                    <TextBlock
+                        MaxWidth="760"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource Plainstall.PageSubtitle}"
+                        Text="{x:Static res:Strings.Welcome_Subtitle}" />
+                </StackPanel>
+                <!--  Profiles  -->
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="24,8,0,0"
+                    VerticalAlignment="Top">
+                    <ui:Button
+                        MinWidth="220"
+                        Margin="0,0,0,8"
+                        HorizontalContentAlignment="Left"
+                        AutomationProperties.Name="{x:Static res:Strings.Welcome_OpenProfile}"
+                        Command="{Binding OpenProfileCommand}"
+                        Content="{x:Static res:Strings.Welcome_OpenProfile}"
+                        Icon="{ui:SymbolIcon FolderOpen24}" />
+                    <ui:Button
+                        MinWidth="220"
+                        MaxWidth="320"
+                        HorizontalContentAlignment="Left"
+                        AutomationProperties.Name="{Binding LastProfileText}"
+                        Command="{Binding UseLastProfileCommand}"
+                        Content="{Binding LastProfileText}"
+                        Icon="{ui:SymbolIcon History24}"
+                        Visibility="{Binding HasLastProfile, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
+            </Grid>
+            <!--  Leftovers of an interrupted build  -->
+            <Border
+                Margin="0,16,0,0"
+                Style="{StaticResource Plainstall.Notice.Caution}"
+                Visibility="{Binding HasLeftovers, Converter={StaticResource BoolToVisibility}}">
+                <DockPanel>
+                    <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon}" Symbol="Warning24" />
+                    <ui:Button
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        AutomationProperties.Name="{x:Static res:Strings.Welcome_CleanUp}"
+                        Command="{Binding CleanUpCommand}"
+                        Content="{x:Static res:Strings.Welcome_CleanUp}"
+                        DockPanel.Dock="Right" />
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                   Text="{x:Static res:Strings.Welcome_LeftoversTitle}" />
+                        <TextBlock Style="{StaticResource Plainstall.Body}"
+                                   Text="{x:Static res:Strings.Welcome_LeftoversText}" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+            <TextBlock
+                Margin="0,8,0,0"
+                AutomationProperties.LiveSetting="Polite"
+                Style="{StaticResource Plainstall.Result}"
+                Tag="{Binding CleanupFailed}"
+                Text="{Binding CleanupMessage}"
+                Visibility="{Binding CleanupMessage, Converter={StaticResource NullToCollapsed}}" />
+            <!--  A cleanup or a deletion is running: "Clean up" and "Delete these files" both wait for it  -->
+            <StackPanel
+                Margin="0,8,0,0"
+                Orientation="Horizontal"
+                Visibility="{Binding IsCleaning, Converter={StaticResource BoolToVisibility}}">
+                <ui:ProgressRing
+                    Width="20"
+                    Height="20"
+                    Margin="0,0,8,0"
+                    AutomationProperties.Name="{x:Static res:Strings.Welcome_Cleaning}"
+                    IsIndeterminate="True" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    AutomationProperties.LiveSetting="Polite"
+                    Style="{StaticResource Plainstall.Secondary}"
+                    Text="{x:Static res:Strings.Welcome_Cleaning}" />
+            </StackPanel>
+
+            <DockPanel Margin="0,16,0,8">
+                <TextBlock
+                    VerticalAlignment="Bottom"
+                    AutomationProperties.LiveSetting="Polite"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource Plainstall.Secondary}"
+                    Text="{Binding StartingPointText}" />
+                <TextBlock
+                    Margin="0"
+                    Style="{StaticResource Plainstall.SectionTitle}"
+                    Text="{x:Static res:Strings.Welcome_ChooseTitle}" />
+            </DockPanel>
+
+            <ItemsControl
+                AutomationProperties.Name="{x:Static res:Strings.Welcome_ChooseTitle}"
+                Focusable="False"
+                ItemsSource="{Binding Presets}"
+                KeyboardNavigation.DirectionalNavigation="Contained"
+                KeyboardNavigation.TabNavigation="Once">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" Rows="1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:PresetCardViewModel}">
+                        <RadioButton
+                            Margin="0,0,12,0"
+                            AutomationProperties.HelpText="{Binding Tagline}"
+                            AutomationProperties.Name="{Binding Title}"
+                            GroupName="Presets"
+                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                            Style="{StaticResource Plainstall.ChoiceCard}">
+                            <StackPanel>
+                                <TextBlock
+                                    FontFamily="{StaticResource Plainstall.BrandFont}"
+                                    FontSize="20"
+                                    FontWeight="ExtraBold"
+                                    Style="{StaticResource Plainstall.Body}"
+                                    Text="{Binding Title}" />
+                                <TextBlock
+                                    Margin="0,8,0,0"
+                                    Style="{StaticResource Plainstall.Strong}"
+                                    Text="{Binding Tagline}" />
+                                <TextBlock
+                                    Margin="0,6,0,0"
+                                    Style="{StaticResource Plainstall.Secondary}"
+                                    Text="{Binding Description}" />
+                            </StackPanel>
+                        </RadioButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock
+                AutomationProperties.LiveSetting="Polite"
+                Margin="0,10,0,0"
+                Style="{StaticResource Plainstall.Body}"
+                Text="{Binding StatusMessage}"
+                Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+            <Border
+                Margin="0,8,0,0"
+                Style="{StaticResource Plainstall.Notice.Danger}"
+                Visibility="{Binding ErrorMessage, Converter={StaticResource NullToCollapsed}}">
+                <DockPanel>
+                    <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon.Danger}" Symbol="ErrorCircle24" />
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                   Text="{x:Static res:Strings.Welcome_ProfileOpenFailed}" />
+                        <TextBlock
+                            AutomationProperties.LiveSetting="Assertive"
+                            Style="{StaticResource Plainstall.Body}"
+                            Text="{Binding ErrorMessage}" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!--  The files that Plainstall keeps on this PC  -->
+            <DockPanel Margin="0,24,0,0"
+                       Visibility="{Binding StoredDataText, Converter={StaticResource NullToCollapsed}}">
+                <ui:Button
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    AutomationProperties.Name="{x:Static res:Strings.Welcome_DeleteFiles}"
+                    Command="{Binding DeleteStoredDataCommand}"
+                    Content="{x:Static res:Strings.Welcome_DeleteFiles}"
+                    DockPanel.Dock="Right"
+                    Icon="{ui:SymbolIcon Delete24}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Style="{StaticResource Plainstall.Secondary}"
+                    Text="{Binding StoredDataText}" />
+            </DockPanel>
+            <TextBlock
+                Margin="0,8,0,0"
+                AutomationProperties.LiveSetting="Polite"
+                Style="{StaticResource Plainstall.Result}"
+                Tag="{Binding StoredDataFailed}"
+                Text="{Binding StoredDataMessage}"
+                Visibility="{Binding StoredDataMessage, Converter={StaticResource NullToCollapsed}}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

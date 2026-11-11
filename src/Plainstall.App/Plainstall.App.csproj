@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <RootNamespace>Plainstall.App</RootNamespace>
+        <AssemblyName>Plainstall.App</AssemblyName>
+        <ApplicationIcon>Assets\plainstall.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <!--
+      Elevation. The engine mounts Windows images and loads registry files, which needs administrator
+      rights. So the shipped app asks for them before it starts: the Release build embeds app.manifest
+      with requestedExecutionLevel "requireAdministrator", and Windows shows the elevation prompt.
+      Debug builds embed app.Debug.manifest with "asInvoker" instead, so the app can start from a
+      normal session and from tests. Started that way, it sees that it is not elevated, shows a banner
+      and disables "Start build". All other parts of the app work.
+    -->
+    <PropertyGroup>
+        <ApplicationManifest Condition="'$(Configuration)' == 'Release'">app.manifest</ApplicationManifest>
+        <ApplicationManifest Condition="'$(Configuration)' != 'Release'">app.Debug.manifest</ApplicationManifest>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Plainstall.Core\Plainstall.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+        <PackageReference Include="Microsoft.Extensions.Logging"/>
+        <PackageReference Include="WPF-UI"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Assets\icon.svg is the drawing the .ico and the .png are made from. It is not part of the app. -->
+        <Resource Include="Assets\plainstall.ico"/>
+        <Resource Include="Assets\icon-64.png"/>
+        <Resource Include="Assets\Fonts\Urbanist-ExtraBold.ttf"/>
+        <!-- The font's licence must travel with the font, so it is embedded next to it: the app ships as one exe. -->
+        <Resource Include="Assets\Fonts\OFL.txt"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Data\boot-keys.json" LogicalName="Plainstall.App.Data.boot-keys.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Strings.Designer.cs is generated from Strings.resx by Visual Studio or Rider (custom tool PublicResXFileCodeGenerator). -->
+        <EmbeddedResource Update="Resources\Strings.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <Compile Update="Resources\Strings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Strings.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- WPF projects leave these out of the implicit usings because of name clashes the app does not have. -->
+        <Using Include="System.IO"/>
+        <Using Include="System.Net.Http"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Plainstall.App.Tests"/>
+    </ItemGroup>
+
+</Project>

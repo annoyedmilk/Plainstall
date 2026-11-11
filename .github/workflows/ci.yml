@@ -1,0 +1,78 @@
+name: CI
+
+# Each push to main and each pull request: build, test, publish the two x64 executables, and open each page
+# of the app as a check. You can download the executables from the run for two weeks.
+# A tag does not start this workflow. The release workflow builds and tests a tag.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+
+jobs:
+  build:
+    name: Build, test, publish
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore Plainstall.slnx
+
+      - name: Build
+        run: dotnet build Plainstall.slnx --configuration Release --no-restore
+
+      # Tests that need an ISO, the network or administrator rights skip themselves.
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+
+      - name: Publish
+        shell: pwsh
+        run: |
+          foreach ($project in 'src/Plainstall.Cli/Plainstall.Cli.csproj', 'src/Plainstall.App/Plainstall.App.csproj') {
+            dotnet publish $project --configuration Release --runtime win-x64 --output artifacts/win-x64
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          Get-ChildItem artifacts -Recurse -File | Format-Table FullName, Length
+
+      - name: Upload win-x64
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: plainstall-win-x64
+          path: artifacts/win-x64/*.exe
+          if-no-files-found: error
+          retention-days: 14
+
+      # Opens every page of the app with sample data and draws it. A page that fails to open fails the run.
+      # The pictures are not kept. The Debug build is used because the Release build asks for administrator rights.
+      - name: Render the pages
+        shell: pwsh
+        run: |
+          dotnet build src/Plainstall.App/Plainstall.App.csproj --configuration Debug
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $out = Join-Path $PWD 'artifacts/pages'
+          $app = Start-Process -FilePath 'src/Plainstall.App/bin/Debug/net10.0-windows/Plainstall.App.exe' -ArgumentList '--render-pages', "`"$out`"" -Wait -PassThru
+          if (Test-Path "$out/render-error.txt") { Get-Content "$out/render-error.txt" }
+          $expected = @(Get-Content "$out/index.txt").Count
+          $written = @(Get-ChildItem $out -Filter *.png).Count
+          Write-Host "Exit code $($app.ExitCode); $written of $expected pages written."
+          if ($app.ExitCode -ne 0 -or $expected -eq 0 -or $written -ne $expected) { exit 1 }

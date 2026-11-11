@@ -1,0 +1,117 @@
+[
+  {
+    "brand": "Acer",
+    "bootMenu": [
+      "F12"
+    ],
+    "setup": [
+      "F2"
+    ]
+  },
+  {
+    "brand": "Asus",
+    "bootMenu": [
+      "F8",
+      "Esc"
+    ],
+    "setup": [
+      "F2",
+      "Del"
+    ]
+  },
+  {
+    "brand": "Dell",
+    "bootMenu": [
+      "F12"
+    ],
+    "setup": [
+      "F2"
+    ]
+  },
+  {
+    "brand": "Fujitsu",
+    "bootMenu": [
+      "F12"
+    ],
+    "setup": [
+      "F2"
+    ]
+  },
+  {
+    "brand": "Gigabyte",
+    "bootMenu": [
+      "F12"
+    ],
+    "setup": [
+      "Del"
+    ]
+  },
+  {
+    "brand": "HP",
+    "bootMenu": [
+      "F9",
+      "Esc"
+    ],
+    "setup": [
+      "F10"
+    ]
+  },
+  {
+    "brand": "Lenovo",
+    "bootMenu": [
+      "F12",
+      "Novo"
+    ],
+    "setup": [
+      "F1",
+      "F2"
+    ]
+  },
+  {
+    "brand": "Medion",
+    "bootMenu": [
+      "F10"
+    ],
+    "setup": [
+      "F2",
+      "Del"
+    ]
+  },
+  {
+    "brand": "Microsoft Surface",
+    "bootMenu": [
+      "Volume -"
+    ],
+    "setup": [
+      "Volume +"
+    ]
+  },
+  {
+    "brand": "MSI",
+    "bootMenu": [
+      "F11"
+    ],
+    "setup": [
+      "Del"
+    ]
+  },
+  {
+    "brand": "Samsung",
+    "bootMenu": [
+      "F10",
+      "Esc"
+    ],
+    "setup": [
+      "F2"
+    ]
+  },
+  {
+    "brand": "Toshiba, Dynabook",
+    "bootMenu": [
+      "F12"
+    ],
+    "setup": [
+      "F2"
+    ]
+  }
+]

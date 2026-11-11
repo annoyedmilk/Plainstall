@@ -1,0 +1,653 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/annoyedmilk/Plainstall/schemas/catalog.schema.json",
+  "title": "Plainstall catalog file (apps.json or tweaks.json)",
+  "description": "A list of catalog entries. An entry in one of these files describes every change Plainstall makes inside a Windows image. The engine contains no hard-coded tweak or app lists.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalogVersion",
+    "kind",
+    "categories",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "catalogVersion": {
+      "description": "Version of the catalog file format (not of its content). Bumped only when the shape of entries or actions changes.",
+      "const": 1
+    },
+    "kind": {
+      "description": "apps: entries that remove preinstalled software. tweaks: entries that change settings.",
+      "enum": [
+        "apps",
+        "tweaks"
+      ]
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/category"
+      }
+    },
+    "protectedPackages": {
+      "description": "apps.json only. Package name patterns ('*' wildcard allowed at the end) that Plainstall refuses to remove, whether the request comes from a catalog entry or from a raw package name in a profile. These keep the Store, winget, Terminal, Defender UI and the shared frameworks working.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]*\\*?$"
+      },
+      "uniqueItems": true
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "Stable identifier. Lowercase kebab-case. Never reused for a different meaning. Profiles refer to entries by this id.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 48
+    },
+    "presetId": {
+      "enum": [
+        "recommended",
+        "privacy-max",
+        "gaming",
+        "minimal"
+      ]
+    },
+    "build": {
+      "description": "Windows build number of the image being serviced, for example 26100 (24H2), 26200 (25H2).",
+      "type": "integer",
+      "minimum": 22000,
+      "maximum": 99999
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    },
+    "source": {
+      "description": "Where the knowledge behind this entry comes from. Shown as 'Based on the work of' in the details and used for credits.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "description",
+        "category",
+        "risk",
+        "defaultIn",
+        "actions"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "description": "Short name shown next to the switch.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "description": {
+          "description": "One plain-language sentence or two. No jargon, no registry terms.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "details": {
+          "description": "Optional longer explanation: side effects and how to undo the change on the installed PC.",
+          "type": "string",
+          "maxLength": 600
+        },
+        "category": {
+          "$ref": "#/$defs/id"
+        },
+        "risk": {
+          "description": "safe: no known downside, easy to undo. moderate: removes or disables something a fair number of people use, or needs a manual step to undo. advanced: can break a feature or other software. Only for people who know why they want it.",
+          "enum": [
+            "safe",
+            "moderate",
+            "advanced"
+          ]
+        },
+        "defaultIn": {
+          "description": "Presets in which this entry is switched on. An empty list means the entry is always opt-in.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/presetId"
+          },
+          "uniqueItems": true
+        },
+        "minBuild": {
+          "$ref": "#/$defs/build"
+        },
+        "maxBuild": {
+          "$ref": "#/$defs/build"
+        },
+        "editions": {
+          "description": "EditionId values the entry applies to (for example Professional, Core, Education). Omitted means all editions.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "requires": {
+          "description": "Ids of entries that must also be selected for this one to make sense. The UI switches them on together.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true
+        },
+        "conflicts": {
+          "description": "Ids of entries that cannot be combined with this one.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true
+        },
+        "reinstall": {
+          "description": "apps only. How the user gets the app back on the installed PC.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method"
+          ],
+          "properties": {
+            "method": {
+              "enum": [
+                "store",
+                "winget",
+                "download",
+                "none"
+              ]
+            },
+            "id": {
+              "description": "Store product id or winget package id.",
+              "type": "string"
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "boundTo": {
+          "description": "Ties the entry to an option in the profile's 'setup' section instead of a switch on the Tweaks page. The entry is applied exactly when that option is on. Such entries must have an empty 'defaultIn'.",
+          "enum": [
+            "setup.localAccount",
+            "setup.skipPrivacyPages",
+            "setup.bypassHardwareChecks"
+          ]
+        },
+        "source": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        }
+      }
+    },
+    "actionCommon": {
+      "description": "Fields every action kind accepts.",
+      "properties": {
+        "minBuild": {
+          "$ref": "#/$defs/build"
+        },
+        "maxBuild": {
+          "$ref": "#/$defs/build"
+        },
+        "note": {
+          "description": "Maintainer note. Not shown to users.",
+          "type": "string"
+        }
+      }
+    },
+    "hive": {
+      "description": "machineSoftware: HKLM\\SOFTWARE of the installed Windows. machineSystem: HKLM\\SYSTEM of the installed Windows. defaultUser: NTUSER.DAT of the Default profile, copied to every new account (HKCU, but NOT HKCU\\Software\\Classes). systemUser: HKU\\.DEFAULT, the profile of the LocalSystem account. setupSystem: HKLM\\SYSTEM of the Windows Setup environment in boot.wim.",
+      "enum": [
+        "machineSoftware",
+        "machineSystem",
+        "defaultUser",
+        "systemUser",
+        "setupSystem"
+      ]
+    },
+    "registryKey": {
+      "description": "Key path relative to the hive root, backslash separated, no leading or trailing backslash. In machineSystem and setupSystem a leading 'CurrentControlSet\\' is replaced at build time by the control set named in Select\\Current.",
+      "type": "string",
+      "pattern": "^[^\\\\].*[^\\\\]$",
+      "not": {
+        "pattern": "^(HKEY_|HKLM|HKCU|HKU|HKCR)"
+      }
+    },
+    "registryType": {
+      "enum": [
+        "dword",
+        "qword",
+        "string",
+        "expandString",
+        "multiString",
+        "binary"
+      ]
+    },
+    "registryData": {
+      "description": "dword and qword: a non-negative integer. string and expandString: a string. multiString: an array of strings. binary: a hex string such as '0a1b2c'.",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "imagePath": {
+      "description": "Path relative to the root of the image, backslash separated. Must not be rooted and must not contain '..'.",
+      "type": "string",
+      "pattern": "^[^\\\\/:][^:]*$",
+      "not": {
+        "pattern": "(^|\\\\)\\.\\.(\\\\|$)"
+      }
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "oneOf": [
+        {
+          "$ref": "#/$defs/registrySet"
+        },
+        {
+          "$ref": "#/$defs/registryDelete"
+        },
+        {
+          "$ref": "#/$defs/appxRemoveProvisioned"
+        },
+        {
+          "$ref": "#/$defs/capabilityRemove"
+        },
+        {
+          "$ref": "#/$defs/featureDisable"
+        },
+        {
+          "$ref": "#/$defs/featureEnable"
+        },
+        {
+          "$ref": "#/$defs/fileDelete"
+        },
+        {
+          "$ref": "#/$defs/taskDelete"
+        },
+        {
+          "$ref": "#/$defs/firstLogonRegistry"
+        },
+        {
+          "$ref": "#/$defs/firstLogonCommand"
+        }
+      ]
+    },
+    "registrySet": {
+      "description": "Write one value into an offline hive. Missing keys are created.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "hive",
+        "key",
+        "name",
+        "type",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "const": "registry.set"
+        },
+        "hive": {
+          "$ref": "#/$defs/hive"
+        },
+        "key": {
+          "$ref": "#/$defs/registryKey"
+        },
+        "name": {
+          "description": "Value name. An empty string means the key's default value.",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/registryType"
+        },
+        "data": {
+          "$ref": "#/$defs/registryData"
+        },
+        "ifKeyExists": {
+          "description": "true: write only when the key is already there, otherwise report the action as skipped. Required for service keys (Services\\<name>), so that a service missing from this Windows build is not created as an empty stub.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "registryDelete": {
+      "description": "Delete one value (when 'name' is given) or a whole key with its subkeys. A target that does not exist is reported as skipped, not as an error.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "hive",
+        "key"
+      ],
+      "properties": {
+        "kind": {
+          "const": "registry.delete"
+        },
+        "hive": {
+          "$ref": "#/$defs/hive"
+        },
+        "key": {
+          "$ref": "#/$defs/registryKey"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "appxRemoveProvisioned": {
+      "description": "Remove a provisioned app package from the image so new accounts do not get it. Matches the package's DisplayName exactly (case-insensitive), all architectures and versions. A package that is not in the image is reported as skipped.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "package"
+      ],
+      "properties": {
+        "kind": {
+          "const": "appx.removeProvisioned"
+        },
+        "package": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]*$"
+        }
+      }
+    },
+    "capabilityRemove": {
+      "description": "Remove a Windows capability (Feature on Demand). 'name' is the capability name without the version suffix, for example 'App.StepsRecorder'.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "kind": {
+          "const": "capability.remove"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]*$"
+        }
+      }
+    },
+    "featureDisable": {
+      "description": "Disable an optional Windows feature by its feature name.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "kind": {
+          "const": "feature.disable"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]*$"
+        }
+      }
+    },
+    "featureEnable": {
+      "description": "Enable an optional Windows feature by its feature name, together with the parent features it needs. Uses only the files already in the image and never contacts Windows Update. A feature that is not in the image (for example on an edition that lacks it) or whose files were removed from the image is reported as skipped.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "kind": {
+          "const": "feature.enable"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]*$"
+        }
+      }
+    },
+    "fileDelete": {
+      "description": "Delete a file or folder inside the mounted install image. Files that belong to TrustedInstaller are deleted with backup semantics, and their owner and access lists do not change. A path that does not exist is reported as skipped.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "path"
+      ],
+      "properties": {
+        "kind": {
+          "const": "file.delete"
+        },
+        "path": {
+          "$ref": "#/$defs/imagePath"
+        },
+        "recurse": {
+          "description": "Required to be true to delete a folder.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "taskDelete": {
+      "description": "Delete a scheduled task from the image. In an install image a task exists only as registry data under Schedule\\TaskCache (Tree\\<path>, Tasks\\{Id}, and one of Boot, Logon, Maintenance, Plain). The files under Windows\\System32\\Tasks are created at first start. All of these are removed together. 'path' is the task path as Task Scheduler shows it, without a leading backslash. With 'folder': true every task in that folder is removed.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "path"
+      ],
+      "properties": {
+        "kind": {
+          "const": "task.delete"
+        },
+        "path": {
+          "$ref": "#/$defs/imagePath"
+        },
+        "folder": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "firstLogonRegistry": {
+      "description": "A per-user registry change that cannot be made offline (most often because it lives in HKCU\\Software\\Classes, which is UsrClass.dat and is not copied from the Default profile). Applied once for every new account at its first sign-in.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "op",
+        "key"
+      ],
+      "properties": {
+        "kind": {
+          "const": "firstLogon.registry"
+        },
+        "op": {
+          "enum": [
+            "set",
+            "delete"
+          ]
+        },
+        "key": {
+          "description": "Key path relative to HKCU.",
+          "$ref": "#/$defs/registryKey"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/registryType"
+        },
+        "data": {
+          "$ref": "#/$defs/registryData"
+        }
+      },
+      "if": {
+        "properties": {
+          "op": {
+            "const": "set"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "name",
+          "type",
+          "data"
+        ]
+      }
+    },
+    "firstLogonCommand": {
+      "description": "A PowerShell command that runs after installation. scope 'user': once per new account at first sign-in, with that user's rights. scope 'machine': once, elevated, at the first sign-in of the first account. Use only for things that cannot be done offline.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/actionCommon"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "scope",
+        "command",
+        "summary"
+      ],
+      "properties": {
+        "kind": {
+          "const": "firstLogon.command"
+        },
+        "scope": {
+          "enum": [
+            "user",
+            "machine"
+          ]
+        },
+        "command": {
+          "description": "Windows PowerShell 5.1 code. One statement or a short block. No downloads.",
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "description": "What the command does, in plain language, for the log and the build report.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

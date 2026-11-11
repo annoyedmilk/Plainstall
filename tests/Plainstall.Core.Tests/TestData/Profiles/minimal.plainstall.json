@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../src/Plainstall.Core/Profiles/profile.schema.json",
+  "schema": 1,
+  "name": "Smallest valid profile",
+  "windows": {
+    "source": "iso",
+    "language": "auto",
+    "edition": "Core"
+  },
+  "apps": {
+    "preset": "minimal"
+  },
+  "tweaks": {
+    "preset": "none"
+  },
+  "setup": {
+    "localAccount": null,
+    "skipPrivacyPages": false,
+    "bypassHardwareChecks": false
+  }
+}

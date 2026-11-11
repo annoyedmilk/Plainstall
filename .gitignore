@@ -1,0 +1,22 @@
+# .NET build output
+bin/
+obj/
+/artifacts/
+/publish/
+/dist/
+*.user
+*.suo
+.vs/
+.idea/
+.claude/
+
+# Windows images and Plainstall output
+*.iso
+*.wim
+*.esd
+*.swm
+build-report.json
+plainstall-*.log
+
+# Tools fetched at run time
+oscdimg.exe

@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../../src/Plainstall.Core/Profiles/profile.schema.json",
+  "schema": 1,
+  "name": "Mom's laptop",
+  "windows": {
+    "source": "download",
+    "language": "auto",
+    "edition": "Professional"
+  },
+  "apps": {
+    "preset": "recommended",
+    "keep": [
+      "Microsoft.GetHelp"
+    ],
+    "remove": []
+  },
+  "tweaks": {
+    "preset": "recommended",
+    "enable": [
+      "dark-theme"
+    ],
+    "disable": []
+  },
+  "setup": {
+    "localAccount": {
+      "name": "Anna",
+      "askPassword": false,
+      "password": null
+    },
+    "computerName": null,
+    "skipPrivacyPages": true,
+    "region": "auto",
+    "keyboard": "auto",
+    "timezone": "auto",
+    "bypassHardwareChecks": true
+  },
+  "drivers": {
+    "fromThisPc": false,
+    "folders": []
+  },
+  "updates": [],
+  "cleanup": {
+    "resetBase": false
+  },
+  "output": {
+    "usb": true,
+    "iso": false
+  }
+}

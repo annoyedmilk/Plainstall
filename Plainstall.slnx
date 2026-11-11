@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Plainstall.App/Plainstall.App.csproj" />
+    <Project Path="src/Plainstall.Cli/Plainstall.Cli.csproj" />
+    <Project Path="src/Plainstall.Core/Plainstall.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Plainstall.App.Tests/Plainstall.App.Tests.csproj" />
+    <Project Path="tests/Plainstall.Core.Tests/Plainstall.Core.Tests.csproj" />
+  </Folder>
+</Solution>

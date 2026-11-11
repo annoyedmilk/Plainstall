@@ -1,0 +1,1079 @@
+{
+  "$schema": "./catalog.schema.json",
+  "catalogVersion": 1,
+  "kind": "apps",
+  "categories": [
+    {
+      "id": "promo",
+      "title": "Promotions and leftovers",
+      "description": "Trial, sponsored and discontinued apps that almost nobody misses."
+    },
+    {
+      "id": "ai",
+      "title": "Copilot and AI apps"
+    },
+    {
+      "id": "services",
+      "title": "Microsoft online services",
+      "description": "Apps that are front ends for Microsoft services. Remove the ones you do not use."
+    },
+    {
+      "id": "tools",
+      "title": "Built-in tools",
+      "description": "Everyday utilities. No preset removes these."
+    },
+    {
+      "id": "gaming",
+      "title": "Xbox and gaming",
+      "description": "No preset removes these. The Xbox sign-in components are always kept."
+    },
+    {
+      "id": "browser-cloud",
+      "title": "Browser and cloud storage"
+    }
+  ],
+  "protectedPackages": [
+    "Microsoft.WindowsStore",
+    "Microsoft.StorePurchaseApp",
+    "Microsoft.Services.Store.Engagement*",
+    "Microsoft.DesktopAppInstaller",
+    "Microsoft.Winget.Source*",
+    "Microsoft.WindowsTerminal",
+    "Microsoft.SecHealthUI",
+    "Microsoft.VCLibs*",
+    "Microsoft.UI.Xaml*",
+    "Microsoft.NET.Native*",
+    "Microsoft.WindowsAppRuntime*",
+    "Microsoft.ApplicationCompatibilityEnhancements",
+    "Microsoft.HEIFImageExtension",
+    "Microsoft.HEVCVideoExtension",
+    "Microsoft.AV1VideoExtension",
+    "Microsoft.AVCEncoderVideoExtension",
+    "Microsoft.MPEG2VideoExtension",
+    "Microsoft.VP9VideoExtensions",
+    "Microsoft.WebMediaExtensions",
+    "Microsoft.WebpImageExtension",
+    "Microsoft.RawImageExtension"
+  ],
+  "entries": [
+    {
+      "id": "clipchamp",
+      "title": "Clipchamp",
+      "description": "Microsoft's video editor. The free version is limited and advertises a subscription.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Clipchamp.Clipchamp"
+        }
+      ]
+    },
+    {
+      "id": "news",
+      "title": "News",
+      "description": "The MSN news feed app, with ads.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.BingNews"
+        }
+      ]
+    },
+    {
+      "id": "solitaire",
+      "title": "Solitaire and Casual Games",
+      "description": "Card games with ads and a paid subscription offer.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.MicrosoftSolitaireCollection"
+        }
+      ]
+    },
+    {
+      "id": "microsoft-365-hub",
+      "title": "Microsoft 365 Copilot app",
+      "description": "A launcher that advertises Microsoft 365. It is not Word or Excel. Those are separate apps and stay if you install them.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.MicrosoftOfficeHub"
+        }
+      ]
+    },
+    {
+      "id": "dev-home",
+      "title": "Dev Home",
+      "description": "A dashboard for software developers. Microsoft has discontinued it.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "requires": [
+        "no-outlook-devhome-autoinstall"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Windows.DevHome"
+        }
+      ]
+    },
+    {
+      "id": "power-automate",
+      "title": "Power Automate",
+      "description": "A tool for building automated workflows. Rarely used at home.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.PowerAutomateDesktop"
+        }
+      ]
+    },
+    {
+      "id": "discontinued-apps",
+      "title": "Discontinued apps",
+      "description": "Apps Microsoft has retired, found only on older Windows 11 media: Cortana, Maps, Movies and TV, People, Mail and Calendar, Tips, 3D Viewer, Mixed Reality Portal, Paint 3D, the old OneNote, Skype, Xbox Console Companion, Wallet.",
+      "category": "promo",
+      "risk": "safe",
+      "defaultIn": [
+        "minimal",
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "none",
+        "note": "Most of these can no longer be installed from the Store."
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.549981C3F5F10"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsMaps"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.ZuneVideo"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.People"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "microsoft.windowscommunicationsapps"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Getstarted"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Microsoft3DViewer"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.MixedReality.Portal"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.MSPaint"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Office.OneNote"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.SkypeApp"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.XboxApp"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Wallet"
+        }
+      ]
+    },
+    {
+      "id": "copilot-app",
+      "title": "Copilot app",
+      "description": "Microsoft's AI chat assistant.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Copilot"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Windows.Copilot"
+        }
+      ]
+    },
+    {
+      "id": "ai-hub",
+      "title": "AI Hub",
+      "description": "A showcase of AI features on Copilot+ PCs.",
+      "category": "ai",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Windows.AIHub"
+        }
+      ]
+    },
+    {
+      "id": "teams",
+      "title": "Microsoft Teams",
+      "description": "Chat and video calls. Remove it unless you use Teams. You can install it again in a minute.",
+      "category": "services",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "requires": [
+        "no-teams-autoinstall"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "MSTeams"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "MicrosoftTeams"
+        }
+      ]
+    },
+    {
+      "id": "outlook",
+      "title": "Outlook",
+      "description": "The mail and calendar app that comes with Windows. Remove it if you read mail in a browser or use another mail program.",
+      "details": "It is the only mail app left in Windows: the old Mail and Calendar app is discontinued. Without Outlook, the PC has no mail program until you install one, for example Thunderbird from the install list.",
+      "category": "services",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "requires": [
+        "no-outlook-devhome-autoinstall"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.OutlookForWindows"
+        }
+      ]
+    },
+    {
+      "id": "weather",
+      "title": "Weather",
+      "description": "The MSN weather app, with ads.",
+      "category": "services",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.BingWeather"
+        }
+      ]
+    },
+    {
+      "id": "bing-search-app",
+      "title": "Bing search add-on",
+      "description": "Puts Bing web results into the Start menu search.",
+      "category": "services",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.BingSearch"
+        }
+      ]
+    },
+    {
+      "id": "to-do",
+      "title": "Microsoft To Do",
+      "description": "A to-do list app that needs a Microsoft account.",
+      "category": "services",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Todos"
+        }
+      ]
+    },
+    {
+      "id": "sticky-notes",
+      "title": "Sticky Notes",
+      "description": "Notes on the desktop, synced through a Microsoft account.",
+      "category": "services",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.MicrosoftStickyNotes"
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "title": "Family",
+      "description": "Microsoft Family Safety: screen time and content filters for children's accounts.",
+      "details": "Keep it if children will use this PC with Microsoft accounts.",
+      "category": "services",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "MicrosoftCorporationII.MicrosoftFamily"
+        }
+      ]
+    },
+    {
+      "id": "feedback-hub",
+      "title": "Feedback Hub",
+      "description": "Sends feedback and problem reports to Microsoft.",
+      "category": "services",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsFeedbackHub"
+        }
+      ]
+    },
+    {
+      "id": "phone-link",
+      "title": "Phone Link",
+      "description": "Shows your phone's notifications, messages and calls on the PC.",
+      "category": "services",
+      "risk": "moderate",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.YourPhone"
+        }
+      ]
+    },
+    {
+      "id": "widgets",
+      "title": "Widgets",
+      "description": "The news and weather panel that opens from the taskbar.",
+      "category": "services",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "MicrosoftWindows.Client.WebExperience"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WidgetsPlatformRuntime"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.StartExperiencesApp"
+        }
+      ]
+    },
+    {
+      "id": "quick-assist",
+      "title": "Quick Assist",
+      "description": "Lets someone you trust see or control your screen to help you.",
+      "details": "Often the way a relative gives remote help. Plainstall keeps it unless you switch this on.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "MicrosoftCorporationII.QuickAssist"
+        }
+      ]
+    },
+    {
+      "id": "get-help",
+      "title": "Get Help",
+      "description": "Microsoft's support app.",
+      "details": "Several Windows 11 troubleshooters open inside this app and stop working without it.",
+      "category": "tools",
+      "risk": "advanced",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.GetHelp"
+        }
+      ]
+    },
+    {
+      "id": "clock",
+      "title": "Clock",
+      "description": "Alarms, timers, stopwatch and focus sessions.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsAlarms"
+        }
+      ]
+    },
+    {
+      "id": "sound-recorder",
+      "title": "Sound Recorder",
+      "description": "Records audio from a microphone.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsSoundRecorder"
+        }
+      ]
+    },
+    {
+      "id": "camera",
+      "title": "Camera",
+      "description": "Takes photos and videos with a webcam.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsCamera"
+        }
+      ]
+    },
+    {
+      "id": "paint",
+      "title": "Paint",
+      "description": "The drawing and image editing app.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Paint"
+        }
+      ]
+    },
+    {
+      "id": "snipping-tool",
+      "title": "Snipping Tool",
+      "description": "Takes screenshots and screen recordings.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.ScreenSketch"
+        }
+      ]
+    },
+    {
+      "id": "photos",
+      "title": "Photos",
+      "description": "The default viewer for pictures and videos.",
+      "details": "Without it, double-clicking a picture has no default app until you install another viewer.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.Windows.Photos"
+        }
+      ]
+    },
+    {
+      "id": "calculator",
+      "title": "Calculator",
+      "description": "The calculator.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsCalculator"
+        }
+      ]
+    },
+    {
+      "id": "notepad",
+      "title": "Notepad",
+      "description": "The plain text editor.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.WindowsNotepad"
+        }
+      ]
+    },
+    {
+      "id": "media-player",
+      "title": "Media Player",
+      "description": "Plays music and video files.",
+      "category": "tools",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.ZuneMusic"
+        }
+      ]
+    },
+    {
+      "id": "xbox-app",
+      "title": "Xbox app",
+      "description": "The store and library for PC Game Pass and Xbox games.",
+      "details": "Needed for Game Pass and to install some PC games.",
+      "category": "gaming",
+      "risk": "moderate",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.GamingApp"
+        }
+      ]
+    },
+    {
+      "id": "game-bar",
+      "title": "Game Bar",
+      "description": "The in-game overlay opened with Win+G: recording, performance, chat.",
+      "details": "Some games require it. Without it Windows can show 'you need a new app to open this ms-gamingoverlay link' when a controller button is pressed, and performance can drop on some recent processors. If you remove it, also switch on 'Xbox button does not open Game Bar' on the Tweaks tab.",
+      "category": "gaming",
+      "risk": "advanced",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.XboxGamingOverlay"
+        },
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "Microsoft.XboxGameOverlay"
+        }
+      ]
+    },
+    {
+      "id": "mobile-devices",
+      "title": "Mobile devices",
+      "description": "Shows your phone in File Explorer and lets you use it as a webcam.",
+      "details": "The package name is MicrosoftWindows.CrossDevice.",
+      "category": "services",
+      "risk": "moderate",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "reinstall": {
+        "method": "store"
+      },
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "appx.removeProvisioned",
+          "package": "MicrosoftWindows.CrossDevice"
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\Orchestrator\\UScheduler_Oobe\\CrossDeviceUpdate",
+          "note": "The setup-time job that would install the app again. Present in the 26H2 image; its purpose is inferred from its name and is checked in the VM test."
+        }
+      ]
+    },
+    {
+      "id": "onedrive",
+      "title": "OneDrive",
+      "description": "Microsoft's cloud storage. Removing it stops the sign-in and backup prompts.",
+      "details": "Only the installer that Windows runs for each new account is removed. To get OneDrive back, install it from Microsoft's website or with winget.",
+      "category": "browser-cloud",
+      "risk": "moderate",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "reinstall": {
+        "method": "winget",
+        "id": "Microsoft.OneDrive"
+      },
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "file.delete",
+          "path": "Windows\\System32\\OneDriveSetup.exe"
+        },
+        {
+          "kind": "file.delete",
+          "path": "Windows\\SysWOW64\\OneDriveSetup.exe"
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "name": "OneDriveSetup",
+          "note": "Without this, every new account tries to start the deleted installer at first sign-in."
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "title": "Microsoft Edge",
+      "description": "Removes the Edge browser. The PC then has no web browser until you install one.",
+      "details": "This deletes the files of Edge. Outside the European Economic Area, Windows has no supported way to uninstall Edge. The WebView2 runtime is deliberately kept, because Start menu search, Widgets, Outlook and many other apps are built on it. A Windows update may bring Edge back. Pair this with 'install apps' to get another browser at first sign-in.",
+      "category": "browser-cloud",
+      "risk": "advanced",
+      "defaultIn": [],
+      "reinstall": {
+        "method": "winget",
+        "id": "Microsoft.Edge"
+      },
+      "source": [
+        {
+          "name": "tiny11builder",
+          "url": "https://github.com/ntdevlabs/tiny11builder"
+        },
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "file.delete",
+          "path": "Program Files (x86)\\Microsoft\\Edge",
+          "recurse": true
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "machineSoftware",
+          "key": "WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Microsoft Edge"
+        },
+        {
+          "kind": "registry.delete",
+          "hive": "machineSoftware",
+          "key": "Microsoft\\WindowsUpdate\\Orchestrator\\UScheduler_Oobe\\EdgeUpdate",
+          "note": "The setup-time job that updates Edge during setup. Present in the 26H2 image; purpose inferred from its name and checked in the VM test."
+        }
+      ]
+    }
+  ]
+}

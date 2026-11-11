@@ -1,0 +1,143 @@
+# Plainstall: settings for a new user account.
+#
+# Created by Plainstall when the installation stick was built. Windows starts this file
+# once for every new account, at its first sign-in, with that user's own rights.
+# It changes settings of that user only. It never restarts the PC and downloads nothing.
+# Log: %LOCALAPPDATA%\Plainstall\Logs\User.log
+
+$ErrorActionPreference = 'Continue'
+$ProgressPreference = 'SilentlyContinue'
+
+$plainstallLogFolder = Join-Path $env:LOCALAPPDATA 'Plainstall\Logs'
+$plainstallLog = Join-Path $plainstallLogFolder 'User.log'
+$plainstallDone = Join-Path $env:LOCALAPPDATA 'Plainstall\User.done'
+$plainstallProblems = 0
+
+function Write-PlainstallLog {
+    param([string]$Message)
+    $plainstallLine = '{0}  {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message
+    try {
+        Add-Content -LiteralPath $script:plainstallLog -Value $plainstallLine -Encoding UTF8 -ErrorAction Stop
+    } catch {
+        # The log itself cannot be written. There is no other place to report that,
+        # and the work must go on.
+    }
+}
+
+# Runs one action. Whatever happens inside is written to the log, and the script goes on.
+function Invoke-PlainstallStep {
+    param([string]$Title, [scriptblock]$Action)
+    try {
+        $plainstallItems = @(& $Action *>&1)
+        $plainstallErrors = @($plainstallItems | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] })
+        $plainstallText = ($plainstallItems | Out-String).Trim()
+        if ($plainstallErrors.Count -gt 0) {
+            $script:plainstallProblems++
+            Write-PlainstallLog ('ERROR   ' + $Title)
+        } else {
+            Write-PlainstallLog ('OK      ' + $Title)
+        }
+        if ($plainstallText) {
+            Write-PlainstallLog ('        ' + $plainstallText)
+        }
+    } catch {
+        $script:plainstallProblems++
+        Write-PlainstallLog ('FAILED  ' + $Title + ': ' + $_.Exception.Message)
+    }
+}
+
+# Runs one command from the Plainstall catalog. The text becomes code here and nowhere else,
+# inside the step, so that a command with a mistake in it fails alone.
+function Invoke-PlainstallCommand {
+    param([string]$Title, [string]$Code)
+    Invoke-PlainstallStep $Title { & ([scriptblock]::Create($Code)) }
+}
+
+# Registry helpers. They use the .NET registry classes, so a key or value name is always
+# taken literally. All keys are relative to HKEY_CURRENT_USER.
+function Set-PlainstallRegistryValue {
+    param([string]$Key, [string]$Name, [string]$Kind, $Data)
+    if ([string]::IsNullOrWhiteSpace($Key)) { throw 'The registry key is empty.' }
+    $plainstallCulture = [System.Globalization.CultureInfo]::InvariantCulture
+    if ($Kind -eq 'DWord') {
+        # The registry class wants a signed number with the same bits.
+        $plainstallValue = [System.BitConverter]::ToInt32([System.BitConverter]::GetBytes([uint32]::Parse([string]$Data, $plainstallCulture)), 0)
+    } elseif ($Kind -eq 'QWord') {
+        $plainstallValue = [System.BitConverter]::ToInt64([System.BitConverter]::GetBytes([uint64]::Parse([string]$Data, $plainstallCulture)), 0)
+    } elseif ($Kind -eq 'MultiString') {
+        $plainstallValue = [string[]]@($Data)
+    } elseif ($Kind -eq 'Binary') {
+        $plainstallHex = [string]$Data
+        $plainstallValue = [byte[]]::new($plainstallHex.Length / 2)
+        for ($plainstallIndex = 0; $plainstallIndex -lt $plainstallValue.Length; $plainstallIndex++) {
+            $plainstallValue[$plainstallIndex] = [System.Convert]::ToByte($plainstallHex.Substring($plainstallIndex * 2, 2), 16)
+        }
+    } elseif ($Kind -eq 'String' -or $Kind -eq 'ExpandString') {
+        $plainstallValue = [string]$Data
+    } else {
+        throw ('Unknown registry value type: ' + $Kind)
+    }
+    $plainstallKey = [Microsoft.Win32.Registry]::CurrentUser.CreateSubKey($Key)
+    try {
+        $plainstallKey.SetValue($Name, $plainstallValue, [Microsoft.Win32.RegistryValueKind]$Kind)
+    } finally {
+        $plainstallKey.Close()
+    }
+}
+
+function Remove-PlainstallRegistryValue {
+    param([string]$Key, [string]$Name)
+    if ([string]::IsNullOrWhiteSpace($Key)) { throw 'The registry key is empty.' }
+    $plainstallKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($Key, $true)
+    if ($null -eq $plainstallKey) { return }
+    try {
+        $plainstallKey.DeleteValue($Name, $false)
+    } finally {
+        $plainstallKey.Close()
+    }
+}
+
+function Remove-PlainstallRegistryKey {
+    param([string]$Key)
+    if ([string]::IsNullOrWhiteSpace($Key)) { throw 'The registry key is empty.' }
+    [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree($Key, $false)
+}
+
+try {
+    New-Item -ItemType Directory -Path $plainstallLogFolder -Force -ErrorAction Stop | Out-Null
+} catch {
+    # Without the folder there is no log, but the work is still worth doing.
+}
+if (Test-Path -LiteralPath $plainstallDone) {
+    # This script has already run to its end once.
+    exit 0
+}
+Write-PlainstallLog 'Started.'
+
+Invoke-PlainstallStep 'Dark theme: set HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme' { Set-PlainstallRegistryValue 'Software\Microsoft\Windows\CurrentVersion\Themes\Personalize' 'AppsUseLightTheme' 'DWord' '0' }
+Invoke-PlainstallStep 'Classic context menu: set HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32\(Default)' { Set-PlainstallRegistryValue 'Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32' '' 'String' '' }
+Invoke-PlainstallStep 'Hide Home: set HKCU\Software\Classes\CLSID\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}\(Default)' { Set-PlainstallRegistryValue 'Software\Classes\CLSID\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}' '' 'String' 'CLSID_MSGraphHomeFolder' }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\Largest dword' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'Largest dword' 'DWord' '4294967295' }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\Largest qword' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'Largest qword' 'QWord' '18446744073709551615' }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\Expandable' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'Expandable' 'ExpandString' '%USERPROFILE%\Desktop' }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\Several' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'Several' 'MultiString' @('one', 'two words') }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\None' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'None' 'MultiString' @() }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\Bytes' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'Bytes' 'Binary' '00FF10AB' }
+Invoke-PlainstallStep 'All value types: set HKCU\Software\Plainstall Test\No bytes' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'No bytes' 'Binary' '' }
+Invoke-PlainstallStep 'It''s a title with a quote: set HKCU\Software\Plainstall Test\It''s a name' { Set-PlainstallRegistryValue 'Software\Plainstall Test' 'It''s a name' 'String' 'It''s data' }
+Invoke-PlainstallStep 'Remove a value: delete HKCU\Software\Plainstall Test\Old value' { Remove-PlainstallRegistryValue 'Software\Plainstall Test' 'Old value' }
+Invoke-PlainstallStep 'Remove a default value: delete HKCU\Software\Plainstall Test\(Default)' { Remove-PlainstallRegistryValue 'Software\Plainstall Test' '' }
+Invoke-PlainstallStep 'Remove a key: delete HKCU\Software\Plainstall Test\Old key' { Remove-PlainstallRegistryKey 'Software\Plainstall Test\Old key' }
+Invoke-PlainstallCommand 'No Store suggestions in search: Block the Store suggestion database' '$d = Join-Path $env:LOCALAPPDATA ''Packages\Example''; New-Item -ItemType Directory -Force -Path $d | Out-Null'
+
+Write-PlainstallLog ('Finished. Steps with problems: ' + $plainstallProblems)
+
+# The very last step: an empty marker file. It is created whether or not every step worked.
+# It keeps this script from running twice, and it shows that the work is over.
+try {
+    [void][System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($plainstallDone))
+    [System.IO.File]::WriteAllBytes($plainstallDone, [byte[]]::new(0))
+} catch {
+    Write-PlainstallLog ('The marker file could not be written: ' + $_.Exception.Message)
+}
+exit 0

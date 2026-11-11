@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <RootNamespace>Plainstall.Core</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The catalog is data. It is embedded so that the engine, the CLI and the app always agree on it. -->
+        <EmbeddedResource Include="Catalog\Data\apps.json" LogicalName="Plainstall.Catalog.apps.json"/>
+        <EmbeddedResource Include="Catalog\Data\tweaks.json" LogicalName="Plainstall.Catalog.tweaks.json"/>
+        <EmbeddedResource Include="Catalog\Data\presets.json" LogicalName="Plainstall.Catalog.presets.json"/>
+        <EmbeddedResource Include="Catalog\Data\installs.json" LogicalName="Plainstall.Catalog.installs.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Dism"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+        <PackageReference Include="System.Management"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Plainstall.Core.Tests"/>
+    </ItemGroup>
+
+</Project>

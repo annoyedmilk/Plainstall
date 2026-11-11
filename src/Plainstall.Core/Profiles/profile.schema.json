@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/annoyedmilk/Plainstall/schemas/profile.schema.json",
+  "title": "Plainstall profile (*.plainstall.json), schema 1",
+  "description": "Everything a user chose for a build, in a file that can be saved, shared and replayed. A profile holds choices, not machine state: no ISO path, no USB disk number, no output path, no password. Those are given at build time.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "name",
+    "windows",
+    "apps",
+    "tweaks",
+    "setup"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": {
+      "description": "Profile schema version. Older versions are migrated forward when the file is opened. A file with a newer version than the app knows is refused with a message asking the user to update Plainstall.",
+      "const": 1
+    },
+    "name": {
+      "description": "Free text shown in the app, for example \"Mom's laptop\".",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "createdWith": {
+      "description": "Plainstall version that last saved the file. Informational.",
+      "type": "string"
+    },
+    "windows": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "language",
+        "edition"
+      ],
+      "properties": {
+        "source": {
+          "description": "download: get the current Windows 11 ISO from Microsoft. iso: the user supplies an ISO at build time (the path is not stored in the profile).",
+          "enum": [
+            "download",
+            "iso"
+          ]
+        },
+        "language": {
+          "description": "auto: the display language of the PC running Plainstall, falling back to en-US when Microsoft offers no ISO in that language. Otherwise a language tag such as de-DE, en-GB, fr-CA.",
+          "type": "string",
+          "pattern": "^(auto|[a-z]{2,3}(-[A-Za-z]{4})?(-[A-Z]{2}|-[0-9]{3})?)$"
+        },
+        "edition": {
+          "description": "EditionId of the edition to install: Professional, Core (Home), Education, ProfessionalWorkstation and so on. Matched against image metadata, never against the localized edition name.",
+          "type": "string",
+          "pattern": "^[A-Za-z]+$"
+        }
+      }
+    },
+    "apps": {
+      "description": "Which preinstalled apps to remove. Start from a preset, then adjust.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preset"
+      ],
+      "properties": {
+        "preset": {
+          "$ref": "#/$defs/presetOrNone"
+        },
+        "keep": {
+          "description": "Apps the preset would remove but this profile keeps. Each item is a catalog app id (for example 'get-help') or a package name (for example 'Microsoft.GetHelp').",
+          "$ref": "#/$defs/appRefList"
+        },
+        "remove": {
+          "description": "Apps to remove in addition to the preset. Each item is a catalog app id or a package name. A package name that is not in the catalog is removed as given (risk: advanced), unless it is on the protected list.",
+          "$ref": "#/$defs/appRefList"
+        },
+        "install": {
+          "description": "Advanced. Apps to install with winget on the new PC at the first sign-in: winget package ids (for example 'Mozilla.Firefox') or Microsoft Store product ids (for example '9NKSQGP7F2NH': '9' and 11 more, or 'XP' and 12 more, capital letters and digits). Needs internet at that moment. Packages that cannot be installed are logged and skipped. Nothing is downloaded into the image.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Za-z0-9][A-Za-z0-9+_\\-]*(\\.[A-Za-z0-9+_\\-]+)+|9[A-Z0-9]{11}|XP[A-Z0-9]{12})$",
+            "maxLength": 120
+          },
+          "uniqueItems": true,
+          "maxItems": 50
+        }
+      }
+    },
+    "tweaks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preset"
+      ],
+      "properties": {
+        "preset": {
+          "$ref": "#/$defs/presetOrNone"
+        },
+        "enable": {
+          "description": "Tweak ids switched on in addition to the preset.",
+          "$ref": "#/$defs/idList"
+        },
+        "disable": {
+          "description": "Tweak ids from the preset that are switched off.",
+          "$ref": "#/$defs/idList"
+        }
+      }
+    },
+    "setup": {
+      "description": "Answers to the questions Windows Setup would otherwise ask. Turned into autounattend.xml at build time.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "localAccount",
+        "skipPrivacyPages",
+        "bypassHardwareChecks"
+      ],
+      "properties": {
+        "localAccount": {
+          "description": "null: Windows Setup runs its normal account pages (Microsoft account). An object: set up with a local account and skip the Microsoft account pages.",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "description": "null: Windows Setup asks for the account name (the Microsoft account pages are still skipped). Otherwise the account is created without any question.",
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20,
+                      "pattern": "^[^\"/\\\\\\[\\]:;|=,+*?<>@]+$"
+                    }
+                  ]
+                },
+                "askPassword": {
+                  "description": "true: Plainstall asks for a password when the build starts and writes it into the answer file on the stick. false: the account is created without a password.",
+                  "type": "boolean",
+                  "default": false
+                },
+                "password": {
+                  "description": "Always null. A password is never stored in a profile. The field exists so that a hand-edited profile that tries to carry one is rejected by this schema.",
+                  "type": "null"
+                }
+              }
+            }
+          ]
+        },
+        "computerName": {
+          "description": "null: Windows picks a random name. Otherwise a NetBIOS name: 1 to 15 characters, letters, digits and hyphen, not only digits.",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^(?![0-9]+$)[A-Za-z0-9-]{1,15}$"
+            }
+          ]
+        },
+        "skipPrivacyPages": {
+          "description": "Skip the 'Choose privacy settings' pages. The privacy tweaks in the profile decide the values.",
+          "type": "boolean"
+        },
+        "region": {
+          "description": "auto: same as the PC running Plainstall. ask: Windows Setup asks. Otherwise a region and format tag such as de-CH.",
+          "$ref": "#/$defs/autoAskOrTag"
+        },
+        "keyboard": {
+          "description": "auto: same as the PC running Plainstall. ask: Windows Setup asks. Otherwise a language tag such as de-CH, resolved to its default keyboard layout.",
+          "$ref": "#/$defs/autoAskOrTag"
+        },
+        "timezone": {
+          "description": "auto: same as the PC running Plainstall. ask: Windows picks the time zone from the region. Otherwise a Windows time zone id such as 'W. Europe Standard Time'.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "bypassHardwareChecks": {
+          "description": "Let Setup install on PCs without TPM 2.0, Secure Boot or a supported CPU.",
+          "type": "boolean"
+        }
+      }
+    },
+    "drivers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fromThisPc": {
+          "description": "Export the third-party drivers of the PC running Plainstall and add them to the image.",
+          "type": "boolean",
+          "default": false
+        },
+        "folders": {
+          "description": "Folders with extra drivers (.inf). Machine-specific paths: only present when the user added them.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "updates": {
+      "description": "Windows update packages (.msu or .cab) to add, in this order. Machine-specific paths: only present when the user added them.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\.([Mm][Ss][Uu]|[Cc][Aa][Bb])$"
+      },
+      "uniqueItems": true
+    },
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resetBase": {
+          "description": "Shrinks the image a little more, but updates already in the image can no longer be uninstalled. Off by default.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "output": {
+      "description": "What to produce. Which USB stick and where the ISO goes are chosen at build time.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "usb": {
+          "type": "boolean",
+          "default": true
+        },
+        "iso": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "presetOrNone": {
+      "description": "A built-in preset, or 'none' to start from nothing switched on.",
+      "enum": [
+        "recommended",
+        "privacy-max",
+        "gaming",
+        "minimal",
+        "none"
+      ]
+    },
+    "idList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "appRefList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]*$"
+      },
+      "uniqueItems": true
+    },
+    "autoAskOrTag": {
+      "type": "string",
+      "pattern": "^(auto|ask|[a-z]{2,3}(-[A-Za-z]{4})?(-[A-Z]{2}|-[0-9]{3})?)$"
+    }
+  }
+}

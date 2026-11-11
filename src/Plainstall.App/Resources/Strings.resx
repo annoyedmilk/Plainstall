@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="App_Title" xml:space="preserve"><value>Plainstall</value></data>
+    <data name="App_UnexpectedError" xml:space="preserve"><value>Something went wrong that Plainstall did not expect: {0} The app keeps running. If this happens again, the log in %LOCALAPPDATA%\Plainstall\logs has the details.</value></data>
+    <data name="App_CloseWhileBuilding" xml:space="preserve"><value>A build is running. To stop it, click Cancel and wait until the build stops. Then close Plainstall.</value></data>
+    <data name="App_CloseWhileCleaning" xml:space="preserve"><value>Plainstall cleans up now. Wait until the cleanup is complete. Then close Plainstall.</value></data>
+    <data name="Wordmark_Pla" xml:space="preserve"><value>pla</value></data>
+    <data name="Wordmark_I" xml:space="preserve"><value>i</value></data>
+    <data name="Wordmark_N" xml:space="preserve"><value>n</value></data>
+    <data name="Wordmark_Stall" xml:space="preserve"><value>stall</value></data>
+    <data name="Banner_NotElevated" xml:space="preserve"><value>Plainstall started without administrator rights. You can look around. To build, start it with &apos;Run as administrator&apos;.</value></data>
+    <data name="Update_Available" xml:space="preserve"><value>A newer version of Plainstall ({0}) is available.</value></data>
+    <data name="Update_OpenPage" xml:space="preserve"><value>Open the release page</value></data>
+    <data name="Update_DismissName" xml:space="preserve"><value>Hide this notice</value></data>
+    <data name="Theme_Label" xml:space="preserve"><value>Appearance</value></data>
+    <data name="Theme_System" xml:space="preserve"><value>Same as Windows</value></data>
+    <data name="Theme_Light" xml:space="preserve"><value>Light</value></data>
+    <data name="Theme_Dark" xml:space="preserve"><value>Dark</value></data>
+    <data name="Nav_Back" xml:space="preserve"><value>Back</value></data>
+    <data name="Nav_BackName" xml:space="preserve"><value>Back to the previous step</value></data>
+    <data name="Nav_Next" xml:space="preserve"><value>Next</value></data>
+    <data name="Nav_NextName" xml:space="preserve"><value>Next step</value></data>
+    <data name="Nav_StartBuild" xml:space="preserve"><value>Start build</value></data>
+    <data name="Step_Welcome" xml:space="preserve"><value>Welcome</value></data>
+    <data name="Step_Windows" xml:space="preserve"><value>Windows</value></data>
+    <data name="Step_Customize" xml:space="preserve"><value>Customize</value></data>
+    <data name="Step_Review" xml:space="preserve"><value>Review</value></data>
+    <data name="Step_Build" xml:space="preserve"><value>Build</value></data>
+    <data name="Step_Done" xml:space="preserve"><value>Done</value></data>
+    <data name="Step_Current" xml:space="preserve"><value>Now</value></data>
+    <data name="Step_DoneState" xml:space="preserve"><value>Done</value></data>
+    <data name="Step_Upcoming" xml:space="preserve"><value>Not yet</value></data>
+    <data name="Step_Of" xml:space="preserve"><value>Step {0} of {1}: {2}</value></data>
+    <data name="Step_AutomationName" xml:space="preserve"><value>Step {0}, {1}: {2}</value></data>
+    <data name="Welcome_Subtitle" xml:space="preserve"><value>Make a clean Windows 11 installer from Microsoft&apos;s official download, on a USB stick or as an ISO file.&#10;Start with one of these choices. You can change every detail later.</value></data>
+    <data name="Welcome_ChooseTitle" xml:space="preserve"><value>How clean should Windows be?</value></data>
+    <data name="Welcome_StartingFromPreset" xml:space="preserve"><value>Starting from: {0}</value></data>
+    <data name="Welcome_StartingFromProfile" xml:space="preserve"><value>Starting from your profile &apos;{0}&apos;.</value></data>
+    <data name="Welcome_NoPreset" xml:space="preserve"><value>no preset</value></data>
+    <data name="Welcome_OpenProfile" xml:space="preserve"><value>Open profile...</value></data>
+    <data name="Welcome_LastProfileText" xml:space="preserve"><value>Continue with &apos;{0}&apos;</value></data>
+    <data name="Welcome_ProfileOpened" xml:space="preserve"><value>Opened the profile &apos;{0}&apos;.</value></data>
+    <data name="Welcome_ProfileOpenFailed" xml:space="preserve"><value>Plainstall could not open the profile</value></data>
+    <data name="Welcome_PresetReplacedChanges" xml:space="preserve"><value>You started again from &apos;{0}&apos;. This replaced the changes that you made before.</value></data>
+    <data name="Welcome_LeftoversTitle" xml:space="preserve"><value>An earlier build did not finish</value></data>
+    <data name="Welcome_LeftoversText" xml:space="preserve"><value>It left a Windows image or a registry file open in the work folder. Clean up before you start a new build.</value></data>
+    <data name="Welcome_CleanUp" xml:space="preserve"><value>Clean up</value></data>
+    <data name="Welcome_CleanupDone" xml:space="preserve"><value>Plainstall cleaned up everything that the earlier build left behind.</value></data>
+    <data name="Welcome_CleanupProblems" xml:space="preserve"><value>Plainstall could not clean up everything:</value></data>
+    <data name="Welcome_Cleaning" xml:space="preserve"><value>Plainstall cleans up now. This can take several minutes.</value></data>
+    <data name="Welcome_StoredData" xml:space="preserve"><value>Plainstall keeps {0} of files on this PC: downloaded Windows files, tools and the logs of earlier builds. If a new build needs these files, Plainstall gets them again.</value></data>
+    <data name="Welcome_DeleteFiles" xml:space="preserve"><value>Delete these files</value></data>
+    <data name="Welcome_DeleteProblems" xml:space="preserve"><value>Plainstall could not delete all files:</value></data>
+    <data name="Windows_Title" xml:space="preserve"><value>Which Windows?</value></data>
+    <data name="Windows_Subtitle" xml:space="preserve"><value>Plainstall works with the official Windows 11 from Microsoft. Let it download the current version, or use an ISO file you already have.</value></data>
+    <data name="Windows_DownloadTitle" xml:space="preserve"><value>Download for me</value></data>
+    <data name="Windows_DownloadText" xml:space="preserve"><value>Plainstall gets the current Windows 11 from Microsoft and checks it against the checksum Microsoft publishes. About 9 GB.</value></data>
+    <data name="Windows_IsoTitle" xml:space="preserve"><value>Use my ISO</value></data>
+    <data name="Windows_IsoText" xml:space="preserve"><value>You already downloaded a Windows 11 ISO file from Microsoft. Plainstall reads it and does not change it.</value></data>
+    <data name="Windows_LanguageLabel" xml:space="preserve"><value>Language of Windows</value></data>
+    <data name="Windows_LoadingLanguages" xml:space="preserve"><value>Asking Microsoft which languages are available...</value></data>
+    <data name="Windows_LanguagesFailed" xml:space="preserve"><value>Plainstall could not load the list of languages. {0}</value></data>
+    <data name="Windows_LanguagesTimedOut" xml:space="preserve"><value>Microsoft did not answer in time.</value></data>
+    <data name="Windows_LanguagesNoConnection" xml:space="preserve"><value>Plainstall found no internet connection.</value></data>
+    <data name="Windows_LanguagesEmpty" xml:space="preserve"><value>Microsoft did not list any languages.</value></data>
+    <data name="Windows_TryAgain" xml:space="preserve"><value>Try again</value></data>
+    <data name="Windows_UseIsoInstead" xml:space="preserve"><value>Use my ISO instead</value></data>
+    <data name="Windows_ReleaseWithBuild" xml:space="preserve"><value>Current version: build {0}</value></data>
+    <data name="Windows_ReleaseNoBuild" xml:space="preserve"><value>Current version from Microsoft</value></data>
+    <data name="Windows_IsoFileLabel" xml:space="preserve"><value>ISO file</value></data>
+    <data name="Windows_IsoPlaceholder" xml:space="preserve"><value>No file chosen yet</value></data>
+    <data name="Windows_BrowseIso" xml:space="preserve"><value>Choose file...</value></data>
+    <data name="Windows_BrowseIsoName" xml:space="preserve"><value>Choose the Windows 11 ISO file</value></data>
+    <data name="Windows_ReadingIso" xml:space="preserve"><value>Reading the ISO file...</value></data>
+    <data name="Windows_IsoErrorTitle" xml:space="preserve"><value>Plainstall cannot use this file</value></data>
+    <data name="Windows_IsoUnreadable" xml:space="preserve"><value>Plainstall could not read the file: {0}</value></data>
+    <data name="Windows_MediaVersion" xml:space="preserve"><value>Windows version: {0}</value></data>
+    <data name="Windows_MediaLanguage" xml:space="preserve"><value>Language: {0}</value></data>
+    <data name="Windows_MediaEditions" xml:space="preserve"><value>Editions on this file: {0}</value></data>
+    <data name="Windows_LanguageWithTag" xml:space="preserve"><value>{0} ({1})</value></data>
+    <data name="Windows_LanguageUnknown" xml:space="preserve"><value>not stated</value></data>
+    <data name="Windows_EditionLabel" xml:space="preserve"><value>Edition</value></data>
+    <data name="Windows_EditionHint" xml:space="preserve"><value>Pick the edition that your PC has a license for. Most PCs that come with Windows have Home or Pro.</value></data>
+    <data name="Windows_BlockedNoIso" xml:space="preserve"><value>Choose an ISO file first.</value></data>
+    <data name="Windows_BlockedNoEdition" xml:space="preserve"><value>Choose an edition first.</value></data>
+    <data name="Edition_Home" xml:space="preserve"><value>Windows 11 Home</value></data>
+    <data name="Edition_Pro" xml:space="preserve"><value>Windows 11 Pro</value></data>
+    <data name="Edition_Education" xml:space="preserve"><value>Windows 11 Education</value></data>
+    <data name="Edition_ProEducation" xml:space="preserve"><value>Windows 11 Pro Education</value></data>
+    <data name="Edition_ProWorkstations" xml:space="preserve"><value>Windows 11 Pro for Workstations</value></data>
+    <data name="Customize_Title" xml:space="preserve"><value>Customize</value></data>
+    <data name="Customize_BasedOnPreset" xml:space="preserve"><value>Based on &apos;{0}&apos;. Nothing changed yet.</value></data>
+    <data name="Customize_BasedOnPresetChanged" xml:space="preserve"><value>Based on &apos;{0}&apos;, with {1} change(s).</value></data>
+    <data name="Customize_Reset" xml:space="preserve"><value>Reset to preset</value></data>
+    <data name="Customize_ResetName" xml:space="preserve"><value>Reset every switch to the preset</value></data>
+    <data name="Customize_ResetDone" xml:space="preserve"><value>Every switch is back to the preset. Your Setup and Advanced choices stay.</value></data>
+    <data name="Customize_Save" xml:space="preserve"><value>Save profile...</value></data>
+    <data name="Customize_SaveName" xml:space="preserve"><value>Save these choices as a profile file</value></data>
+    <data name="Customize_Saved" xml:space="preserve"><value>Saved to {0}</value></data>
+    <data name="Customize_BlockedSetupErrors" xml:space="preserve"><value>Fix the marked fields on the Setup tab first.</value></data>
+    <data name="Customize_DismissMessages" xml:space="preserve"><value>Hide these notes</value></data>
+    <data name="Customize_TabApps" xml:space="preserve"><value>Apps</value></data>
+    <data name="Customize_TabTweaks" xml:space="preserve"><value>Tweaks</value></data>
+    <data name="Customize_TabSetup" xml:space="preserve"><value>Setup</value></data>
+    <data name="Customize_TabAdvanced" xml:space="preserve"><value>Advanced</value></data>
+    <data name="Customize_TweaksPolicyNotice" xml:space="preserve"><value>Many of these switches work as Windows policies. While they are on, Settings and Microsoft Edge say &apos;Some settings are managed by your organization&apos;. This is normal and safe. Nobody else controls this PC. Only the settings that you chose here are locked.</value></data>
+    <data name="Filter_SearchPlaceholder" xml:space="preserve"><value>Search</value></data>
+    <data name="Filter_SearchName" xml:space="preserve"><value>Search the list</value></data>
+    <data name="Filter_RiskName" xml:space="preserve"><value>Show by risk</value></data>
+    <data name="Filter_AllRisks" xml:space="preserve"><value>All risk levels</value></data>
+    <data name="Filter_ChangedOnly" xml:space="preserve"><value>Only changed from the preset</value></data>
+    <data name="Filter_ResultCount" xml:space="preserve"><value>{0} of {1} shown</value></data>
+    <data name="Filter_NoMatches" xml:space="preserve"><value>Nothing matches. Clear the search or the filters to see everything.</value></data>
+    <data name="Risk_Safe" xml:space="preserve"><value>Safe</value></data>
+    <data name="Risk_Moderate" xml:space="preserve"><value>Moderate</value></data>
+    <data name="Risk_Advanced" xml:space="preserve"><value>Advanced</value></data>
+    <data name="Switch_Remove" xml:space="preserve"><value>Remove</value></data>
+    <data name="Switch_Keep" xml:space="preserve"><value>Keep</value></data>
+    <data name="Switch_On" xml:space="preserve"><value>On</value></data>
+    <data name="Switch_Off" xml:space="preserve"><value>Off</value></data>
+    <data name="Entry_ChangedMarker" xml:space="preserve"><value>changed</value></data>
+    <data name="Entry_Details" xml:space="preserve"><value>Details</value></data>
+    <data name="Entry_DetailsButtonName" xml:space="preserve"><value>Details for {0}</value></data>
+    <data name="Entry_SwitchNameApp" xml:space="preserve"><value>Remove {0}</value></data>
+    <data name="Entry_SwitchNameTweak" xml:space="preserve"><value>{0}</value></data>
+    <data name="Entry_AllBuilds" xml:space="preserve"><value>Applies to every Windows 11 version.</value></data>
+    <data name="Entry_BuildFrom" xml:space="preserve"><value>Applies from Windows build {0}.</value></data>
+    <data name="Entry_BuildUpTo" xml:space="preserve"><value>Applies up to Windows build {0}.</value></data>
+    <data name="Entry_BuildRange" xml:space="preserve"><value>Applies to Windows builds {0} to {1}.</value></data>
+    <data name="Entry_Reinstall" xml:space="preserve"><value>To get it back later: {0}</value></data>
+    <data name="Entry_Source" xml:space="preserve"><value>Based on the work of: {0}</value></data>
+    <data name="Rule_QuotedName" xml:space="preserve"><value>&quot;{0}&quot;</value></data>
+    <data name="Rule_RemovingApp" xml:space="preserve"><value>Removing &quot;{0}&quot;</value></data>
+    <data name="Rule_RequirementSwitchedOn" xml:space="preserve"><value>{0} needs {1}, so Plainstall switched on {1} too.</value></data>
+    <data name="Rule_DependentSwitchedOff" xml:space="preserve"><value>Plainstall switched off {0} too, because it needs {1}.</value></data>
+    <data name="Rule_DependentAppKept" xml:space="preserve"><value>Plainstall keeps {0} too, because removing it needs {1}.</value></data>
+    <data name="Rule_ConflictRefused" xml:space="preserve"><value>You cannot use {0} together with {1}. If you want {0}, switch off {1} first.</value></data>
+    <data name="Rule_RequirementIsSetupOption" xml:space="preserve"><value>{0} needs {1}. Turn on that option on the Setup tab first.</value></data>
+    <data name="Setup_LocalAccountTitle" xml:space="preserve"><value>Local account</value></data>
+    <data name="Setup_LocalAccountText" xml:space="preserve"><value>Sign in with a name and password on this PC instead of a Microsoft account. Setup skips the Microsoft account pages.</value></data>
+    <data name="Setup_AccountNameLabel" xml:space="preserve"><value>Account name</value></data>
+    <data name="Setup_AccountNamePlaceholder" xml:space="preserve"><value>Leave empty and Setup asks for it</value></data>
+    <data name="Setup_AccountNameInvalid" xml:space="preserve"><value>Use 1 to 20 characters, without &quot; / \ [ ] : ; | = , + * ? &lt; &gt; @, and not ending in a dot or a space.</value></data>
+    <data name="Setup_AccountNameReserved" xml:space="preserve"><value>Windows uses this name already. Choose a different name.</value></data>
+    <data name="Setup_AccountNameSameAsComputer" xml:space="preserve"><value>The account name and the computer name must be different.</value></data>
+    <data name="Setup_AskPassword" xml:space="preserve"><value>Set a password for this account</value></data>
+    <data name="Setup_AskPasswordText" xml:space="preserve"><value>You type the password when the build starts. It is never saved in the profile.</value></data>
+    <data name="Setup_AskPasswordNeedsName" xml:space="preserve"><value>You can set a password only for an account with a name. Type a name, or let Setup ask for both.</value></data>
+    <data name="Setup_ComputerNameLabel" xml:space="preserve"><value>Computer name</value></data>
+    <data name="Setup_ComputerNameText" xml:space="preserve"><value>The name of the PC on your network. If you leave it empty, Windows picks a name.</value></data>
+    <data name="Setup_ComputerNamePlaceholder" xml:space="preserve"><value>For example LIVING-ROOM</value></data>
+    <data name="Setup_ComputerNameInvalid" xml:space="preserve"><value>Use 1 to 15 letters, digits or hyphens, and not only digits.</value></data>
+    <data name="Setup_SkipPrivacyTitle" xml:space="preserve"><value>Skip the privacy questions</value></data>
+    <data name="Setup_SkipPrivacyText" xml:space="preserve"><value>Setup does not ask about location, diagnostics and ads. The answers come from your choices on the Tweaks tab.</value></data>
+    <data name="Setup_BypassTitle" xml:space="preserve"><value>Install on unsupported hardware</value></data>
+    <data name="Setup_BypassText" xml:space="preserve"><value>Lets Setup install on PCs without TPM 2.0, Secure Boot or a supported processor. Microsoft can limit updates on these PCs.</value></data>
+    <data name="Setup_RegionalText" xml:space="preserve"><value>What Setup uses for region, keyboard and time.</value></data>
+    <data name="Setup_Region" xml:space="preserve"><value>Region and formats</value></data>
+    <data name="Setup_RegionValueName" xml:space="preserve"><value>Region to use</value></data>
+    <data name="Setup_Keyboard" xml:space="preserve"><value>Keyboard</value></data>
+    <data name="Setup_KeyboardValueName" xml:space="preserve"><value>Keyboard to use</value></data>
+    <data name="Setup_TimeZone" xml:space="preserve"><value>Time zone</value></data>
+    <data name="Setup_TimeZoneValueName" xml:space="preserve"><value>Time zone to use</value></data>
+    <data name="Setup_SameAsThisPc" xml:space="preserve"><value>Same as this PC</value></data>
+    <data name="Setup_AskDuringSetup" xml:space="preserve"><value>Ask during Setup</value></data>
+    <data name="Setup_TimeZoneFromRegion" xml:space="preserve"><value>Windows picks one from the region</value></data>
+    <data name="Setup_ChooseValue" xml:space="preserve"><value>Choose one</value></data>
+    <data name="Advanced_InstallTitle" xml:space="preserve"><value>Install apps at the first sign-in</value></data>
+    <data name="Advanced_InstallText" xml:space="preserve"><value>The Microsoft app installer winget installs these apps at the first sign-in. Each app comes from its maker or from the Microsoft Store.</value></data>
+    <data name="Advanced_InstallCount" xml:space="preserve"><value>{0} of at most {1}</value></data>
+    <data name="Advanced_BrowserSuggestion" xml:space="preserve"><value>Plainstall removes Microsoft Edge. Pick a web browser to install. If you do not, the new PC has no browser.</value></data>
+    <data name="Advanced_AddOtherLabel" xml:space="preserve"><value>Another app, by its winget id or Microsoft Store id</value></data>
+    <data name="Advanced_AddOtherName" xml:space="preserve"><value>Add this winget id or Store id</value></data>
+    <data name="Advanced_Add" xml:space="preserve"><value>Add</value></data>
+    <data name="Advanced_WingetPlaceholder" xml:space="preserve"><value>For example Mozilla.Firefox or 9NKSQGP7F2NH</value></data>
+    <data name="Advanced_WingetIdInvalid" xml:space="preserve"><value>That is not a winget id or a Store id. A winget id looks like Maker.App, for example Mozilla.Firefox. A Store id is the code at the end of the app&apos;s Store web address, for example 9NKSQGP7F2NH.</value></data>
+    <data name="Advanced_WingetIdDuplicate" xml:space="preserve"><value>This app is already on the list.</value></data>
+    <data name="Advanced_InstallLimit" xml:space="preserve"><value>You can install a maximum of {0} apps this way.</value></data>
+    <data name="Advanced_Remove" xml:space="preserve"><value>Remove</value></data>
+    <data name="Advanced_RemoveItemName" xml:space="preserve"><value>Remove {0}</value></data>
+    <data name="Advanced_DriversTitle" xml:space="preserve"><value>Drivers</value></data>
+    <data name="Advanced_DriversFromPc" xml:space="preserve"><value>Include the drivers of this PC</value></data>
+    <data name="Advanced_AddDriverFolder" xml:space="preserve"><value>Add a driver folder...</value></data>
+    <data name="Advanced_UpdatesTitle" xml:space="preserve"><value>Update packages</value></data>
+    <data name="Advanced_UpdatesText" xml:space="preserve"><value>.msu or .cab files from the Microsoft Update Catalog, installed in this order.</value></data>
+    <data name="Advanced_AddUpdates" xml:space="preserve"><value>Add update files...</value></data>
+    <data name="Advanced_MoveUp" xml:space="preserve"><value>Move up</value></data>
+    <data name="Advanced_MoveUpName" xml:space="preserve"><value>Move {0} up</value></data>
+    <data name="Advanced_MoveDown" xml:space="preserve"><value>Move down</value></data>
+    <data name="Advanced_MoveDownName" xml:space="preserve"><value>Move {0} down</value></data>
+    <data name="Advanced_ResetBase" xml:space="preserve"><value>Shrink further (ResetBase)</value></data>
+    <data name="Advanced_ResetBaseWarning" xml:space="preserve"><value>Makes the image smaller. It removes the backup copies of replaced system files. You then cannot uninstall the updates that are already in the image. The build takes 10 to 25 minutes longer.</value></data>
+    <data name="Review_Title" xml:space="preserve"><value>Review</value></data>
+    <data name="Review_WindowsDownload" xml:space="preserve"><value>{0} in {1}, downloaded from Microsoft.</value></data>
+    <data name="Review_WindowsFromIso" xml:space="preserve"><value>{0} from {1} (version {2}).</value></data>
+    <data name="Review_LanguageOfThisPc" xml:space="preserve"><value>the language of this PC</value></data>
+    <data name="Review_PlanErrorsTitle" xml:space="preserve"><value>This combination cannot be built</value></data>
+    <data name="Review_FixProblems" xml:space="preserve"><value>Back to Customize</value></data>
+    <data name="Review_RemovedAppsHeader" xml:space="preserve"><value>Apps that Plainstall removes ({0})</value></data>
+    <data name="Review_ChangesHeader" xml:space="preserve"><value>Settings that Plainstall changes ({0})</value></data>
+    <data name="Review_SetupHeader" xml:space="preserve"><value>Windows Setup</value></data>
+    <data name="Review_InstallsHeader" xml:space="preserve"><value>Installed at the first sign-in</value></data>
+    <data name="Review_NotesHeader" xml:space="preserve"><value>Good to know</value></data>
+    <data name="Review_BuildAssumed" xml:space="preserve"><value>Plainstall knows the exact Windows build only after the download. The list above is for the current build.</value></data>
+    <data name="Review_AccountMicrosoft" xml:space="preserve"><value>Setup shows its usual Microsoft account pages.</value></data>
+    <data name="Review_AccountLocalAsk" xml:space="preserve"><value>A local account. Setup asks for its name and password.</value></data>
+    <data name="Review_AccountLocalNamed" xml:space="preserve"><value>A local account named &apos;{0}&apos;, without a password.</value></data>
+    <data name="Review_AccountLocalNamedPassword" xml:space="preserve"><value>A local account named &apos;{0}&apos;. You type its password when the build starts.</value></data>
+    <data name="Review_PrivacySkipped" xml:space="preserve"><value>The privacy questions are skipped.</value></data>
+    <data name="Review_PrivacyAsked" xml:space="preserve"><value>Setup asks the privacy questions.</value></data>
+    <data name="Review_HardwareBypassed" xml:space="preserve"><value>Installs on PCs without TPM 2.0, Secure Boot or a supported processor.</value></data>
+    <data name="Review_HardwareChecked" xml:space="preserve"><value>Setup checks the hardware as usual.</value></data>
+    <data name="Review_ComputerName" xml:space="preserve"><value>Computer name: {0}</value></data>
+    <data name="Review_Region" xml:space="preserve"><value>Region and formats: {0}</value></data>
+    <data name="Review_Keyboard" xml:space="preserve"><value>Keyboard: {0}</value></data>
+    <data name="Review_TimeZone" xml:space="preserve"><value>Time zone: {0}</value></data>
+    <data name="Review_OutputHeader" xml:space="preserve"><value>What to make</value></data>
+    <data name="Review_WantsUsb" xml:space="preserve"><value>A USB stick to install from</value></data>
+    <data name="Review_WantsIso" xml:space="preserve"><value>An ISO file</value></data>
+    <data name="Review_PickStick" xml:space="preserve"><value>Which stick?</value></data>
+    <data name="Review_RefreshUsb" xml:space="preserve"><value>Refresh</value></data>
+    <data name="Review_RefreshUsbName" xml:space="preserve"><value>Look for USB sticks again</value></data>
+    <data name="Review_NoSticks" xml:space="preserve"><value>Plainstall found no USB stick. Plug one in (16 GB or more) and press Refresh.</value></data>
+    <data name="Review_UsbNoVolumes" xml:space="preserve"><value>no drive letter</value></data>
+    <data name="Review_UsbNoLabel" xml:space="preserve"><value>no name</value></data>
+    <data name="Review_UsbNotOffered" xml:space="preserve"><value>Not offered: {0}</value></data>
+    <data name="Review_UsbItemName" xml:space="preserve"><value>{0}, {1}, {2}</value></data>
+    <data name="Review_UsbItemNameNotOffered" xml:space="preserve"><value>{0}, {1}, cannot be chosen. {2}</value></data>
+    <data name="Review_EraseTitle" xml:space="preserve"><value>Plainstall erases everything on this stick</value></data>
+    <data name="Review_EraseConfirm" xml:space="preserve"><value>{0} ({1}, now holds {2}). When the build writes the stick, it deletes all files on it for good.</value></data>
+    <data name="Review_EraseCheckbox" xml:space="preserve"><value>Yes, erase this stick</value></data>
+    <data name="Review_UsbExternalNote" xml:space="preserve"><value>Windows reports this as an external drive, not as a USB stick.</value></data>
+    <data name="Review_ExternalCheckbox" xml:space="preserve"><value>This is my USB stick, not a backup drive, and it holds nothing I need.</value></data>
+    <data name="Review_BlockedExternalNotConfirmed" xml:space="preserve"><value>Confirm that this external drive is your USB stick.</value></data>
+    <data name="Review_ChooseIso" xml:space="preserve"><value>Save as...</value></data>
+    <data name="Review_ChooseIsoName" xml:space="preserve"><value>Choose where to save the ISO file</value></data>
+    <data name="Review_IsoPathName" xml:space="preserve"><value>Where the ISO file is saved</value></data>
+    <data name="Review_IsoPlaceholder" xml:space="preserve"><value>No place chosen yet</value></data>
+    <data name="Review_SpaceHeader" xml:space="preserve"><value>Room to work</value></data>
+    <data name="Review_SpaceText" xml:space="preserve"><value>About {0} needed on the drive of the work folder, {1} free.</value></data>
+    <data name="Review_SpaceUnknown" xml:space="preserve"><value>About {0} needed on the drive of the work folder.</value></data>
+    <data name="Review_ChangeWorkFolder" xml:space="preserve"><value>Change...</value></data>
+    <data name="Review_ChangeWorkFolderName" xml:space="preserve"><value>Choose another work folder</value></data>
+    <data name="Review_TimeHeader" xml:space="preserve"><value>How long it takes</value></data>
+    <data name="Review_TimeText" xml:space="preserve"><value>Usually {0} to {1} minutes, depending on the PC and the internet connection.</value></data>
+    <data name="Review_BlockedNotElevated" xml:space="preserve"><value>Building needs &apos;Run as administrator&apos;.</value></data>
+    <data name="Review_BlockedPlanErrors" xml:space="preserve"><value>Fix the problems listed on the left first.</value></data>
+    <data name="Review_BlockedSpace" xml:space="preserve"><value>There is not enough room in the work folder.</value></data>
+    <data name="Review_BlockedNoOutput" xml:space="preserve"><value>Choose a USB stick, an ISO file or both.</value></data>
+    <data name="Review_BlockedNoStick" xml:space="preserve"><value>Choose the USB stick to use.</value></data>
+    <data name="Review_BlockedNotConfirmed" xml:space="preserve"><value>Confirm that the stick may be erased.</value></data>
+    <data name="Review_BlockedNoIsoPath" xml:space="preserve"><value>Choose where to save the ISO file.</value></data>
+    <data name="Review_BlockedIsoIsSource" xml:space="preserve"><value>Choose a different name for the new ISO file. It must not replace your Windows ISO file.</value></data>
+    <data name="Review_BlockedIsoExists" xml:space="preserve"><value>The ISO file already exists. Click &apos;Save as...&apos; again and choose a new name or replace the file.</value></data>
+    <data name="Review_BlockedLoadingUsb" xml:space="preserve"><value>Wait until the list of USB sticks is complete.</value></data>
+    <data name="Size_Gigabytes" xml:space="preserve"><value>{0} GB</value></data>
+    <data name="Build_Title" xml:space="preserve"><value>Building</value></data>
+    <data name="Build_StageOf" xml:space="preserve"><value>Step {0} of {1}: {2}</value></data>
+    <data name="Build_Percent" xml:space="preserve"><value>{0} %</value></data>
+    <data name="Build_Cancel" xml:space="preserve"><value>Cancel</value></data>
+    <data name="Build_CancelName" xml:space="preserve"><value>Cancel the build</value></data>
+    <data name="Build_Stopping" xml:space="preserve"><value>Plainstall stops after the current step. It cannot interrupt a step that changes the Windows image, so this can take a few minutes.</value></data>
+    <data name="Build_ShowLog" xml:space="preserve"><value>Show the details</value></data>
+    <data name="Build_LogName" xml:space="preserve"><value>Build log</value></data>
+    <data name="Build_StagesName" xml:space="preserve"><value>Steps of the build</value></data>
+    <data name="Build_PasswordTitle" xml:space="preserve"><value>Password for the account</value></data>
+    <data name="Build_PasswordText" xml:space="preserve"><value>Type the password for the local account. Plainstall uses it for this build only. It does not save it in the profile. It writes it only into the answer file on the stick or in the ISO file.</value></data>
+    <data name="Build_PasswordWarning" xml:space="preserve"><value>Plainstall writes the password onto the stick or ISO in a form that people can decode. Keep the stick safe. Change the password after Windows is installed.</value></data>
+    <data name="Build_PasswordLabel" xml:space="preserve"><value>Password</value></data>
+    <data name="Build_PasswordConfirmLabel" xml:space="preserve"><value>Type it again</value></data>
+    <data name="Build_PasswordStart" xml:space="preserve"><value>Start the build</value></data>
+    <data name="Build_PasswordCancel" xml:space="preserve"><value>Do not build now</value></data>
+    <data name="Build_PasswordEmpty" xml:space="preserve"><value>Type a password, or go back and switch off &apos;Set a password for this account&apos;.</value></data>
+    <data name="Build_PasswordMismatch" xml:space="preserve"><value>The two passwords are not the same. Type them again.</value></data>
+    <data name="Build_PasswordTooLong" xml:space="preserve"><value>The password is too long. Use a maximum of {0} characters.</value></data>
+    <data name="Build_CancelledBeforeStart" xml:space="preserve"><value>The build did not start.</value></data>
+    <data name="Build_UnexpectedError" xml:space="preserve"><value>Plainstall did not expect this: {0}</value></data>
+    <data name="Stage1" xml:space="preserve"><value>Check this PC</value></data>
+    <data name="Stage2" xml:space="preserve"><value>Get the Windows image</value></data>
+    <data name="Stage3" xml:space="preserve"><value>Look at the image</value></data>
+    <data name="Stage4" xml:space="preserve"><value>Copy the installation files</value></data>
+    <data name="Stage5" xml:space="preserve"><value>Customize Windows</value></data>
+    <data name="Stage6" xml:space="preserve"><value>Prepare Windows Setup</value></data>
+    <data name="Stage7" xml:space="preserve"><value>Write the answer file</value></data>
+    <data name="Stage8" xml:space="preserve"><value>Pack the image</value></data>
+    <data name="Stage9" xml:space="preserve"><value>Create the output</value></data>
+    <data name="Stage10" xml:space="preserve"><value>Write the report</value></data>
+    <data name="Stage_Pending" xml:space="preserve"><value>Not yet</value></data>
+    <data name="Stage_Current" xml:space="preserve"><value>Now</value></data>
+    <data name="Stage_Done" xml:space="preserve"><value>Done</value></data>
+    <data name="Stage_Skipped" xml:space="preserve"><value>Skipped</value></data>
+    <data name="Stage_Failed" xml:space="preserve"><value>Did not finish</value></data>
+    <data name="Stage_AutomationName" xml:space="preserve"><value>Step {0}, {1}: {2}</value></data>
+    <data name="Done_SucceededHeadline" xml:space="preserve"><value>Your installer is ready</value></data>
+    <data name="Done_SucceededMessage" xml:space="preserve"><value>Put the stick into the PC that you want to install. Switch on the PC and start it from the stick.</value></data>
+    <data name="Done_SucceededIsoMessage" xml:space="preserve"><value>Use the ISO file to make a USB stick, or start a virtual machine from it.</value></data>
+    <data name="Done_PartlyHeadline" xml:space="preserve"><value>Ready, with a few changes missing</value></data>
+    <data name="Done_PartlyMessage" xml:space="preserve"><value>The installer works, but Plainstall could not make some changes. The list below and the report show them.</value></data>
+    <data name="Done_FailedHeadline" xml:space="preserve"><value>The build did not work</value></data>
+    <data name="Done_FailedMessage" xml:space="preserve"><value>The build stopped before it was done. The reason is below. The log has the details.</value></data>
+    <data name="Done_CancelledHeadline" xml:space="preserve"><value>The build stopped</value></data>
+    <data name="Done_CancelledMessage" xml:space="preserve"><value>Plainstall closed everything that the build opened. You can start the build again.</value></data>
+    <data name="Done_CancelledNotCleanedMessage" xml:space="preserve"><value>Plainstall could not close everything that the build opened. Go to the Welcome page and use &apos;Clean up&apos;. Then you can start the build again.</value></data>
+    <data name="Done_WhatWentWrong" xml:space="preserve"><value>What went wrong</value></data>
+    <data name="Done_WarningsTitle" xml:space="preserve"><value>Worth knowing</value></data>
+    <data name="Done_IsoWritten" xml:space="preserve"><value>ISO file: {0}</value></data>
+    <data name="Done_UsbWritten" xml:space="preserve"><value>USB stick: {0}</value></data>
+    <data name="Done_BootTitle" xml:space="preserve"><value>Start the PC from the stick</value></data>
+    <data name="Done_BootIntro" xml:space="preserve"><value>Switch on the PC and push the boot-menu key immediately, several times. Then pick the USB stick. The key is different for each maker:</value></data>
+    <data name="Done_BootKeyUsually" xml:space="preserve"><value>usually {0}</value></data>
+    <data name="Done_BootKeyUsuallyWithSetup" xml:space="preserve"><value>usually {0} (settings: {1})</value></data>
+    <data name="Done_KeyOr" xml:space="preserve"><value>or</value></data>
+    <data name="Done_BootHint" xml:space="preserve"><value>If no menu comes up, the PC possibly starts too fast. Hold Shift while you choose Restart in Windows. Then pick &apos;Use a device&apos;.</value></data>
+    <data name="Done_ChecklistTitle" xml:space="preserve"><value>After the first start</value></data>
+    <data name="Done_Checklist1" xml:space="preserve"><value>Connect to the internet and let Windows Update run until nothing is left.</value></data>
+    <data name="Done_Checklist2" xml:space="preserve"><value>Check Device Manager for devices without a driver.</value></data>
+    <data name="Done_Checklist3" xml:space="preserve"><value>Install the apps you need from the Microsoft Store or their makers.</value></data>
+    <data name="Done_Checklist4" xml:space="preserve"><value>If you set a password on the stick, change it now in Settings.</value></data>
+    <data name="Done_Checklist5" xml:space="preserve"><value>Keep the stick safe, or erase it. It can contain your account details.</value></data>
+    <data name="Done_OpenLog" xml:space="preserve"><value>Open the log</value></data>
+    <data name="Done_OpenReportFolder" xml:space="preserve"><value>Open the report folder</value></data>
+    <data name="Done_SaveProfile" xml:space="preserve"><value>Save profile...</value></data>
+    <data name="Done_BackToReview" xml:space="preserve"><value>Back to Review</value></data>
+    <data name="Done_StartOver" xml:space="preserve"><value>Start again</value></data>
+    <data name="Profile_SaveFailed" xml:space="preserve"><value>Plainstall could not save the profile: {0}</value></data>
+    <data name="Dialog_OpenProfileTitle" xml:space="preserve"><value>Open a Plainstall profile</value></data>
+    <data name="Dialog_SaveProfileTitle" xml:space="preserve"><value>Save the Plainstall profile</value></data>
+    <data name="Dialog_ProfileFilter" xml:space="preserve"><value>Plainstall profile</value></data>
+    <data name="Dialog_AllFilesFilter" xml:space="preserve"><value>All files</value></data>
+    <data name="Dialog_OpenIsoTitle" xml:space="preserve"><value>Choose a Windows 11 ISO file</value></data>
+    <data name="Dialog_SaveIsoTitle" xml:space="preserve"><value>Save the new ISO file</value></data>
+    <data name="Dialog_IsoFilter" xml:space="preserve"><value>ISO file</value></data>
+    <data name="Dialog_PickFolderTitle" xml:space="preserve"><value>Choose a folder</value></data>
+    <data name="Dialog_PickUpdatesTitle" xml:space="preserve"><value>Choose update packages</value></data>
+    <data name="Dialog_UpdateFilter" xml:space="preserve"><value>Update packages</value></data>
+    <data name="Shell_OpenFailed" xml:space="preserve"><value>Plainstall could not open &apos;{0}&apos;: {1}</value></data>
+</root>

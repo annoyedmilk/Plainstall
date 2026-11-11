@@ -1,0 +1,195 @@
+<UserControl
+    x:Class="Plainstall.App.Views.DonePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:res="clr-namespace:Plainstall.App.Resources"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
+    d:DataContext="{d:DesignInstance Type=vm:DoneViewModel}"
+    mc:Ignorable="d">
+    <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,12,32,24">
+            <DockPanel>
+                <Grid
+                    Width="40"
+                    Height="40"
+                    Margin="0,0,14,0"
+                    VerticalAlignment="Top">
+                    <ui:SymbolIcon
+                        FontSize="40"
+                        Filled="True"
+                        Foreground="{DynamicResource Plainstall.AccentTextBrush}"
+                        Symbol="CheckmarkCircle24"
+                        Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibility}}" />
+                    <ui:SymbolIcon
+                        FontSize="40"
+                        Filled="True"
+                        Foreground="{DynamicResource Plainstall.DangerBrush}"
+                        Symbol="ErrorCircle24"
+                        Visibility="{Binding IsFailed, Converter={StaticResource BoolToVisibility}}" />
+                    <ui:SymbolIcon
+                        FontSize="40"
+                        Foreground="{DynamicResource Plainstall.TextBrush}"
+                        Symbol="Info24"
+                        Visibility="{Binding IsCancelled, Converter={StaticResource BoolToVisibility}}" />
+                </Grid>
+                <StackPanel>
+                    <TextBlock
+                        AutomationProperties.LiveSetting="Assertive"
+                        Style="{StaticResource Plainstall.PageTitle}"
+                        Text="{Binding Headline}" />
+                    <TextBlock Style="{StaticResource Plainstall.PageSubtitle}" Text="{Binding Message}" />
+                    <ItemsControl
+                        Margin="0,6,0,0"
+                        Focusable="False"
+                        ItemsSource="{Binding Outputs}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource Plainstall.Body}" Text="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </DockPanel>
+
+            <WrapPanel Margin="0,14,0,0">
+                <ui:Button
+                    Margin="0,0,8,8"
+                    AutomationProperties.Name="{x:Static res:Strings.Done_OpenLog}"
+                    Command="{Binding OpenLogCommand}"
+                    Content="{x:Static res:Strings.Done_OpenLog}"
+                    Icon="{ui:SymbolIcon DocumentText24}" />
+                <ui:Button
+                    Margin="0,0,8,8"
+                    AutomationProperties.Name="{x:Static res:Strings.Done_OpenReportFolder}"
+                    Command="{Binding OpenReportFolderCommand}"
+                    Content="{x:Static res:Strings.Done_OpenReportFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen24}" />
+                <ui:Button
+                    Margin="0,0,8,8"
+                    AutomationProperties.Name="{x:Static res:Strings.Done_SaveProfile}"
+                    Command="{Binding SaveProfileCommand}"
+                    Content="{x:Static res:Strings.Done_SaveProfile}"
+                    Icon="{ui:SymbolIcon Save24}" />
+                <ui:Button
+                    Margin="0,0,8,8"
+                    AutomationProperties.Name="{x:Static res:Strings.Done_BackToReview}"
+                    Command="{Binding BackToReviewCommand}"
+                    Content="{x:Static res:Strings.Done_BackToReview}"
+                    Icon="{ui:SymbolIcon ArrowLeft24}"
+                    Visibility="{Binding IsFailure, Converter={StaticResource BoolToVisibility}}" />
+                <ui:Button
+                    Margin="0,0,8,8"
+                    AutomationProperties.Name="{x:Static res:Strings.Done_StartOver}"
+                    Command="{Binding StartOverCommand}"
+                    Content="{x:Static res:Strings.Done_StartOver}"
+                    Icon="{ui:SymbolIcon ArrowRepeatAll24}" />
+            </WrapPanel>
+
+            <!--  Failure  -->
+            <Border
+                Margin="0,16,0,0"
+                Style="{StaticResource Plainstall.Notice.Danger}"
+                Visibility="{Binding ErrorText, Converter={StaticResource NullToCollapsed}}">
+                <DockPanel>
+                    <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon.Danger}" Symbol="ErrorCircle24" />
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                   Text="{x:Static res:Strings.Done_WhatWentWrong}" />
+                        <TextBlock Style="{StaticResource Plainstall.Body}" Text="{Binding ErrorText}" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <Border
+                Margin="0,12,0,0"
+                Style="{StaticResource Plainstall.Notice.Caution}"
+                Visibility="{Binding HasWarnings, Converter={StaticResource BoolToVisibility}}">
+                <DockPanel>
+                    <ui:SymbolIcon Style="{StaticResource Plainstall.NoticeIcon}" Symbol="Warning24" />
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.Strong}"
+                                   Text="{x:Static res:Strings.Done_WarningsTitle}" />
+                        <ItemsControl Focusable="False" ItemsSource="{Binding Warnings}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource Plainstall.Bullet}" Text="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!--  Success: how to start from the stick, and what to do first  -->
+            <Grid Margin="0,16,0,0" Visibility="{Binding IsSuccess, Converter={StaticResource BoolToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                   Text="{x:Static res:Strings.Done_BootTitle}" />
+                        <TextBlock Style="{StaticResource Plainstall.Body}"
+                                   Text="{x:Static res:Strings.Done_BootIntro}" />
+                        <ItemsControl
+                            Margin="0,8,0,0"
+                            Focusable="False"
+                            ItemsSource="{Binding BootKeys}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:BootKeyRow}">
+                                    <Grid Margin="0,1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{StaticResource Plainstall.Strong}" Text="{Binding Brand}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{StaticResource Plainstall.Body}"
+                                            Text="{Binding Text}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock
+                            Margin="0,8,0,0"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{x:Static res:Strings.Done_BootHint}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource Plainstall.Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource Plainstall.SectionTitle}"
+                                   Text="{x:Static res:Strings.Done_ChecklistTitle}" />
+                        <ItemsControl Focusable="False" ItemsSource="{Binding Checklist}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="0,3">
+                                        <ui:SymbolIcon
+                                            Margin="0,1,8,0"
+                                            VerticalAlignment="Top"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource Plainstall.AccentTextBrush}"
+                                            Symbol="ArrowRight24" />
+                                        <TextBlock Style="{StaticResource Plainstall.Body}" Text="{Binding}" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <TextBlock
+                AutomationProperties.LiveSetting="Polite"
+                Style="{StaticResource Plainstall.Body}"
+                Text="{Binding SaveMessage}"
+                Visibility="{Binding SaveMessage, Converter={StaticResource NullToCollapsed}}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

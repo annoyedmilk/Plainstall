@@ -1,0 +1,43 @@
+<Project>
+    <PropertyGroup>
+        <Version>0.1.0</Version>
+        <Authors>Marco Müller</Authors>
+        <Product>Plainstall</Product>
+        <Copyright>Copyright (c) 2026 Marco Müller</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+        <!-- The same source gives the same binary, so a release can be checked against its tag. -->
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+        <!-- The version shown to users is the plain number, without a commit id appended. -->
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+        <!-- Release builds carry their debug information inside the binaries, so no .pdb files sit next to a published exe. -->
+        <DebugType Condition="'$(Configuration)' == 'Release'">embedded</DebugType>
+        <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    </PropertyGroup>
+
+    <!--
+        How the two executables are published, for example 'dotnet publish src\Plainstall.App -c Release -r win-x64':
+        one self-contained file that runs on a PC without .NET installed. Only when a runtime identifier is
+        given, so a plain 'dotnet build' stays fast. Not trimmed: the engine reads JSON through reflection,
+        and WPF does not support trimming.
+    -->
+    <PropertyGroup Condition="('$(MSBuildProjectName)' == 'Plainstall.App' or '$(MSBuildProjectName)' == 'Plainstall.Cli') and '$(RuntimeIdentifier)' != ''">
+        <SelfContained>true</SelfContained>
+        <PublishSingleFile>true</PublishSingleFile>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    </PropertyGroup>
+
+    <!-- 'dotnet test' would otherwise create an empty TestResults folder wherever it is started. -->
+    <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+        <TestingPlatformCommandLineArguments>--results-directory "$(MSBuildProjectDirectory)\bin\test-results"</TestingPlatformCommandLineArguments>
+    </PropertyGroup>
+</Project>

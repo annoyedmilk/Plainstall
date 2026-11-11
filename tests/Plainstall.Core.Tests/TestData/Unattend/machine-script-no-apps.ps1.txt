@@ -1,0 +1,86 @@
+# Plainstall: last steps on a freshly installed PC.
+#
+# Created by Plainstall when the installation stick was built. Windows starts this file
+# once, with administrator rights, when the first account signs in for the first time.
+# It never restarts the PC. It downloads nothing, except the apps the owner of the stick
+# chose, and those only through winget.
+# Log: %SystemRoot%\Setup\Scripts\Plainstall\Logs\Machine.log
+
+$ErrorActionPreference = 'Continue'
+$ProgressPreference = 'SilentlyContinue'
+
+$plainstallLogFolder = Join-Path $env:SystemRoot 'Setup\Scripts\Plainstall\Logs'
+$plainstallLog = Join-Path $plainstallLogFolder 'Machine.log'
+$plainstallDone = Join-Path $plainstallLogFolder 'Machine.done'
+$plainstallProblems = 0
+
+function Write-PlainstallLog {
+    param([string]$Message)
+    $plainstallLine = '{0}  {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Message
+    try {
+        Add-Content -LiteralPath $script:plainstallLog -Value $plainstallLine -Encoding UTF8 -ErrorAction Stop
+    } catch {
+        # The log itself cannot be written. There is no other place to report that,
+        # and the work must go on.
+    }
+}
+
+# Runs one action. Whatever happens inside is written to the log, and the script goes on.
+function Invoke-PlainstallStep {
+    param([string]$Title, [scriptblock]$Action)
+    try {
+        $plainstallItems = @(& $Action *>&1)
+        $plainstallErrors = @($plainstallItems | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] })
+        $plainstallText = ($plainstallItems | Out-String).Trim()
+        if ($plainstallErrors.Count -gt 0) {
+            $script:plainstallProblems++
+            Write-PlainstallLog ('ERROR   ' + $Title)
+        } else {
+            Write-PlainstallLog ('OK      ' + $Title)
+        }
+        if ($plainstallText) {
+            Write-PlainstallLog ('        ' + $plainstallText)
+        }
+    } catch {
+        $script:plainstallProblems++
+        Write-PlainstallLog ('FAILED  ' + $Title + ': ' + $_.Exception.Message)
+    }
+}
+
+# Runs one command from the Plainstall catalog. The text becomes code here and nowhere else,
+# inside the step, so that a command with a mistake in it fails alone.
+function Invoke-PlainstallCommand {
+    param([string]$Title, [string]$Code)
+    Invoke-PlainstallStep $Title { & ([scriptblock]::Create($Code)) }
+}
+
+try {
+    New-Item -ItemType Directory -Path $plainstallLogFolder -Force -ErrorAction Stop | Out-Null
+} catch {
+    # Without the folder there is no log, but the work is still worth doing.
+}
+if (Test-Path -LiteralPath $plainstallDone) {
+    # This script has already run to its end once.
+    exit 0
+}
+Write-PlainstallLog 'Started.'
+
+try { $Host.UI.RawUI.WindowTitle = 'Finishing the setup of this PC' } catch { }
+Write-Host ''
+Write-Host '  Windows is almost ready.'
+Write-Host '  A few last steps are running. This window closes by itself.'
+Write-Host ''
+
+Invoke-PlainstallCommand 'OneDrive: Remove the OneDrive setup entry' 'Get-Date | Out-Null'
+
+Write-PlainstallLog ('Finished. Steps with problems: ' + $plainstallProblems)
+
+# The very last step: an empty marker file. It is created whether or not every step worked.
+# It keeps this script from running twice, and it shows that the work is over.
+try {
+    [void][System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($plainstallDone))
+    [System.IO.File]::WriteAllBytes($plainstallDone, [byte[]]::new(0))
+} catch {
+    Write-PlainstallLog ('The marker file could not be written: ' + $_.Exception.Message)
+}
+exit 0

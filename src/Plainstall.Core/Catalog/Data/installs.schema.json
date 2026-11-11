@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/annoyedmilk/Plainstall/schemas/installs.schema.json",
+  "title": "Plainstall install suggestions (installs.json)",
+  "description": "The pick list for the 'install apps at first sign-in' option. Each entry is a winget package id or a Microsoft Store product id. A profile may list ids that are not here. This file only decides what the app offers with a checkbox.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalogVersion",
+    "categories",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "catalogVersion": {
+      "const": 1
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "wingetId",
+          "title",
+          "description",
+          "category"
+        ],
+        "properties": {
+          "wingetId": {
+            "description": "The exact package id in the winget community source, or a Microsoft Store product id ('9' and 11 more, or 'XP' and 12 more, capital letters and digits), which winget installs from its msstore source.",
+            "type": "string",
+            "pattern": "^([A-Za-z0-9][A-Za-z0-9+_\\-]*(\\.[A-Za-z0-9+_\\-]+)+|9[A-Z0-9]{11}|XP[A-Z0-9]{12})$",
+            "maxLength": 120
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "category": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          }
+        }
+      }
+    }
+  }
+}

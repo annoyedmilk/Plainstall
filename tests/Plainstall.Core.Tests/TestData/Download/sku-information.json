@@ -1,0 +1,51 @@
+{
+  "Skus": [
+    {
+      "Id": "27157",
+      "Language": "Arabic",
+      "LocalizedLanguage": "Arabic",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "LocalizedProductDisplayName": "Windows 11"
+    },
+    {
+      "Id": "27158",
+      "Language": "Portuguese (Brazil)",
+      "LocalizedLanguage": "Brazilian Portuguese",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "LocalizedProductDisplayName": "Windows 11"
+    },
+    {
+      "Id": "27159",
+      "Language": "Chinese (Simplified)",
+      "LocalizedLanguage": "Chinese (Simplified)",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "LocalizedProductDisplayName": "Windows 11"
+    },
+    {
+      "Id": "27160",
+      "Language": "English",
+      "LocalizedLanguage": "English (United States)",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "LocalizedProductDisplayName": "Windows 11"
+    },
+    {
+      "Id": 27161,
+      "Language": "English (United Kingdom)",
+      "LocalizedLanguage": "English International",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "LocalizedProductDisplayName": "Windows 11"
+    },
+    {
+      "Id": "27165",
+      "Language": "German",
+      "LocalizedLanguage": "German",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "LocalizedProductDisplayName": "Windows 11"
+    },
+    {
+      "Id": "not a safe id!",
+      "Language": "Skipped",
+      "LocalizedLanguage": "Skipped"
+    }
+  ]
+}

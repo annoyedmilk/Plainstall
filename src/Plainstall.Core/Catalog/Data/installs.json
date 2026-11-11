@@ -1,0 +1,436 @@
+{
+  "$schema": "./installs.schema.json",
+  "catalogVersion": 1,
+  "categories": [
+    {
+      "id": "browsers",
+      "title": "Web browsers"
+    },
+    {
+      "id": "everyday",
+      "title": "Everyday tools"
+    },
+    {
+      "id": "office",
+      "title": "Office and mail"
+    },
+    {
+      "id": "passwords",
+      "title": "Password managers"
+    },
+    {
+      "id": "media",
+      "title": "Media and creative"
+    },
+    {
+      "id": "games",
+      "title": "Games"
+    },
+    {
+      "id": "chat",
+      "title": "Chat and video calls"
+    },
+    {
+      "id": "ai",
+      "title": "AI assistants"
+    },
+    {
+      "id": "runtimes",
+      "title": "Runtimes for games and programs"
+    },
+    {
+      "id": "system",
+      "title": "System and hardware"
+    },
+    {
+      "id": "editors",
+      "title": "Code editors"
+    },
+    {
+      "id": "developer",
+      "title": "Developer tools"
+    },
+    {
+      "id": "ai-coding",
+      "title": "AI coding tools"
+    },
+    {
+      "id": "network",
+      "title": "Network and remote access"
+    }
+  ],
+  "entries": [
+    {
+      "wingetId": "Mozilla.Firefox",
+      "title": "Firefox",
+      "description": "Web browser from Mozilla.",
+      "category": "browsers"
+    },
+    {
+      "wingetId": "Google.Chrome",
+      "title": "Chrome",
+      "description": "Web browser from Google.",
+      "category": "browsers"
+    },
+    {
+      "wingetId": "Brave.Brave",
+      "title": "Brave",
+      "description": "Web browser that blocks ads and trackers.",
+      "category": "browsers"
+    },
+    {
+      "wingetId": "Vivaldi.Vivaldi",
+      "title": "Vivaldi",
+      "description": "Web browser you can arrange your way.",
+      "category": "browsers"
+    },
+    {
+      "wingetId": "Microsoft.Edge",
+      "title": "Microsoft Edge",
+      "description": "Puts Edge back when the profile removes it.",
+      "category": "browsers"
+    },
+    {
+      "wingetId": "7zip.7zip",
+      "title": "7-Zip",
+      "description": "Opens zip, 7z, rar and other archives.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "RARLab.WinRAR",
+      "title": "WinRAR",
+      "description": "Opens rar and zip archives. Paid after a trial.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "Notepad++.Notepad++",
+      "title": "Notepad++",
+      "description": "A text editor with tabs and syntax colors.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "SumatraPDF.SumatraPDF",
+      "title": "Sumatra PDF",
+      "description": "A small, fast reader for PDF and e-books.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "Adobe.Acrobat.Reader.64-bit",
+      "title": "Adobe Acrobat Reader",
+      "description": "Adobe's free PDF reader, with forms and signing.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "voidtools.Everything",
+      "title": "Everything",
+      "description": "Finds files and folders by name as you type.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "Microsoft.PowerToys",
+      "title": "PowerToys",
+      "description": "Window layouts, a launcher and other extras.",
+      "category": "everyday"
+    },
+    {
+      "wingetId": "TheDocumentFoundation.LibreOffice",
+      "title": "LibreOffice",
+      "description": "Free office suite for text, tables and slides.",
+      "category": "office"
+    },
+    {
+      "wingetId": "Mozilla.Thunderbird",
+      "title": "Thunderbird",
+      "description": "Mail and calendar program from Mozilla.",
+      "category": "office"
+    },
+    {
+      "wingetId": "Bitwarden.Bitwarden",
+      "title": "Bitwarden",
+      "description": "Free password manager for all your devices.",
+      "category": "passwords"
+    },
+    {
+      "wingetId": "AgileBits.1Password",
+      "title": "1Password",
+      "description": "Password manager with a subscription.",
+      "category": "passwords"
+    },
+    {
+      "wingetId": "KeePassXCTeam.KeePassXC",
+      "title": "KeePassXC",
+      "description": "Password manager that keeps a file on your PC.",
+      "category": "passwords"
+    },
+    {
+      "wingetId": "VideoLAN.VLC",
+      "title": "VLC",
+      "description": "Plays almost every video and audio file.",
+      "category": "media"
+    },
+    {
+      "wingetId": "Spotify.Spotify",
+      "title": "Spotify",
+      "description": "Music streaming.",
+      "category": "media"
+    },
+    {
+      "wingetId": "GIMP.GIMP",
+      "title": "GIMP",
+      "description": "Image editor.",
+      "category": "media"
+    },
+    {
+      "wingetId": "OBSProject.OBSStudio",
+      "title": "OBS Studio",
+      "description": "Screen recording and live streaming.",
+      "category": "media"
+    },
+    {
+      "wingetId": "Valve.Steam",
+      "title": "Steam",
+      "description": "Game store and library.",
+      "category": "games"
+    },
+    {
+      "wingetId": "EpicGames.EpicGamesLauncher",
+      "title": "Epic Games Launcher",
+      "description": "Epic's game store and library.",
+      "category": "games"
+    },
+    {
+      "wingetId": "ElectronicArts.EADesktop",
+      "title": "EA app",
+      "description": "EA's game store and library.",
+      "category": "games"
+    },
+    {
+      "wingetId": "GOG.Galaxy",
+      "title": "GOG Galaxy",
+      "description": "GOG's store of games without copy protection.",
+      "category": "games"
+    },
+    {
+      "wingetId": "Blizzard.BattleNet",
+      "title": "Battle.net",
+      "description": "Blizzard's launcher, for Diablo and Warcraft.",
+      "category": "games"
+    },
+    {
+      "wingetId": "Ubisoft.Connect",
+      "title": "Ubisoft Connect",
+      "description": "Ubisoft's game store and launcher.",
+      "category": "games"
+    },
+    {
+      "wingetId": "Discord.Discord",
+      "title": "Discord",
+      "description": "Voice and text chat.",
+      "category": "chat"
+    },
+    {
+      "wingetId": "9NKSQGP7F2NH",
+      "title": "WhatsApp",
+      "description": "WhatsApp messages and calls on the PC.",
+      "category": "chat"
+    },
+    {
+      "wingetId": "OpenWhisperSystems.Signal",
+      "title": "Signal",
+      "description": "Private messaging with end-to-end encryption.",
+      "category": "chat"
+    },
+    {
+      "wingetId": "Telegram.TelegramDesktop",
+      "title": "Telegram",
+      "description": "Messaging app with chats, groups and channels.",
+      "category": "chat"
+    },
+    {
+      "wingetId": "Zoom.Zoom",
+      "title": "Zoom",
+      "description": "Video meetings.",
+      "category": "chat"
+    },
+    {
+      "wingetId": "Anthropic.Claude",
+      "title": "Claude",
+      "description": "The AI assistant from Anthropic.",
+      "category": "ai"
+    },
+    {
+      "wingetId": "9PLM9XGG6VKS",
+      "title": "ChatGPT",
+      "description": "The AI assistant from OpenAI.",
+      "category": "ai"
+    },
+    {
+      "wingetId": "Google.GeminiDesktop",
+      "title": "Gemini",
+      "description": "The AI assistant from Google.",
+      "category": "ai"
+    },
+    {
+      "wingetId": "Ollama.Ollama",
+      "title": "Ollama",
+      "description": "Runs open AI models on your own PC.",
+      "category": "ai"
+    },
+    {
+      "wingetId": "Microsoft.VCRedist.2015+.x64",
+      "title": "Visual C++ Runtime (64-bit)",
+      "description": "Needed by many games and programs.",
+      "category": "runtimes"
+    },
+    {
+      "wingetId": "Microsoft.VCRedist.2015+.x86",
+      "title": "Visual C++ Runtime (32-bit)",
+      "description": "Needed by older and 32-bit games and programs.",
+      "category": "runtimes"
+    },
+    {
+      "wingetId": "Microsoft.DotNet.DesktopRuntime.10",
+      "title": ".NET Desktop Runtime 10",
+      "description": "Needed by programs written with .NET.",
+      "category": "runtimes"
+    },
+    {
+      "wingetId": "Microsoft.DirectX",
+      "title": "DirectX End-User Runtime",
+      "description": "Older DirectX parts that some games need.",
+      "category": "runtimes"
+    },
+    {
+      "wingetId": "CPUID.CPU-Z",
+      "title": "CPU-Z",
+      "description": "Details of processor, memory and mainboard.",
+      "category": "system"
+    },
+    {
+      "wingetId": "TechPowerUp.GPU-Z",
+      "title": "GPU-Z",
+      "description": "Shows details of the graphics card.",
+      "category": "system"
+    },
+    {
+      "wingetId": "Guru3D.Afterburner",
+      "title": "MSI Afterburner",
+      "description": "Monitors and tunes the graphics card.",
+      "category": "system"
+    },
+    {
+      "wingetId": "Microsoft.VisualStudioCode",
+      "title": "Visual Studio Code",
+      "description": "Code editor from Microsoft.",
+      "category": "editors"
+    },
+    {
+      "wingetId": "ZedIndustries.Zed",
+      "title": "Zed",
+      "description": "Fast code editor.",
+      "category": "editors"
+    },
+    {
+      "wingetId": "JetBrains.Toolbox",
+      "title": "JetBrains Toolbox",
+      "description": "Installs and updates JetBrains IDEs.",
+      "category": "editors"
+    },
+    {
+      "wingetId": "Git.Git",
+      "title": "Git",
+      "description": "Version control.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "GitHub.cli",
+      "title": "GitHub CLI",
+      "description": "Works with GitHub from the command line.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "GLab.GLab",
+      "title": "GitLab CLI",
+      "description": "Works with GitLab from the command line.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "OpenJS.NodeJS",
+      "title": "Node.js",
+      "description": "JavaScript runtime with npm.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "Python.Python.3.15",
+      "title": "Python",
+      "description": "The Python programming language, version 3.15.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "Microsoft.PowerShell",
+      "title": "PowerShell",
+      "description": "PowerShell 7, next to Windows PowerShell 5.1.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "Gyan.FFmpeg",
+      "title": "FFmpeg",
+      "description": "Converts video and audio on the command line.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "Docker.DockerDesktop",
+      "title": "Docker Desktop",
+      "description": "Runs containers. Paid for larger companies.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "Podman.CLI",
+      "title": "Podman",
+      "description": "Runs containers without a background service.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "RedHat.Podman-Desktop",
+      "title": "Podman Desktop",
+      "description": "Desktop app for Podman containers.",
+      "category": "developer"
+    },
+    {
+      "wingetId": "Anthropic.ClaudeCode",
+      "title": "Claude Code",
+      "description": "Anthropic's AI coding tool for the terminal.",
+      "category": "ai-coding"
+    },
+    {
+      "wingetId": "OpenAI.Codex",
+      "title": "Codex CLI",
+      "description": "OpenAI's AI coding tool for the terminal.",
+      "category": "ai-coding"
+    },
+    {
+      "wingetId": "Google.Antigravity",
+      "title": "Antigravity",
+      "description": "Google's code editor with AI agents.",
+      "category": "ai-coding"
+    },
+    {
+      "wingetId": "WiresharkFoundation.Wireshark",
+      "title": "Wireshark",
+      "description": "Records and analyzes network traffic.",
+      "category": "network"
+    },
+    {
+      "wingetId": "WinSCP.WinSCP",
+      "title": "WinSCP",
+      "description": "Copies files to servers over SFTP and FTP.",
+      "category": "network"
+    },
+    {
+      "wingetId": "PuTTY.PuTTY",
+      "title": "PuTTY",
+      "description": "Connects to other computers over SSH.",
+      "category": "network"
+    }
+  ]
+}

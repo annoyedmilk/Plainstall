@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title>Synthetic download page for Plainstall tests</title>
+    <!-- Written by hand for the tests. It mirrors the structure the parser relies on and nothing else. -->
+</head>
+<body>
+<!-- <select id="product-edition"><option value="1111">Commented out, must be ignored</option></select> -->
+<select id="some-other-list">
+    <option value="42">Not the product list</option>
+</select>
+
+<div class="row">
+    <select aria-label="Select Download" class="form-control" id="product-edition">
+        <option selected="selected" value="">Select Download</option>
+        <option value="3813">Windows 11 (multi-edition ISO for x64 devices)</option>
+        <option value="9999">A later entry that must not be picked</option>
+    </select>
+</div>
+
+<p>Text that names version 26H2 and a table that is not the hash table:</p>
+<table>
+    <tr>
+        <td>Processor</td>
+        <td>1 gigahertz (GHz) or faster</td>
+    </tr>
+    <tr>
+        <td>Memory</td>
+        <td>4 GB</td>
+    </tr>
+</table>
+
+<div id="hash-section">
+    <table class="table table-striped" role="presentation">
+        <thead>
+        <tr>
+            <th>Language</th>
+            <th>SHA-256</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Arabic 64-bit</td>
+            <td>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</td>
+        </tr>
+        <tr class="alt">
+            <td style="width:40%">English 64-bit</td>
+            <td data-kind="hash">0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef</td>
+        </tr>
+        <tr>
+            <td> English&nbsp;International
+                64-bit
+            </td>
+            <td>
+                BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+            </td>
+        </tr>
+        <tr>
+            <td><span lang="en">German</span> 64-bit</td>
+            <td><code>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC</code></td>
+        </tr>
+        <tr>
+            <td>Chinese (Simplified) 64-bit</td>
+            <td>&nbsp;DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD&#160;</td>
+        </tr>
+        <tr>
+            <td>Brazilian Portuguese 64-bit
+            <td>EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+        <tr>
+            <td>Too Short 64-bit</td>
+            <td>999999999999999999999999999999999999999999999999999999999999999</td>
+        </tr>
+        <tr>
+            <td>Not Hex 64-bit</td>
+            <td>999999999999999999999999999999999999999999999999999999999999999G</td>
+        </tr>
+        <tr>
+            <td>Three</td>
+            <td>cells</td>
+            <td>0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

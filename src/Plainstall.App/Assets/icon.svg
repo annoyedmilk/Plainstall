@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Plainstall">
+    <circle cx="256.0" cy="280.81" r="197.91" fill="#CC1236"/>
+    <rect x="198.58" y="16.0" width="114.28" height="103.14" fill="#A1A39A"/>
+    <rect x="216.42" y="63.39" width="22.3" height="22.3" fill="#111314"/>
+    <rect x="273.28" y="63.39" width="21.74" height="22.3" fill="#111314"/>
+    <rect x="173.49" y="119.14" width="18.4" height="234.14" fill="#E2B540"/>
+    <rect x="191.89" y="119.14" width="63.55" height="234.14" fill="#005B8D"/>
+    <rect x="255.44" y="119.14" width="83.07" height="234.14" fill="#006EB8"/>
+    <polygon points="119.41,353.28 139.48,353.28 264.36,496.0 244.29,496.0" fill="#E2B540"/>
+    <polygon points="139.48,353.28 255.44,353.28 255.44,484.85 264.36,496.0" fill="#005B8D"/>
+    <polygon points="255.44,353.28 391.47,353.28 265.48,496.0 264.36,496.0 255.44,484.85" fill="#006EB8"/>
+</svg>

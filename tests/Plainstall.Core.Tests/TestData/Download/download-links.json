@@ -1,0 +1,24 @@
+{
+  "ProductDownloadOptions": [
+    {
+      "Name": "Windows 11 German Arm64",
+      "Uri": "https://software.download.prss.microsoft.com/dbazure/Windows11_Client_arm64_de-de_26300_9457.iso?t=ARM-TOKEN&P1=1794400000&sig=SECRETARM",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "Language": "German",
+      "LocalizedProductDisplayName": "Windows 11",
+      "LocalizedLanguage": "German",
+      "DownloadType": 2
+    },
+    {
+      "Name": "Windows 11 German 64-bit",
+      "Uri": "https://software.download.prss.microsoft.com/dbazure/Windows11_Client_x64_de-de_26300_9457.iso?t=X64-TOKEN&P1=1794400000&sig=SECRETX64",
+      "ProductDisplayName": "Windows 11 Client - Build 26300.9457",
+      "Language": "German",
+      "LocalizedProductDisplayName": "Windows 11",
+      "LocalizedLanguage": "German",
+      "DownloadType": 1
+    }
+  ],
+  "ValidationContainer": {},
+  "DownloadExpirationDatetime": "2026-11-11T14:03:11Z"
+}
