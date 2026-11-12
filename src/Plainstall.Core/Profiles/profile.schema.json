@@ -237,6 +237,18 @@
         }
       }
     },
+    "verify": {
+      "description": "Checks that run on the finished Windows image, before it is saved.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scanHealth": {
+          "description": "Scans the image's component store for damage (DISM ScanHealth) after all changes. Damage stops the build, so no broken image is written. Adds about 5 to 15 minutes. Off by default.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
     "output": {
       "description": "What to produce. Which USB stick and where the ISO goes are chosen at build time.",
       "type": "object",

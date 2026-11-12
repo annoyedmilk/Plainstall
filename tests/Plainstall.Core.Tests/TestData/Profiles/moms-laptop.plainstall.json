@@ -42,6 +42,9 @@
   "cleanup": {
     "resetBase": false
   },
+  "verify": {
+    "scanHealth": true
+  },
   "output": {
     "usb": true,
     "iso": false

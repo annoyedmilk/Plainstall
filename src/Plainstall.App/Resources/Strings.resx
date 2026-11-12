@@ -214,6 +214,8 @@
     <data name="Advanced_MoveDownName" xml:space="preserve"><value>Move {0} down</value></data>
     <data name="Advanced_ResetBase" xml:space="preserve"><value>Shrink further (ResetBase)</value></data>
     <data name="Advanced_ResetBaseWarning" xml:space="preserve"><value>Makes the image smaller. It removes the backup copies of replaced system files. You then cannot uninstall the updates that are already in the image. The build takes 10 to 25 minutes longer.</value></data>
+    <data name="Advanced_ScanHealth" xml:space="preserve"><value>Check the image for damage (ScanHealth)</value></data>
+    <data name="Advanced_ScanHealthText" xml:space="preserve"><value>After all changes, DISM examines the system files of the image. If it finds damage, the build stops and Plainstall writes nothing to the USB stick or the ISO file. The build takes 5 to 15 minutes longer.</value></data>
     <data name="Review_Title" xml:space="preserve"><value>Review</value></data>
     <data name="Review_WindowsDownload" xml:space="preserve"><value>{0} in {1}, downloaded from Microsoft.</value></data>
     <data name="Review_WindowsFromIso" xml:space="preserve"><value>{0} from {1} (version {2}).</value></data>

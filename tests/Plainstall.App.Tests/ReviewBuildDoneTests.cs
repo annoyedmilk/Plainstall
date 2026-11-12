@@ -326,10 +326,12 @@ public class ReviewTests
     [Fact]
     public void Time_estimate_grows_with_the_work()
     {
-        var plain = TimeEstimate.Minutes(false, false, true, false);
-        var more = TimeEstimate.Minutes(true, true, true, true);
+        var plain = TimeEstimate.Minutes(false, false, false, true, false);
+        var checkedImage = TimeEstimate.Minutes(false, false, true, true, false);
+        var more = TimeEstimate.Minutes(true, true, true, true, true);
         Assert.True(plain.Min < plain.Max);
-        Assert.True(more.Min > plain.Min && more.Max > plain.Max);
+        Assert.True(checkedImage.Min > plain.Min && checkedImage.Max > plain.Max);
+        Assert.True(more.Min > checkedImage.Min && more.Max > checkedImage.Max);
     }
 
     /// <summary>Gives the sample sticks only when the test releases them, so a test can look at the page meanwhile.</summary>

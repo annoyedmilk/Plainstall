@@ -1,10 +1,12 @@
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Plainstall.App.Composition;
+using Plainstall.App.Resources;
 using Plainstall.App.Services;
 using Plainstall.App.ViewModels;
 using Plainstall.App.Views;
@@ -130,7 +132,12 @@ internal static class PageRenderer
         advanced.AddDriverFolderCommand.Execute(null);
         advanced.AddUpdatesCommand.Execute(null);
         await h.ShotAsync(folder, $"{theme}-11-customize-advanced",
-            "Customize, Advanced: winget installs with one extra id, browser suggestion because Edge is removed, a driver folder, an update package and ResetBase.",
+            "Customize, Advanced: winget installs with one extra id, browser suggestion because Edge is removed, a driver folder and an update package.",
+            index);
+        advanced.ScanHealth = true;
+        await h.ScrollIntoViewAsync<TextBlock>(t => t.Text == Strings.Advanced_ScanHealthText);
+        await h.ShotAsync(folder, $"{theme}-11b-customize-advanced-checks",
+            "Customize, Advanced scrolled down: ResetBase and the image check (ScanHealth), which is switched on.",
             index);
 
         // 4. Review
@@ -327,6 +334,26 @@ internal static class PageRenderer
             }
 
             Window.UpdateLayout();
+        }
+
+        /// <summary>Scrolls the first visible element of type <typeparamref name="T" /> that matches into view.</summary>
+        public async Task ScrollIntoViewAsync<T>(Func<T, bool> match) where T : FrameworkElement
+        {
+            Descendants(Window).OfType<T>().First(e => e.IsVisible && match(e)).BringIntoView();
+            await SettleAsync();
+        }
+
+        private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
+        {
+            var pending = new Stack<DependencyObject>();
+            pending.Push(root);
+            while (pending.Count > 0)
+            {
+                var current = pending.Pop();
+                yield return current;
+                for (var i = VisualTreeHelper.GetChildrenCount(current) - 1; i >= 0; i--)
+                    pending.Push(VisualTreeHelper.GetChild(current, i));
+            }
         }
 
         public async Task GoAsync(WizardStep step)

@@ -294,6 +294,18 @@ public sealed class DismImagingService : IImagingService, IDisposable
             }
         }
 
+        public ImageHealth ScanHealth(IProgress<int>? progress = null)
+        {
+            var state = _owner.Run("check the image for damage",
+                () => DismApi.CheckImageHealth(_session, true, Callback(progress)));
+            return state switch
+            {
+                DismImageHealthState.Healthy => ImageHealth.Healthy,
+                DismImageHealthState.Repairable => ImageHealth.Repairable,
+                _ => ImageHealth.NotRepairable
+            };
+        }
+
         public void Dispose()
         {
             _session.Dispose();

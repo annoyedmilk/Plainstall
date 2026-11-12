@@ -169,9 +169,11 @@ public sealed class BuildPipelineTests : IDisposable
         Assert.Contains("Microsoft.WindowsStore", left);
         Assert.Contains("Microsoft.Paint", left);
         Assert.Contains("Microsoft.GetHelp", left);
-        Assert.False(File.Exists(Path.Combine(layout.InstallMount, "Windows", "System32", "OneDriveSetup.exe")));
+        // OneDrive is stopped by its Run value. Its installer is a system file and stays, so sfc finds nothing.
+        Assert.True(File.Exists(Path.Combine(layout.InstallMount, "Windows", "System32", "OneDriveSetup.exe")));
         Assert.Contains("cleanup", install.Calls);
         Assert.DoesNotContain("cleanup resetbase", install.Calls);
+        Assert.DoesNotContain("scanhealth", install.Calls);
 
         // Registry: installed system, default user, and the Setup image for the hardware bypass.
         Assert.Equal(1,
@@ -234,6 +236,47 @@ public sealed class BuildPipelineTests : IDisposable
         Assert.Null(result.ErrorKind);
         Assert.False(Directory.Exists(WorkFolder));
         Assert.True(File.Exists(IsoPath));
+    }
+
+    private static Profile WithScanHealth()
+    {
+        return ProfileFactory.FromPreset(CatalogLoader.LoadEmbedded().DefaultPreset) with
+        {
+            Verify = new VerifyOptions { ScanHealth = true }
+        };
+    }
+
+    [Fact]
+    public async Task The_health_check_runs_after_the_cleanup_and_before_the_image_is_saved()
+    {
+        var result = await RunAsync(Request(WithScanHealth()), TestContext.Current.CancellationToken);
+
+        Assert.Equal("succeeded", result.Report.Result);
+        var calls = _images[0].Calls;
+        Assert.True(calls.IndexOf("scanhealth") > calls.IndexOf("cleanup"));
+        Assert.Single(calls, "scanhealth");
+        Assert.Contains(result.Report.Actions,
+            a => a is { Entry: "verify", Kind: "image.scanHealth", Result: "applied" });
+        Assert.Single(_imaging.Committed, new WorkLayout(WorkFolder).InstallMount);
+    }
+
+    [Theory]
+    [InlineData(ImageHealth.Repairable)]
+    [InlineData(ImageHealth.NotRepairable)]
+    public async Task Damage_found_by_the_health_check_stops_the_build_and_discards_the_image(ImageHealth health)
+    {
+        _onMount = image => image.Health = health;
+
+        var result = await RunAsync(Request(WithScanHealth(), false), TestContext.Current.CancellationToken);
+
+        Assert.Equal("failed", result.Report.Result);
+        Assert.Equal(ErrorKind.Imaging, result.ErrorKind);
+        Assert.Contains("ScanHealth", result.Report.Error);
+        Assert.Contains(result.Report.Actions,
+            a => a is { Entry: "verify", Kind: "image.scanHealth", Result: "failed" });
+        Assert.Equal([new WorkLayout(WorkFolder).InstallMount], _imaging.Discarded);
+        Assert.Empty(_imaging.Committed);
+        Assert.False(File.Exists(IsoPath));
     }
 
     [Fact]

@@ -50,6 +50,7 @@ public class ProfileTests
         Assert.Equal("Anna", profile.Setup.LocalAccount!.Name);
         Assert.True(profile.Output.Usb);
         Assert.False(profile.Cleanup.ResetBase);
+        Assert.True(profile.Verify.ScanHealth);
     }
 
     [Fact]
@@ -61,6 +62,7 @@ public class ProfileTests
         Assert.Equal("auto", profile.Setup.Timezone);
         Assert.Empty(profile.Updates);
         Assert.False(profile.Drivers.FromThisPc);
+        Assert.False(profile.Verify.ScanHealth);
         Assert.True(profile.Output.Usb);
         Assert.False(profile.Output.Iso);
     }

@@ -237,6 +237,13 @@ try {
             'windowed-game-optimizations' = @(, @('Software\Microsoft\DirectX\UserGpuPreferences', 'DirectXUserGlobalSettings', 'SwapEffectUpgradeEnable=1;'))
             'short-menu-delay' = @(, @('Control Panel\Desktop', 'MenuShowDelay', '100'))
             'no-startup-delay' = @(, @('Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize', 'StartupDelayInMSec', 0))
+            'no-snap-layouts-popup' = @(
+                @('Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', 'EnableSnapAssistFlyout', 0),
+                @('Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', 'EnableSnapBar', 0))
+            'no-recent-files' = @(
+                @('Software\Microsoft\Windows\CurrentVersion\Explorer', 'ShowRecent', 0),
+                @('Software\Microsoft\Windows\CurrentVersion\Explorer', 'ShowFrequent', 0),
+                @('Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', 'Start_TrackDocs', 0))
         }
         $appliedEntries = @($actions | ForEach-Object { $_.entry } | Select-Object -Unique)
         foreach ($entryId in $perAccount.Keys) {

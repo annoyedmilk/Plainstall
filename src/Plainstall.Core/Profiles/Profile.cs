@@ -39,6 +39,7 @@ public sealed record Profile
     public DriverOptions Drivers { get; init; } = new();
     public IReadOnlyList<string> Updates { get; init; } = [];
     public CleanupOptions Cleanup { get; init; } = new();
+    public VerifyOptions Verify { get; init; } = new();
     public OutputOptions Output { get; init; } = new();
 }
 
@@ -110,6 +111,13 @@ public sealed record DriverOptions
 public sealed record CleanupOptions
 {
     public bool ResetBase { get; init; }
+}
+
+/// <summary>Checks that run on the finished image, before it is saved.</summary>
+public sealed record VerifyOptions
+{
+    /// <summary>DISM ScanHealth on the component store. Damage stops the build. Adds several minutes.</summary>
+    public bool ScanHealth { get; init; }
 }
 
 public sealed record OutputOptions

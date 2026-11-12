@@ -240,6 +240,24 @@ namespace Plainstall.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check the image for damage (ScanHealth).
+        /// </summary>
+        public static string Advanced_ScanHealth {
+            get {
+                return ResourceManager.GetString("Advanced_ScanHealth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After all changes, DISM examines the system files of the image. If it finds damage, the build stops and Plainstall writes nothing to the USB stick or the ISO file. The build takes 5 to 15 minutes longer..
+        /// </summary>
+        public static string Advanced_ScanHealthText {
+            get {
+                return ResourceManager.GetString("Advanced_ScanHealthText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .msu or .cab files from the Microsoft Update Catalog, installed in this order..
         /// </summary>
         public static string Advanced_UpdatesText {

@@ -162,6 +162,15 @@ internal sealed class FakeMountedImage : IMountedImage
         return CleanupResult.Done;
     }
 
+    /// <summary>What <see cref="ScanHealth" /> reports.</summary>
+    public ImageHealth Health { get; set; } = ImageHealth.Healthy;
+
+    public ImageHealth ScanHealth(IProgress<int>? progress = null)
+    {
+        Calls.Add("scanhealth");
+        return Health;
+    }
+
     public void Dispose()
     {
         Disposed = true;

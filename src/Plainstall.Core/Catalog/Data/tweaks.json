@@ -892,6 +892,29 @@
       ]
     },
     {
+      "id": "no-language-list-for-websites",
+      "title": "No language list for websites",
+      "description": "Websites no longer get the list of languages you use in Windows, so they cannot use it to pick content for you.",
+      "details": "Applied at first sign-in, for every new account, because Windows writes this setting when it creates the account. Websites still see the language of your browser. Change it in Settings > Privacy & security > General.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Control Panel\\International\\User Profile",
+          "name": "HttpAcceptLanguageOptOut",
+          "type": "dword",
+          "data": 1
+        }
+      ]
+    },
+    {
       "id": "no-feedback-prompts",
       "title": "No feedback requests",
       "description": "Windows does not ask you to rate it or answer surveys.",
@@ -1551,6 +1574,33 @@
       ]
     },
     {
+      "id": "no-cloud-search",
+      "title": "No cloud results in Start search",
+      "description": "Start search no longer looks in OneDrive, Outlook and other content of your Microsoft account or work account. It finds apps, files and settings on this PC.",
+      "details": "Set by policy, so the two cloud search switches in Settings > Privacy & security > Search permissions are locked while this is on.",
+      "category": "search",
+      "risk": "safe",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "source": [
+        {
+          "name": "Microsoft Search policy reference",
+          "url": "https://learn.microsoft.com/windows/client-management/mdm/policy-csp-search"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\Windows\\Windows Search",
+          "name": "AllowCloudSearch",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
       "id": "no-phone-link-in-start",
       "title": "No phone panel in Start",
       "description": "Removes the Phone Link panel next to the Start menu.",
@@ -1852,12 +1902,10 @@
       "id": "no-driver-updates",
       "title": "No driver updates through Windows Update",
       "description": "Windows Update no longer installs drivers, so a graphics driver you installed yourself is not replaced by an older one.",
-      "details": "Install drivers from the maker of your PC or graphics card instead, and keep them up to date yourself. The drivers that come with Windows still work. Windows Update keeps installing security and other updates.",
+      "details": "Install drivers from the maker of your PC or graphics card instead, and keep them up to date yourself. On a new PC, Windows then does not install a graphics driver by itself. The drivers that come with Windows still work. Windows Update keeps installing security and other updates.",
       "category": "updates",
       "risk": "moderate",
-      "defaultIn": [
-        "gaming"
-      ],
+      "defaultIn": [],
       "source": [
         {
           "name": "Win11Debloat",
@@ -2235,6 +2283,39 @@
       ]
     },
     {
+      "id": "edge-no-desktop-shortcut",
+      "title": "No new Edge desktop shortcut",
+      "description": "Edge no longer puts its icon on the desktop when it is installed or updated.",
+      "details": "A shortcut that is already on the desktop stays until you delete it.",
+      "category": "edge",
+      "risk": "safe",
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
+      "source": [
+        {
+          "name": "winutil",
+          "url": "https://github.com/ChrisTitusTech/winutil"
+        },
+        {
+          "name": "Microsoft Edge Update policy reference",
+          "url": "https://learn.microsoft.com/deployedge/microsoft-edge-update-policies"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "machineSoftware",
+          "key": "Policies\\Microsoft\\EdgeUpdate",
+          "name": "CreateDesktopShortcutDefault",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
       "id": "show-file-extensions",
       "title": "Show file extensions",
       "description": "Shows the ending of file names, such as .pdf or .exe, so you can tell what a file really is.",
@@ -2257,6 +2338,43 @@
           "hive": "defaultUser",
           "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
           "name": "HideFileExt",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
+      "id": "no-recent-files",
+      "title": "No recent files and folders",
+      "description": "File Explorer, Start and the taskbar jump lists no longer show the files and folders you opened recently.",
+      "details": "Your files stay where they are. Only the lists of recent items are switched off. Change it in Settings > Personalization > Start, and in File Explorer under Options > Privacy.",
+      "category": "privacy",
+      "risk": "safe",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "name": "ShowRecent",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "name": "ShowFrequent",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "Start_TrackDocs",
           "type": "dword",
           "data": 0
         }
@@ -2445,7 +2563,11 @@
       "details": "The per-user part is applied at first sign-in because it lives in a part of the registry that is created per account. Relies on an internal Windows switch that an update can change.",
       "category": "explorer",
       "risk": "moderate",
-      "defaultIn": [],
+      "defaultIn": [
+        "recommended",
+        "privacy-max",
+        "gaming"
+      ],
       "source": [
         {
           "name": "Win11Debloat",

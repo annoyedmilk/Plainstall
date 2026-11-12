@@ -6,7 +6,7 @@
       "id": "recommended",
       "title": "Recommended",
       "tagline": "A clean Windows without the clutter. Right for most people.",
-      "description": "Removes preinstalled promo apps, ads, suggestions and Copilot, and turns the common privacy switches off. Everything that everyday use depends on stays: Windows Update, Defender, the Store, Photos, Calculator and Xbox gaming.",
+      "description": "Removes preinstalled promo apps, ads, suggestions and Copilot, and turns the common privacy switches off. It brings back the full right-click menu. Everything that everyday use depends on stays: Windows Update, Defender, the Store, Photos, Calculator and Xbox gaming.",
       "isDefault": true,
       "setup": {
         "localAccount": true,
@@ -18,7 +18,7 @@
       "id": "privacy-max",
       "title": "Privacy first",
       "tagline": "Everything in Recommended, plus the stricter privacy switches.",
-      "description": "Also turns off location, Find My Device, clipboard sync, search history, error reports, the diagnostic services and the AI features in Notepad and Paint, and removes Phone Link and Mobile devices. A few conveniences stop working, such as automatic time zone and weather for your location. Each one can be switched back on.",
+      "description": "Also turns off location, Find My Device, clipboard sync, search history, cloud results in search, the lists of recent files, error reports, the diagnostic services and the AI features in Notepad and Paint, and removes Phone Link and Mobile devices. A few conveniences stop working, such as automatic time zone and weather for your location. Each one can be switched back on.",
       "setup": {
         "localAccount": true,
         "skipPrivacyPages": true,
@@ -29,7 +29,7 @@
       "id": "gaming",
       "title": "Gaming",
       "tagline": "Recommended, tuned for games.",
-      "description": "Like Recommended, but also turns off background game recording, mouse acceleration, Fast Startup, driver updates through Windows Update and Game Bar on the Xbox button. It shortens the menu delay and removes the startup delay for apps. It turns on hardware GPU scheduling, windowed game optimizations and the High performance power plan, which uses more power. Xbox and Game Pass keep working.",
+      "description": "Like Recommended, but also turns off background game recording, mouse acceleration, Fast Startup and Game Bar on the Xbox button. It shortens the menu delay and removes the startup delay for apps. It turns on hardware GPU scheduling, windowed game optimizations and the High performance power plan, which uses more power. Xbox and Game Pass keep working.",
       "setup": {
         "localAccount": true,
         "skipPrivacyPages": true,

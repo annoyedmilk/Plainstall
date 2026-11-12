@@ -23,8 +23,8 @@ public partial class FirstLogonScriptGeneratorTests
 
     private static readonly string[] UserCommands =
     [
-        "Add-Content", "Get-Date", "Invoke-PlainstallCommand", "Invoke-PlainstallStep", "New-Item", "Out-Null",
-        "Out-String",
+        "Add-Content", "Add-Type", "Get-Date", "Invoke-PlainstallCommand", "Invoke-PlainstallStep", "New-Item",
+        "Out-Null", "Out-String",
         "Remove-PlainstallRegistryKey", "Remove-PlainstallRegistryValue", "Set-PlainstallRegistryValue",
         "Test-Path", "Where-Object", "Write-PlainstallLog", "<dynamic>", "Join-Path"
     ];
@@ -208,7 +208,9 @@ public partial class FirstLogonScriptGeneratorTests
     {
         var lines = StepLines(UserText(TypicalPlan()));
 
-        Assert.Equal(15, lines.Length);
+        // 15 steps from the plan, then the theme refresh, because the plan sets dark mode.
+        Assert.Equal(16, lines.Length);
+        Assert.StartsWith("Invoke-PlainstallStep 'Show the new colors at once'", lines[15]);
         Assert.Equal(
             $@"Invoke-PlainstallStep 'Dark theme: set HKCU\{PersonalizeKey}\AppsUseLightTheme' {{ Set-PlainstallRegistryValue '{PersonalizeKey}' 'AppsUseLightTheme' 'DWord' '0' }}",
             lines[0]);

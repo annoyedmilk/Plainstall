@@ -31,6 +31,18 @@ public enum CleanupResult
     SkippedPendingOperations
 }
 
+/// <summary>What DISM ScanHealth found in the image's component store.</summary>
+public enum ImageHealth
+{
+    Healthy,
+
+    /// <summary>The store is damaged. DISM could repair it with a source of good files.</summary>
+    Repairable,
+
+    /// <summary>The store is damaged beyond repair. The image must be discarded.</summary>
+    NotRepairable
+}
+
 public sealed record MountedImageInfo(string MountPath, string ImageFilePath, int ImageIndex);
 
 /// <summary>An image mounted for servicing. Disposing closes the servicing session but leaves the mount in place.</summary>
@@ -61,6 +73,9 @@ public interface IMountedImage : IDisposable
     void AddDriver(string infPath);
 
     CleanupResult CleanupComponents(bool resetBase, IProgress<int>? progress = null);
+
+    /// <summary>Scans the whole component store for damage (DISM /ScanHealth). Reads only, repairs nothing.</summary>
+    ImageHealth ScanHealth(IProgress<int>? progress = null);
 }
 
 /// <summary>

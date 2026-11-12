@@ -2,6 +2,18 @@
 
 This file lists the changes in each version of Plainstall. The version numbers follow [Semantic Versioning](https://semver.org).
 
+## 0.1.2
+
+- New option on the Advanced page: "Check the image for damage (ScanHealth)". After all changes, DISM examines the system files of the image. If it finds damage, the build stops and Plainstall writes nothing. The option is off by default. It adds 5 to 15 minutes to the build.
+- OneDrive: Plainstall no longer deletes the OneDrive installer file. It is a Windows system file, so "sfc /scannow" reported it as damaged. Windows still does not install OneDrive for new accounts.
+- Windows Update installs drivers again in all presets. The "Gaming" preset no longer turns off driver updates. The switch is still available on the Tweaks page.
+- The full right-click menu is on in the "Recommended", "Privacy first" and "Gaming" presets.
+- New tweak: "No language list for websites". It is on in the "Recommended", "Privacy first" and "Gaming" presets.
+- New tweak: "No new Edge desktop shortcut". It is on in the "Recommended", "Privacy first" and "Gaming" presets.
+- New tweak: "No cloud results in Start search". It is on in the "Privacy first" preset.
+- New tweak: "No recent files and folders". It is on in the "Privacy first" preset.
+- Dark mode: at the first sign-in, Plainstall tells Windows that the colors changed, so the taskbar changes to dark at once and not only at the next sign-in.
+
 ## 0.1.1
 
 - The Customize page shows its four sections (Apps, Tweaks, Setup and Advanced) as cards. Each card shows a short summary, for example how many apps Plainstall removes. **Next** opens the sections in sequence and shows the name of the next section.

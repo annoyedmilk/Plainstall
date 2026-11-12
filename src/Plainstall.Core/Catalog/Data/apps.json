@@ -994,7 +994,7 @@
       "id": "onedrive",
       "title": "OneDrive",
       "description": "Microsoft's cloud storage. Removing it stops the sign-in and backup prompts.",
-      "details": "Only the installer that Windows runs for each new account is removed. To get OneDrive back, install it from Microsoft's website or with winget.",
+      "details": "Windows no longer installs OneDrive for each new account. The installer file stays in Windows, because it is a system file: if it were deleted, 'sfc /scannow' would report damage. To get OneDrive back, install it from Microsoft's website or with winget.",
       "category": "browser-cloud",
       "risk": "moderate",
       "defaultIn": [
@@ -1018,19 +1018,11 @@
       ],
       "actions": [
         {
-          "kind": "file.delete",
-          "path": "Windows\\System32\\OneDriveSetup.exe"
-        },
-        {
-          "kind": "file.delete",
-          "path": "Windows\\SysWOW64\\OneDriveSetup.exe"
-        },
-        {
           "kind": "registry.delete",
           "hive": "defaultUser",
           "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
           "name": "OneDriveSetup",
-          "note": "Without this, every new account tries to start the deleted installer at first sign-in."
+          "note": "This Run value installs OneDrive for every new account. OneDriveSetup.exe itself stays: it is a component-store file (microsoft-windows-onedrive-setup), and deleting it makes sfc report it as damaged and restore it."
         }
       ]
     },

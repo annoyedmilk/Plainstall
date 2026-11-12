@@ -54,7 +54,7 @@ The page has four sections. Select a section card at the top to open it. **Next*
 - **Apps**: the preinstalled apps that Plainstall removes.
 - **Tweaks**: the Windows settings that Plainstall changes, for example privacy, ads, Start menu and taskbar.
 - **Setup**: the local account, the computer name, the region, the keyboard and the time zone.
-- **Advanced**: apps to install with winget at the first sign-in, drivers and Windows updates.
+- **Advanced**: apps to install with winget at the first sign-in, drivers, Windows updates and a check of the finished image for damage.
 
 ![The Customize page. Each app has a switch, a short description, a risk level and a Details button.](.github/screenshots/customize.png)
 

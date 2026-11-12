@@ -368,11 +368,13 @@ public class AdvancedTests
         advanced.AddDriverFolderCommand.Execute(null);
         advanced.DriversFromThisPc = true;
         advanced.ResetBase = true;
+        advanced.ScanHealth = true;
 
         Assert.Equal([@"D:\u\two.cab", @"D:\u\one.msu"], w.Profile.Updates);
         Assert.Equal([w.Dialogs.Folder!], w.Profile.Drivers.Folders);
         Assert.True(w.Profile.Drivers.FromThisPc);
         Assert.True(w.Profile.Cleanup.ResetBase);
+        Assert.True(w.Profile.Verify.ScanHealth);
         Assert.Empty(ProfileSerializer.Validate(w.Profile));
     }
 }

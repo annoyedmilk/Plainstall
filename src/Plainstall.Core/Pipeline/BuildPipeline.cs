@@ -692,6 +692,8 @@ public sealed class BuildPipeline
                         "Component cleanup was skipped, because the image has pending operations (0x800F0806). The image is slightly larger. Nothing is wrong with it.");
             }
 
+            if (request.Profile.Verify.ScanHealth) CheckHealth(imaging, layout, log, stage, cancellationToken);
+
             cancellationToken.ThrowIfCancellationRequested();
             stage.Action("Saving the Windows image");
             imaging.UnmountAndCommit(layout.InstallMount, stage.Percent());
@@ -708,6 +710,33 @@ public sealed class BuildPipeline
         {
             if (!committed) Discard(imaging, journal, layout.InstallMount, stage);
         }
+    }
+
+    /// <summary>
+    ///     The optional last check of the Windows image: DISM ScanHealth after every change, before the image is
+    ///     saved. It reads only. Damage stops the build, so the mount is discarded and no broken image reaches a
+    ///     USB stick. The image's own files are the only possible repair source, so Plainstall does not repair.
+    /// </summary>
+    private void CheckHealth(IImagingService imaging, WorkLayout layout, BuildLog log, StageReporter stage,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        stage.Action("Checking the image for damage (ScanHealth)");
+        using var image = imaging.Open(layout.InstallMount);
+        var health = image.ScanHealth(stage.Percent());
+        if (health == ImageHealth.Healthy)
+        {
+            Record(log, "verify", "image.scanHealth", "install.wim",
+                ActionOutcome.AppliedWith("DISM found no damage."));
+            return;
+        }
+
+        var found = health == ImageHealth.Repairable
+            ? "damage in the component store"
+            : "damage in the component store that cannot be repaired";
+        Record(log, "verify", "image.scanHealth", "install.wim", ActionOutcome.Failed("DISM found " + found + "."));
+        throw new PlainstallException(ErrorKind.Imaging,
+            $"The image check (DISM ScanHealth) found {found}. The build stopped, and nothing was written. Build again. If it happens again, leave out the update packages and drivers.");
     }
 
     private void ServiceSetupImage(BuildPlan plan, IReadOnlyList<DriverPackage> storageDrivers, MediaInfo media,

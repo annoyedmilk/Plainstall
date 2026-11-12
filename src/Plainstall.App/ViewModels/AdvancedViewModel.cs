@@ -47,7 +47,7 @@ public sealed class InstallGroupViewModel(string title, IReadOnlyList<InstallOpt
     public IReadOnlyList<InstallOptionViewModel> Items { get; } = items;
 }
 
-/// <summary>The Advanced tab: apps to install at the first sign-in, drivers, update packages, extra cleanup.</summary>
+/// <summary>The Advanced section: apps to install at the first sign-in, drivers, update packages, extra cleanup and the image check.</summary>
 public sealed partial class AdvancedViewModel : ObservableObject
 {
     public const int MaxInstalls = 50;
@@ -107,6 +107,8 @@ public sealed partial class AdvancedViewModel : ObservableObject
 
     [ObservableProperty] public partial bool ResetBase { get; set; }
 
+    [ObservableProperty] public partial bool ScanHealth { get; set; }
+
     partial void OnDriversFromThisPcChanged(bool value)
     {
         if (!_loading) _session.Editor.Update(p => p with { Drivers = p.Drivers with { FromThisPc = value } });
@@ -115,6 +117,11 @@ public sealed partial class AdvancedViewModel : ObservableObject
     partial void OnResetBaseChanged(bool value)
     {
         if (!_loading) _session.Editor.Update(p => p with { Cleanup = new CleanupOptions { ResetBase = value } });
+    }
+
+    partial void OnScanHealthChanged(bool value)
+    {
+        if (!_loading) _session.Editor.Update(p => p with { Verify = new VerifyOptions { ScanHealth = value } });
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -253,6 +260,7 @@ public sealed partial class AdvancedViewModel : ObservableObject
             Replace(DriverFolders, profile.Drivers.Folders);
             Replace(Updates, profile.Updates);
             ResetBase = profile.Cleanup.ResetBase;
+            ScanHealth = profile.Verify.ScanHealth;
         }
         finally
         {

@@ -245,7 +245,7 @@
                     </StackPanel>
                 </Border>
 
-                <!--  Extra cleanup  -->
+                <!--  Extra cleanup and the image check: both run at the end of the build  -->
                 <Border Margin="0,12,0,0" Style="{StaticResource Plainstall.Card}">
                     <StackPanel>
                         <CheckBox
@@ -257,6 +257,16 @@
                             Margin="28,2,0,0"
                             Style="{StaticResource Plainstall.Secondary}"
                             Text="{x:Static res:Strings.Advanced_ResetBaseWarning}" />
+                        <CheckBox
+                            Margin="0,14,0,0"
+                            AutomationProperties.HelpText="{x:Static res:Strings.Advanced_ScanHealthText}"
+                            AutomationProperties.Name="{x:Static res:Strings.Advanced_ScanHealth}"
+                            Content="{x:Static res:Strings.Advanced_ScanHealth}"
+                            IsChecked="{Binding ScanHealth}" />
+                        <TextBlock
+                            Margin="28,2,0,0"
+                            Style="{StaticResource Plainstall.Secondary}"
+                            Text="{x:Static res:Strings.Advanced_ScanHealthText}" />
                     </StackPanel>
                 </Border>
             </StackPanel>

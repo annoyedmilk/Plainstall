@@ -130,6 +130,15 @@ Invoke-PlainstallStep 'Remove a default value: delete HKCU\Software\Plainstall T
 Invoke-PlainstallStep 'Remove a key: delete HKCU\Software\Plainstall Test\Old key' { Remove-PlainstallRegistryKey 'Software\Plainstall Test\Old key' }
 Invoke-PlainstallCommand 'No Store suggestions in search: Block the Store suggestion database' '$d = Join-Path $env:LOCALAPPDATA ''Packages\Example''; New-Item -ItemType Directory -Force -Path $d | Out-Null'
 
+# The taskbar is already running and does not read the new colors by itself. Settings sends
+# this message when the theme changes, so the taskbar and open windows switch at once.
+Invoke-PlainstallStep 'Show the new colors at once' {
+    Add-Type -Namespace PlainstallNative -Name User32 -MemberDefinition '[DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr SendMessageTimeout(IntPtr window, uint message, UIntPtr wParam, string lParam, uint flags, uint timeout, out UIntPtr result);'
+    $plainstallResult = [UIntPtr]::Zero
+    # To all top-level windows (0xFFFF): WM_SETTINGCHANGE (0x1A), "ImmersiveColorSet". Windows that
+    # do not answer are skipped (SMTO_ABORTIFHUNG), and each one gets at most 5 seconds.
+    [void][PlainstallNative.User32]::SendMessageTimeout([IntPtr]0xFFFF, 0x1A, [UIntPtr]::Zero, 'ImmersiveColorSet', 2, 5000, [ref]$plainstallResult)
+}
 Write-PlainstallLog ('Finished. Steps with problems: ' + $plainstallProblems)
 
 # The very last step: an empty marker file. It is created whether or not every step worked.

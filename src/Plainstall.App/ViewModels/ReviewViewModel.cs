@@ -66,10 +66,12 @@ internal static class Sizes
 /// <summary>A rough time range for a build, from experience with typical PCs. Only shown as "about".</summary>
 public static class TimeEstimate
 {
-    public static (int Min, int Max) Minutes(bool download, bool resetBase, bool usb, bool iso)
+    public static (int Min, int Max) Minutes(bool download, bool resetBase, bool scanHealth, bool usb, bool iso)
     {
-        var min = 15 + (download ? 10 : 0) + (resetBase ? 10 : 0) + (usb ? 5 : 0) + (iso ? 2 : 0);
-        var max = 35 + (download ? 60 : 0) + (resetBase ? 25 : 0) + (usb ? 15 : 0) + (iso ? 5 : 0);
+        var min = 15 + (download ? 10 : 0) + (resetBase ? 10 : 0) + (scanHealth ? 5 : 0) + (usb ? 5 : 0) +
+                  (iso ? 2 : 0);
+        var max = 35 + (download ? 60 : 0) + (resetBase ? 25 : 0) + (scanHealth ? 15 : 0) + (usb ? 15 : 0) +
+                  (iso ? 5 : 0);
         return (min, max);
     }
 }
@@ -509,7 +511,7 @@ public sealed partial class ReviewViewModel : WizardPageViewModel
     private void RefreshTime()
     {
         var (min, max) = TimeEstimate.Minutes(_session.Profile.Windows.Source == WindowsSource.Download,
-            _session.Profile.Cleanup.ResetBase, WantsUsb, WantsIso);
+            _session.Profile.Cleanup.ResetBase, _session.Profile.Verify.ScanHealth, WantsUsb, WantsIso);
         TimeText = string.Format(CultureInfo.CurrentCulture, Strings.Review_TimeText, min, max);
     }
 

@@ -157,6 +157,9 @@ public static class FirstLogonScriptGenerator
     /// <summary>How long Machine.ps1 waits for an internet connection before it gives up on the apps.</summary>
     public const int NetworkWaitSeconds = 300;
 
+    /// <summary>The user's theme settings. A first sign-in change below it ends User.ps1 with a theme refresh.</summary>
+    public const string ThemesKey = @"Software\Microsoft\Windows\CurrentVersion\Themes";
+
     /// <summary>How long Machine.ps1 waits for winget to become available to the new account.</summary>
     public const int WingetWaitSeconds = 300;
 
@@ -453,6 +456,21 @@ public static class FirstLogonScriptGenerator
 
                                        """;
 
+    // Windows reads the theme when the taskbar starts, and at first sign-in the taskbar is already running
+    // when User.ps1 sets the theme. Without this message the taskbar stays light until the next sign-in.
+    private const string ThemeRefreshBlock = """
+                                             # The taskbar is already running and does not read the new colors by itself. Settings sends
+                                             # this message when the theme changes, so the taskbar and open windows switch at once.
+                                             Invoke-PlainstallStep 'Show the new colors at once' {
+                                                 Add-Type -Namespace PlainstallNative -Name User32 -MemberDefinition '[DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr SendMessageTimeout(IntPtr window, uint message, UIntPtr wParam, string lParam, uint flags, uint timeout, out UIntPtr result);'
+                                                 $plainstallResult = [UIntPtr]::Zero
+                                                 # To all top-level windows (0xFFFF): WM_SETTINGCHANGE (0x1A), "ImmersiveColorSet". Windows that
+                                                 # do not answer are skipped (SMTO_ABORTIFHUNG), and each one gets at most 5 seconds.
+                                                 [void][PlainstallNative.User32]::SendMessageTimeout([IntPtr]0xFFFF, 0x1A, [UIntPtr]::Zero, 'ImmersiveColorSet', 2, 5000, [ref]$plainstallResult)
+                                             }
+
+                                             """;
+
     private const string Footer = """
                                   Write-PlainstallLog ('Finished. Steps with problems: ' + $plainstallProblems)
 
@@ -521,6 +539,8 @@ public static class FirstLogonScriptGenerator
         text.Append(StartBlock);
         foreach (var step in steps) text.Append(step).Append('\n');
         text.Append('\n');
+        if (plan.Actions.Any(a => a.Action is FirstLogonRegistryAction registry && IsThemeKey(registry.Key)))
+            text.Append(ThemeRefreshBlock);
         text.Append(Footer);
         return new GeneratedScript(UserScriptImagePath, Finish(text));
     }
@@ -620,6 +640,14 @@ public static class FirstLogonScriptGenerator
             default:
                 throw new PlainstallException(ErrorKind.Internal, $"{where}: unknown operation.");
         }
+    }
+
+    /// <summary>True for a key below the user's theme settings, such as Themes\Personalize for dark mode.</summary>
+    private static bool IsThemeKey(string? key)
+    {
+        return key is not null &&
+               (key.Equals(ThemesKey, StringComparison.OrdinalIgnoreCase) ||
+                key.StartsWith(ThemesKey + @"\", StringComparison.OrdinalIgnoreCase));
     }
 
     private static string CommandStep(PlannedAction planned, FirstLogonCommandAction action)

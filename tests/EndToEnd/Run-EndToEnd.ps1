@@ -5,7 +5,8 @@
 .DESCRIPTION
     One command for the whole end-to-end test:
       1. builds the command-line tool,
-      2. writes a test profile (Recommended preset, local account "tester" with a random password),
+      2. writes a test profile (Recommended preset, local account "tester" with a random password, the image
+         check DISM ScanHealth switched on),
       3. runs 'Plainstall.Cli build --vm-test' against a Windows 11 ISO,
       4. runs Test-InVm.ps1, which installs the result in a new virtual machine and checks it.
 
@@ -28,6 +29,8 @@ param(
     [string] $TimeZone = "W. Europe Standard Time",
     # Only build the ISO. Do not start a virtual machine.
     [switch] $SkipVm,
+    # Leave out the image check (DISM ScanHealth) at the end of the build. It adds 5 to 15 minutes.
+    [switch] $SkipScanHealth,
     # Use the last Release build of the command-line tool. Do not build it again. Use this switch when the
     # elevated account has no NuGet cache or cannot get to the package feed.
     [switch] $NoBuild,
@@ -69,7 +72,11 @@ try {
         name    = "VM test ($Preset)"
         windows = [ordered]@{ source = "iso"; language = "auto"; edition = "Professional" }
         apps    = [ordered]@{ preset = $Preset }
-        tweaks  = [ordered]@{ preset = $Preset; enable = @("dark-theme", "classic-context-menu") }
+        tweaks  = [ordered]@{
+            preset = $Preset
+            enable = @("dark-theme", "classic-context-menu", "no-search-history", "no-snap-layouts-popup",
+                "no-cloud-search", "no-recent-files")
+        }
         setup   = [ordered]@{
             localAccount         = [ordered]@{ name = "tester"; askPassword = $true; password = $null }
             computerName         = "PLAINSTALL-VM"
@@ -79,6 +86,7 @@ try {
             timezone             = $TimeZone
             bypassHardwareChecks = $true
         }
+        verify  = [ordered]@{ scanHealth = (-not $SkipScanHealth) }
     }
     $profile | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $profilePath -Encoding UTF8
 
@@ -101,6 +109,9 @@ try {
             Write-Host ("   FAILED {0} {1} {2}: {3}" -f $failed.entry, $failed.kind, $failed.target, $failed.reason)
         }
         foreach ($warning in @($report.warnings)) { Write-Host "   warning: $warning" }
+        foreach ($check in @($report.actions | Where-Object { $_.kind -eq 'image.scanHealth' })) {
+            Write-Host ("   image check (ScanHealth): {0}, {1}" -f $check.result, $check.reason)
+        }
     }
     # A build that did not apply all changes still makes a usable ISO. The VM test then checks each change
     # that was applied. The report keeps the list of the failed changes.
