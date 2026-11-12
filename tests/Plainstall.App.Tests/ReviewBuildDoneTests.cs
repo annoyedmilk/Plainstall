@@ -656,12 +656,54 @@ public class MainTests
         Assert.Contains("2", w.Main.StepText);
 
         await w.Main.NextCommand.ExecuteAsync(null);
+        Assert.Equal(WizardStep.Customize, w.Main.CurrentStep);
+        Assert.Equal(CustomizeTab.Apps, w.Customize.SelectedTab);
+
+        // Next walks through the four sections of Customize before it leaves the page.
+        foreach (var tab in new[] { CustomizeTab.Tweaks, CustomizeTab.Setup, CustomizeTab.Advanced })
+        {
+            await w.Main.NextCommand.ExecuteAsync(null);
+            Assert.Equal(WizardStep.Customize, w.Main.CurrentStep);
+            Assert.Equal(tab, w.Customize.SelectedTab);
+        }
+
+        Assert.Equal(Strings.Nav_Next, w.Main.NextText);
         await w.Main.NextCommand.ExecuteAsync(null);
         Assert.Equal(WizardStep.Review, w.Main.CurrentStep);
         Assert.Equal(Strings.Nav_StartBuild, w.Main.NextText);
 
         w.Main.BackCommand.Execute(null);
         Assert.Equal(WizardStep.Customize, w.Main.CurrentStep);
+        Assert.Equal(CustomizeTab.Advanced, w.Customize.SelectedTab);
+    }
+
+    [Fact]
+    public async Task On_customize_next_names_the_next_section_and_back_returns_to_the_previous_one()
+    {
+        var w = new TestWizard();
+        await w.Main.NextCommand.ExecuteAsync(null);
+        await w.Main.NextCommand.ExecuteAsync(null);
+        var changes = new List<string?>();
+        w.Main.PropertyChanged += (_, e) => changes.Add(e.PropertyName);
+
+        Assert.Equal(string.Format(CultureInfo.CurrentCulture, Strings.Nav_NextSection, Strings.Customize_TabTweaks),
+            w.Main.NextText);
+        Assert.Equal(
+            string.Format(CultureInfo.CurrentCulture, Strings.Nav_NextSectionName, Strings.Customize_TabTweaks),
+            w.Main.NextAutomationName);
+
+        // A click on a section card moves the label along.
+        w.Customize.SelectedTab = CustomizeTab.Setup;
+        Assert.Contains(nameof(MainViewModel.NextText), changes);
+        Assert.Equal(string.Format(CultureInfo.CurrentCulture, Strings.Nav_NextSection, Strings.Customize_TabAdvanced),
+            w.Main.NextText);
+
+        w.Main.BackCommand.Execute(null);
+        Assert.Equal(CustomizeTab.Tweaks, w.Customize.SelectedTab);
+        w.Main.BackCommand.Execute(null);
+        Assert.Equal(CustomizeTab.Apps, w.Customize.SelectedTab);
+        w.Main.BackCommand.Execute(null);
+        Assert.Equal(WizardStep.Windows, w.Main.CurrentStep);
     }
 
     [Fact]

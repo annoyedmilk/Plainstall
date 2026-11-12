@@ -132,10 +132,16 @@ public sealed partial class MainViewModel : ObservableObject
     public string StepText => string.Format(CultureInfo.CurrentCulture, Strings.Step_Of, (int)CurrentStep + 1,
         Steps.Count, Steps[(int)CurrentStep].Title);
 
-    public string NextText => CurrentStep == WizardStep.Review ? Strings.Nav_StartBuild : Strings.Nav_Next;
+    /// <summary>"Next", "Next: Tweaks" while Next opens another section of the same page, or "Start build".</summary>
+    public string NextText => CurrentStep == WizardStep.Review ? Strings.Nav_StartBuild :
+        CurrentPage.NextSectionTitle is { } section
+            ? string.Format(CultureInfo.CurrentCulture, Strings.Nav_NextSection, section)
+            : Strings.Nav_Next;
 
-    public string NextAutomationName =>
-        CurrentStep == WizardStep.Review ? Strings.Nav_StartBuild : Strings.Nav_NextName;
+    public string NextAutomationName => CurrentStep == WizardStep.Review ? Strings.Nav_StartBuild :
+        CurrentPage.NextSectionTitle is { } section
+            ? string.Format(CultureInfo.CurrentCulture, Strings.Nav_NextSectionName, section)
+            : Strings.Nav_NextName;
 
     public bool ShowBack => CurrentStep is not (WizardStep.Welcome or WizardStep.Build or WizardStep.Done);
 
@@ -220,6 +226,7 @@ public sealed partial class MainViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanGoNext))]
     private async Task NextAsync()
     {
+        if (CurrentPage.MoveToNextSection()) return;
         switch (CurrentStep)
         {
             case WizardStep.Review:
@@ -227,6 +234,7 @@ public sealed partial class MainViewModel : ObservableObject
                 await Build.BeginAsync(Review.CreateStart);
                 break;
             case < WizardStep.Review:
+                _pages[CurrentStep + 1].PrepareArrival(true);
                 GoTo(CurrentStep + 1);
                 break;
         }
@@ -240,6 +248,8 @@ public sealed partial class MainViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanGoBack))]
     private void Back()
     {
+        if (CurrentPage.MoveToPreviousSection()) return;
+        _pages[CurrentStep - 1].PrepareArrival(false);
         GoTo(CurrentStep - 1);
     }
 
@@ -279,8 +289,15 @@ public sealed partial class MainViewModel : ObservableObject
 
     private void OnPagePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (ReferenceEquals(sender, CurrentPage) && e.PropertyName is nameof(WizardPageViewModel.CanContinue)
-                or nameof(WizardPageViewModel.ContinueBlockedReason) or null) RefreshNavigation();
+        if (!ReferenceEquals(sender, CurrentPage)) return;
+        if (e.PropertyName is nameof(WizardPageViewModel.NextSectionTitle) or null)
+        {
+            OnPropertyChanged(nameof(NextText));
+            OnPropertyChanged(nameof(NextAutomationName));
+        }
+
+        if (e.PropertyName is nameof(WizardPageViewModel.CanContinue)
+            or nameof(WizardPageViewModel.ContinueBlockedReason) or null) RefreshNavigation();
     }
 
     private void RefreshNavigation()

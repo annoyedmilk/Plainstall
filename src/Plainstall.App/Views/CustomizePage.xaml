@@ -10,6 +10,91 @@
     xmlns:vm="clr-namespace:Plainstall.App.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:CustomizeViewModel}"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--  The header of one section card: an icon, the name and a short summary that follows the switches.  -->
+        <DataTemplate x:Key="SectionHeader" DataType="{x:Type vm:CustomizeSectionViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ui:SymbolIcon
+                    x:Name="Icon"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center"
+                    FontSize="24"
+                    Foreground="{DynamicResource Plainstall.TextSecondaryBrush}"
+                    Symbol="Apps24" />
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock
+                        x:Name="Title"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource Plainstall.TextBrush}"
+                        Text="{Binding Title}"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="{DynamicResource Plainstall.TextSecondaryBrush}"
+                        Text="{Binding Summary}"
+                        TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Tab}" Value="{x:Static vm:CustomizeTab.Tweaks}">
+                    <Setter TargetName="Icon" Property="Symbol" Value="Options24" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tab}" Value="{x:Static vm:CustomizeTab.Setup}">
+                    <Setter TargetName="Icon" Property="Symbol" Value="PersonAccounts24" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tab}" Value="{x:Static vm:CustomizeTab.Advanced}">
+                    <Setter TargetName="Icon" Property="Symbol" Value="Toolbox24" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                             Value="True">
+                    <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource Plainstall.AccentTextBrush}" />
+                    <Setter TargetName="Icon" Property="Filled" Value="True" />
+                    <Setter TargetName="Title" Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <!--  A section is a card, like the preset choices, so it reads as something to click, not as a label.  -->
+        <Style x:Key="SectionCard" TargetType="TabItem">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource Plainstall.FocusVisual}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HeaderTemplate" Value="{StaticResource SectionHeader}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border
+                            x:Name="Card"
+                            Margin="0,0,10,0"
+                            Padding="14,10"
+                            Background="{DynamicResource Plainstall.CardSurfaceBrush}"
+                            BorderBrush="{DynamicResource Plainstall.CardBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <ContentPresenter ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Card" Property="Background"
+                                        Value="{DynamicResource Plainstall.SubtleBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush"
+                                        Value="{DynamicResource Plainstall.AccentBrush}" />
+                                <Setter TargetName="Card" Property="BorderThickness" Value="3" />
+                                <Setter TargetName="Card" Property="Padding" Value="12,8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid Margin="32,12,32,8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -82,21 +167,51 @@
         <TabControl
             Grid.Row="2"
             Margin="0,10,0,0"
+            AutomationProperties.Name="{x:Static res:Strings.Customize_SectionsName}"
             SelectedIndex="{Binding SelectedTabIndex}">
-            <TabItem AutomationProperties.Name="{x:Static res:Strings.Customize_TabApps}"
-                     Header="{x:Static res:Strings.Customize_TabApps}">
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <UniformGrid
+                            Margin="0,0,-10,0"
+                            IsItemsHost="True"
+                            KeyboardNavigation.DirectionalNavigation="Cycle"
+                            KeyboardNavigation.TabIndex="1"
+                            Rows="1" />
+                        <ContentPresenter
+                            Grid.Row="1"
+                            Margin="0,14,0,0"
+                            ContentSource="SelectedContent"
+                            KeyboardNavigation.TabIndex="2" />
+                    </Grid>
+                </ControlTemplate>
+            </TabControl.Template>
+            <TabItem
+                AutomationProperties.Name="{Binding AppsSection.AutomationName}"
+                Header="{Binding AppsSection}"
+                Style="{StaticResource SectionCard}">
                 <views:CatalogListView DataContext="{Binding Apps}" />
             </TabItem>
-            <TabItem AutomationProperties.Name="{x:Static res:Strings.Customize_TabTweaks}"
-                     Header="{x:Static res:Strings.Customize_TabTweaks}">
+            <TabItem
+                AutomationProperties.Name="{Binding TweaksSection.AutomationName}"
+                Header="{Binding TweaksSection}"
+                Style="{StaticResource SectionCard}">
                 <views:CatalogListView DataContext="{Binding Tweaks}" />
             </TabItem>
-            <TabItem AutomationProperties.Name="{x:Static res:Strings.Customize_TabSetup}"
-                     Header="{x:Static res:Strings.Customize_TabSetup}">
+            <TabItem
+                AutomationProperties.Name="{Binding SetupSection.AutomationName}"
+                Header="{Binding SetupSection}"
+                Style="{StaticResource SectionCard}">
                 <views:SetupView DataContext="{Binding Setup}" />
             </TabItem>
-            <TabItem AutomationProperties.Name="{x:Static res:Strings.Customize_TabAdvanced}"
-                     Header="{x:Static res:Strings.Customize_TabAdvanced}">
+            <TabItem
+                AutomationProperties.Name="{Binding AdvancedSection.AutomationName}"
+                Header="{Binding AdvancedSection}"
+                Style="{StaticResource SectionCard}">
                 <views:AdvancedView DataContext="{Binding Advanced}" />
             </TabItem>
         </TabControl>

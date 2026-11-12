@@ -49,6 +49,8 @@ Plainstall downloads Windows 11 from Microsoft. It compares the file with the ch
 
 Select the apps to remove and the settings to change. Each item has a short explanation, a risk level and a **Details** button.
 
+The page has four sections. Select a section card at the top to open it. **Next** also opens the sections in sequence. The text on the button shows the name of the next section.
+
 - **Apps**: the preinstalled apps that Plainstall removes.
 - **Tweaks**: the Windows settings that Plainstall changes, for example privacy, ads, Start menu and taskbar.
 - **Setup**: the local account, the computer name, the region, the keyboard and the time zone.

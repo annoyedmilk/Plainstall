@@ -934,7 +934,7 @@
       "id": "game-bar",
       "title": "Game Bar",
       "description": "The in-game overlay opened with Win+G: recording, performance, chat.",
-      "details": "Some games require it. Without it Windows can show 'you need a new app to open this ms-gamingoverlay link' when a controller button is pressed, and performance can drop on some recent processors. If you remove it, also switch on 'Xbox button does not open Game Bar' on the Tweaks tab.",
+      "details": "Some games require it. Without it Windows can show 'you need a new app to open this ms-gamingoverlay link' when a controller button is pressed, and performance can drop on some recent processors. If you remove it, also switch on 'Xbox button does not open Game Bar' in the Tweaks section.",
       "category": "gaming",
       "risk": "advanced",
       "defaultIn": [],

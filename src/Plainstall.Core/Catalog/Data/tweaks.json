@@ -52,7 +52,7 @@
     {
       "id": "setup",
       "title": "Setup",
-      "description": "Applied through the options on the Setup tab, not as switches."
+      "description": "Applied through the options in the Setup section, not as switches."
     }
   ],
   "entries": [
@@ -60,7 +60,7 @@
       "id": "setup-hardware-bypass",
       "title": "Install on unsupported hardware",
       "description": "Lets Windows 11 install on PCs without TPM 2.0, Secure Boot or a supported processor.",
-      "details": "Harmless on PCs that meet the requirements. On PCs that do not, Microsoft does not promise updates, and Windows reminds you of that with a 'requirements not met' notice in Settings and on the desktop. The switch to hide that notice is on the Tweaks tab, under System and storage.",
+      "details": "Harmless on PCs that meet the requirements. On PCs that do not, Microsoft does not promise updates, and Windows reminds you of that with a 'requirements not met' notice in Settings and on the desktop. The switch to hide that notice is in the Tweaks section, under System and storage.",
       "category": "setup",
       "risk": "moderate",
       "defaultIn": [],
@@ -1530,10 +1530,31 @@
       ]
     },
     {
+      "id": "no-search-history",
+      "title": "No search history on this PC",
+      "description": "Start search does not keep a list of what you searched for on this PC, and does not use it to suggest results.",
+      "details": "Applied at first sign-in, for every new account. Change it in Settings > Privacy & security > Search permissions > History.",
+      "category": "search",
+      "risk": "safe",
+      "defaultIn": [
+        "privacy-max"
+      ],
+      "actions": [
+        {
+          "kind": "firstLogon.registry",
+          "op": "set",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings",
+          "name": "IsDeviceSearchHistoryEnabled",
+          "type": "dword",
+          "data": 0
+        }
+      ]
+    },
+    {
       "id": "no-phone-link-in-start",
       "title": "No phone panel in Start",
       "description": "Removes the Phone Link panel next to the Start menu.",
-      "details": "The panel belongs to the Phone Link app. When Phone Link is removed on the Apps tab, the panel is gone anyway and this switch changes nothing.",
+      "details": "The panel belongs to the Phone Link app. When Phone Link is removed in the Apps section, the panel is gone anyway and this switch changes nothing.",
       "category": "search",
       "risk": "safe",
       "defaultIn": [
@@ -2300,39 +2321,6 @@
       ]
     },
     {
-      "id": "no-widgets",
-      "title": "Widgets off",
-      "description": "Turns the Widgets panel off by policy, so it stays off even if the Widgets app comes back with an update.",
-      "details": "The taskbar button value (TaskbarDa) is not written: recent Windows builds protect it. Removing the Widgets app removes the button.",
-      "category": "explorer",
-      "risk": "safe",
-      "defaultIn": [
-        "recommended",
-        "privacy-max",
-        "gaming"
-      ],
-      "source": [
-        {
-          "name": "tiny11builder",
-          "url": "https://github.com/ntdevlabs/tiny11builder"
-        },
-        {
-          "name": "winutil",
-          "url": "https://github.com/ChrisTitusTech/winutil"
-        }
-      ],
-      "actions": [
-        {
-          "kind": "registry.set",
-          "hive": "machineSoftware",
-          "key": "Policies\\Microsoft\\Dsh",
-          "name": "AllowNewsAndInterests",
-          "type": "dword",
-          "data": 0
-        }
-      ]
-    },
-    {
       "id": "hide-chat-icon",
       "title": "No Chat icon",
       "description": "Removes the Chat icon from the taskbar on Windows 11 22H2.",
@@ -2598,6 +2586,39 @@
           "name": "MMTaskbarGlomLevel",
           "type": "dword",
           "data": 2
+        }
+      ]
+    },
+    {
+      "id": "no-snap-layouts-popup",
+      "title": "No Snap layouts pop-up",
+      "description": "The window layouts no longer pop up when you point at the maximize button or drag a window to the top of the screen.",
+      "details": "Windows still snap when you drag them to the edge of the screen. Change it in Settings > System > Multitasking > Snap windows.",
+      "category": "explorer",
+      "risk": "safe",
+      "defaultIn": [],
+      "source": [
+        {
+          "name": "Win11Debloat",
+          "url": "https://github.com/Raphire/Win11Debloat"
+        }
+      ],
+      "actions": [
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "EnableSnapAssistFlyout",
+          "type": "dword",
+          "data": 0
+        },
+        {
+          "kind": "registry.set",
+          "hive": "defaultUser",
+          "key": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "name": "EnableSnapBar",
+          "type": "dword",
+          "data": 0
         }
       ]
     },
@@ -2877,7 +2898,7 @@
       "id": "no-controller-game-bar",
       "title": "Xbox button does not open Game Bar",
       "description": "Pressing the Xbox button on a game controller no longer opens Game Bar.",
-      "details": "Game Bar itself stays and still opens with Win+G. Also worth switching on when you remove the Game Bar app on the Apps tab, so the controller button no longer tries to open it. Undo in Settings > Gaming > Game Bar.",
+      "details": "Game Bar itself stays and still opens with Win+G. Also worth switching on when you remove the Game Bar app in the Apps section, so the controller button no longer tries to open it. Undo in Settings > Gaming > Game Bar.",
       "category": "gaming",
       "risk": "safe",
       "defaultIn": [

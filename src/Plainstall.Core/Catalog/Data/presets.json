@@ -18,7 +18,7 @@
       "id": "privacy-max",
       "title": "Privacy first",
       "tagline": "Everything in Recommended, plus the stricter privacy switches.",
-      "description": "Also turns off location, Find My Device, clipboard sync, error reports, the diagnostic services and the AI features in Notepad and Paint, and removes Phone Link and Mobile devices. A few conveniences stop working, such as automatic time zone and weather for your location. Each one can be switched back on.",
+      "description": "Also turns off location, Find My Device, clipboard sync, search history, error reports, the diagnostic services and the AI features in Notepad and Paint, and removes Phone Link and Mobile devices. A few conveniences stop working, such as automatic time zone and weather for your location. Each one can be switched back on.",
       "setup": {
         "localAccount": true,
         "skipPrivacyPages": true,

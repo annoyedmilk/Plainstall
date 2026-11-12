@@ -36,6 +36,8 @@
     <data name="Nav_BackName" xml:space="preserve"><value>Back to the previous step</value></data>
     <data name="Nav_Next" xml:space="preserve"><value>Next</value></data>
     <data name="Nav_NextName" xml:space="preserve"><value>Next step</value></data>
+    <data name="Nav_NextSection" xml:space="preserve"><value>Next: {0}</value></data>
+    <data name="Nav_NextSectionName" xml:space="preserve"><value>Next section: {0}</value></data>
     <data name="Nav_StartBuild" xml:space="preserve"><value>Start build</value></data>
     <data name="Step_Welcome" xml:space="preserve"><value>Welcome</value></data>
     <data name="Step_Windows" xml:space="preserve"><value>Windows</value></data>
@@ -113,11 +115,17 @@
     <data name="Customize_Save" xml:space="preserve"><value>Save profile...</value></data>
     <data name="Customize_SaveName" xml:space="preserve"><value>Save these choices as a profile file</value></data>
     <data name="Customize_Saved" xml:space="preserve"><value>Saved to {0}</value></data>
-    <data name="Customize_BlockedSetupErrors" xml:space="preserve"><value>Fix the marked fields on the Setup tab first.</value></data>
+    <data name="Customize_BlockedSetupErrors" xml:space="preserve"><value>Fix the marked fields in the Setup section first.</value></data>
     <data name="Customize_DismissMessages" xml:space="preserve"><value>Hide these notes</value></data>
     <data name="Customize_TabApps" xml:space="preserve"><value>Apps</value></data>
     <data name="Customize_TabTweaks" xml:space="preserve"><value>Tweaks</value></data>
     <data name="Customize_TabSetup" xml:space="preserve"><value>Setup</value></data>
+    <data name="Customize_SectionAppsSummary" xml:space="preserve"><value>{0} of {1} removed</value></data>
+    <data name="Customize_SectionTweaksSummary" xml:space="preserve"><value>{0} of {1} switched on</value></data>
+    <data name="Customize_SectionSetupSummary" xml:space="preserve"><value>Account and setup questions</value></data>
+    <data name="Customize_SectionAdvancedSummary" xml:space="preserve"><value>Programs, drivers, updates</value></data>
+    <data name="Customize_SectionName" xml:space="preserve"><value>{0}: {1}</value></data>
+    <data name="Customize_SectionsName" xml:space="preserve"><value>Sections of Customize</value></data>
     <data name="Customize_TabAdvanced" xml:space="preserve"><value>Advanced</value></data>
     <data name="Customize_TweaksPolicyNotice" xml:space="preserve"><value>Many of these switches work as Windows policies. While they are on, Settings and Microsoft Edge say &apos;Some settings are managed by your organization&apos;. This is normal and safe. Nobody else controls this PC. Only the settings that you chose here are locked.</value></data>
     <data name="Filter_SearchPlaceholder" xml:space="preserve"><value>Search</value></data>
@@ -151,7 +159,7 @@
     <data name="Rule_DependentSwitchedOff" xml:space="preserve"><value>Plainstall switched off {0} too, because it needs {1}.</value></data>
     <data name="Rule_DependentAppKept" xml:space="preserve"><value>Plainstall keeps {0} too, because removing it needs {1}.</value></data>
     <data name="Rule_ConflictRefused" xml:space="preserve"><value>You cannot use {0} together with {1}. If you want {0}, switch off {1} first.</value></data>
-    <data name="Rule_RequirementIsSetupOption" xml:space="preserve"><value>{0} needs {1}. Turn on that option on the Setup tab first.</value></data>
+    <data name="Rule_RequirementIsSetupOption" xml:space="preserve"><value>{0} needs {1}. Turn on that option in the Setup section first.</value></data>
     <data name="Setup_LocalAccountTitle" xml:space="preserve"><value>Local account</value></data>
     <data name="Setup_LocalAccountText" xml:space="preserve"><value>Sign in with a name and password on this PC instead of a Microsoft account. Setup skips the Microsoft account pages.</value></data>
     <data name="Setup_AccountNameLabel" xml:space="preserve"><value>Account name</value></data>
@@ -167,7 +175,7 @@
     <data name="Setup_ComputerNamePlaceholder" xml:space="preserve"><value>For example LIVING-ROOM</value></data>
     <data name="Setup_ComputerNameInvalid" xml:space="preserve"><value>Use 1 to 15 letters, digits or hyphens, and not only digits.</value></data>
     <data name="Setup_SkipPrivacyTitle" xml:space="preserve"><value>Skip the privacy questions</value></data>
-    <data name="Setup_SkipPrivacyText" xml:space="preserve"><value>Setup does not ask about location, diagnostics and ads. The answers come from your choices on the Tweaks tab.</value></data>
+    <data name="Setup_SkipPrivacyText" xml:space="preserve"><value>Setup does not ask about location, diagnostics and ads. The answers come from your choices in the Tweaks section.</value></data>
     <data name="Setup_BypassTitle" xml:space="preserve"><value>Install on unsupported hardware</value></data>
     <data name="Setup_BypassText" xml:space="preserve"><value>Lets Setup install on PCs without TPM 2.0, Secure Boot or a supported processor. Microsoft can limit updates on these PCs.</value></data>
     <data name="Setup_RegionalText" xml:space="preserve"><value>What Setup uses for region, keyboard and time.</value></data>

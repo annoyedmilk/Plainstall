@@ -609,6 +609,60 @@ namespace Plainstall.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Programs, drivers, updates.
+        /// </summary>
+        public static string Customize_SectionAdvancedSummary {
+            get {
+                return ResourceManager.GetString("Customize_SectionAdvancedSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} removed.
+        /// </summary>
+        public static string Customize_SectionAppsSummary {
+            get {
+                return ResourceManager.GetString("Customize_SectionAppsSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}: {1}.
+        /// </summary>
+        public static string Customize_SectionName {
+            get {
+                return ResourceManager.GetString("Customize_SectionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account and setup questions.
+        /// </summary>
+        public static string Customize_SectionSetupSummary {
+            get {
+                return ResourceManager.GetString("Customize_SectionSetupSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} switched on.
+        /// </summary>
+        public static string Customize_SectionTweaksSummary {
+            get {
+                return ResourceManager.GetString("Customize_SectionTweaksSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sections of Customize.
+        /// </summary>
+        public static string Customize_SectionsName {
+            get {
+                return ResourceManager.GetString("Customize_SectionsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
         public static string Customize_TabAdvanced {
@@ -1271,6 +1325,24 @@ namespace Plainstall.App.Resources {
         public static string Nav_NextName {
             get {
                 return ResourceManager.GetString("Nav_NextName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next: {0}.
+        /// </summary>
+        public static string Nav_NextSection {
+            get {
+                return ResourceManager.GetString("Nav_NextSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next section: {0}.
+        /// </summary>
+        public static string Nav_NextSectionName {
+            get {
+                return ResourceManager.GetString("Nav_NextSectionName", resourceCulture);
             }
         }
         

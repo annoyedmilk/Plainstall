@@ -1,3 +1,4 @@
+using System.Globalization;
 using Plainstall.App.Resources;
 using Plainstall.App.ViewModels;
 using Plainstall.Core.Catalog;
@@ -103,6 +104,40 @@ public class CatalogListTests
         Assert.Contains("OneDrive", app.SwitchName);
         var tweak = w.Customize.Tweaks.Entries.First(e => e.Id == "dark-theme");
         Assert.Equal(Strings.Switch_On, tweak.OnText);
+    }
+}
+
+public class SectionTests
+{
+    private static string Summary(string format, CatalogListViewModel list)
+    {
+        return string.Format(CultureInfo.CurrentCulture, format, list.Entries.Count(e => e.IsOn),
+            list.Entries.Count());
+    }
+
+    [Fact]
+    public void The_four_sections_are_listed_in_order_with_a_summary_each()
+    {
+        var w = new TestWizard();
+        var sections = w.Customize.Sections;
+        Assert.Equal([CustomizeTab.Apps, CustomizeTab.Tweaks, CustomizeTab.Setup, CustomizeTab.Advanced],
+            sections.Select(s => s.Tab));
+        Assert.All(sections, s => Assert.False(string.IsNullOrWhiteSpace(s.Summary)));
+        Assert.Equal(Summary(Strings.Customize_SectionAppsSummary, w.Customize.Apps), w.Customize.AppsSection.Summary);
+        Assert.Equal(Summary(Strings.Customize_SectionTweaksSummary, w.Customize.Tweaks),
+            w.Customize.TweaksSection.Summary);
+        Assert.Contains(w.Customize.AppsSection.Summary, w.Customize.AppsSection.AutomationName);
+    }
+
+    [Fact]
+    public void A_switch_updates_the_count_on_its_section_card()
+    {
+        var w = new TestWizard();
+        var before = w.Customize.AppsSection.Summary;
+        w.Customize.Apps.Entries.First(e => e.Id == "calculator").IsOn = true;
+
+        Assert.NotEqual(before, w.Customize.AppsSection.Summary);
+        Assert.Equal(Summary(Strings.Customize_SectionAppsSummary, w.Customize.Apps), w.Customize.AppsSection.Summary);
     }
 }
 
